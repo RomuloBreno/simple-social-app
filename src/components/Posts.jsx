@@ -1,0 +1,137 @@
+// src/components/Post.tsx
+import React, { useState, useEffect} from 'react';
+import fetchApi from '../utils/fetch';
+
+const Post = ({dataUser}) => {
+    const [user,setUser] = useState(null);  // Estado para armazenar os user
+    const {title , description} = dataUser
+    const [showComments, setShowComments] = useState(false);
+
+    useEffect(() => {
+        console.log(`${process.env.REACT_APP_URL_API}/user/${dataUser.owner}`)
+        // validar quais posts podem ser requisitados com base no usuario
+        const fetchUser = async () => {
+          setUser(await fetchApi(`/user/${dataUser.owner}`, user, 'GET'))
+          console.log(user)
+        }
+        fetchUser();
+      }, [])
+
+    // const toggleComments = () => setShowComments(!showComments);
+    const toggleComments = () => {
+        setShowComments(!showComments);
+    }
+    return (
+        <div className="container" style={{ display: 'flex', border: '0px solid #ddd', padding: '10px', margin: '10px 0', maxHeight: 'auto' }}>
+            <div style={{ flex: 1 }}>
+
+
+                <div style={styles.container}>
+                    <div style={styles.blackBox}>
+                            <div class="card gedf-card">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex justify-content-between align-items-center">
+
+                                            <div class="d-flex">
+                                                <img class="rounded-circle" width="65" src="https://picsum.photos/50/50" alt="" />
+                                                <div class="h7 text-muted px-2">
+                                                    {user?.name}
+                                                    <p>{user?.email}</p>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-h"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                                    <div class="h6 dropdown-header">Configuration</div>
+                                                    <a class="dropdown-item" href="#">Save</a>
+                                                    <a class="dropdown-item" href="#">Hide</a>
+                                                    <a class="dropdown-item" href="#">Report</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {/* CONTEUDO DO POST */}
+                                <div class="card-body">
+                                    <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
+                                    <a class="card-link" href="#">
+                                        <h5 class="card-title">{title}</h5>
+                                    </a>
+                                    <img width='100%' src='https://picsum.photos/50/50' />
+                                    <p class="card-text">
+                                       {description}
+                                    </p>
+                                </div>
+                            </div>
+                        
+                        </div>
+
+                    {showComments && (
+                        <div style={styles.blueBox}></div>
+                    )}
+                    <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>
+                        <button>❤</button>
+                        <button onClick={toggleComments}>💬</button>
+                        <button>🔗</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    );
+};
+
+const styles = {
+    container: {
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff', // Cor de fundo para facilitar a visualização
+    },
+    circle: {
+        backgroundColor: 'black',
+        borderRadius: '50%',
+        top: '20px',
+        left: '20px',
+    },
+    horizontalBar: {
+        textAlign: 'left',
+        padding: '10px',
+        width: '100%',
+        height: 'fit-content',
+        borderRadius: '10px',
+    },
+    blackBox: {
+        width: '80%',
+        height: 'auto',//deve ser auto
+        maxHeight: 'auto',
+        backgroundColor: 'white',
+        borderRadius: '10px',
+        zIndex: 1,
+        transition: 'height 0.5s ease, opacity 0.5s ease', // Animação suave
+    },
+    blueBox: {
+        marginLeft: '-40px', // Animação no marginLeft
+        opacity: '1',
+        overflow: 'auto',
+        transition: 'margin-left 0.5s ease, opacity 0.5s ease', // Animação suave
+        width: '30%',
+        minHeight: '620px',
+        backgroundColor: '#9d8bdb',
+        borderRadius: '10px',
+        zIndex: 0,
+    },
+};
+
+export default Post;
