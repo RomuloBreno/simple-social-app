@@ -20,7 +20,7 @@ const Login = () => {
             let loginJson = await result.json()
             if(!result)
                 throw new Error('Falha na autenticação');
-            login(loginJson.result) // Envia as credenciais
+            login(`Bearer ${loginJson.token}`) // Envia as credenciais
             if (!login) {
                 throw new Error('Falha no login');
             }

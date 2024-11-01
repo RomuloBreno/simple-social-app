@@ -4,7 +4,7 @@ export async function fetchApi(route, PageData, methodRequest, dataToSend,token)
         method: methodRequest, // Especifica o método da requisição (GET, POST, etc.)
         headers: {
           'Content-Type': 'application/json', // Informa que o corpo da requisição está em JSON
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
       // Inclui o corpo apenas se o método for POST

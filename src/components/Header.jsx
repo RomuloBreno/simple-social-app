@@ -119,12 +119,12 @@ const Header = () => {
                                     <button style={{ marginLeft: 'auto', marginRight: '12%' }}>Perfil</button>
                                 }
                                 {
-                                    !IsLoged &&
-                                    <button type='submit' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
-                                }
-                                {
                                     IsLoged &&
                                     <button type ="submit" onClick={handlelogout} style={{ marginLeft: 'auto', marginRight: '10%' }}>Logout</button>
+                                }
+                                {
+                                    !IsLoged &&
+                                    <button type='submit' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
                                 }
 
                             </div>
