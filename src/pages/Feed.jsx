@@ -1,17 +1,29 @@
 // src/pages/Feed.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import Post from '../components/Posts';
-import fetchApi from '../utils/fetch';
+import {fetchApi} from '../utils/fetch';
+import { useAuth } from '../authContext';
+import { useNavigate } from 'react-router-dom';
 const Feed = () => {
+  const navigate = useNavigate()
+  const user = useAuth();
+  const token = user
+  if (!user) {
+    console.error('Acesso negado: usuário não autenticado', user);
+    navigate("/")
+  
+  }
   const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
   const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
   const [feedToInteligence] = useState({})
+  
   useEffect(() => {
-    console.log(`${process.env.REACT_APP_URL_API}/posts`)
+    document.title="Feed"
     // validar quais posts podem ser requisitados com base no usuario
-
     const fetchPosts = async () => {
-      setPosts(await fetchApi('/posts', posts, 'GET', feedToInteligence))
+      let result = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, token)
+      let postsJson = await result.json()
+      setPosts(postsJson.result)
       setLoading(false)
     }
     fetchPosts();

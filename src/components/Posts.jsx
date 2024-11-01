@@ -1,18 +1,21 @@
 // src/components/Post.tsx
 import React, { useState, useEffect} from 'react';
-import fetchApi from '../utils/fetch';
+import {fetchApi} from '../utils/fetch';
+import {useAuth} from '../authContext';
+
 
 const Post = ({dataUser}) => {
-    const [user,setUser] = useState(null);  // Estado para armazenar os user
+    const [user, setUser] = useState(null);  // Estado para armazenar os user
+    const token = useAuth()
     const {title , description} = dataUser
     const [showComments, setShowComments] = useState(false);
 
     useEffect(() => {
-        console.log(`${process.env.REACT_APP_URL_API}/user/${dataUser.owner}`)
         // validar quais posts podem ser requisitados com base no usuario
         const fetchUser = async () => {
-          setUser(await fetchApi(`/user/${dataUser.owner}`, user, 'GET'))
-          console.log(user)
+            let result = await fetchApi(`v1/user/${dataUser.owner}`, user, 'GET',  token)
+            let userJson = await result.json()
+            setUser(userJson.result)
         }
         fetchUser();
       }, [])
