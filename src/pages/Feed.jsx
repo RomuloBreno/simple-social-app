@@ -5,25 +5,42 @@ import {fetchApi} from '../utils/fetch';
 import { useAuth } from '../authContext';
 import { useNavigate } from 'react-router-dom';
 const Feed = () => {
+  const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
+  const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
+  const [feedToInteligence] = useState({})
+  const [postContent, setPostContent] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate()
   const user = useAuth();
-  const token = user
+  const token = user.user.token
+
+  const handlePostChange = (event) => {
+    setPostContent(event.target.value);
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Aqui você pode lidar com o envio do postContent e selectedFile
+    console.log('Post Content:', postContent);
+    console.log('Selected File:', selectedFile);
+  };
   if (!user) {
     console.error('Acesso negado: usuário não autenticado', user);
     navigate("/")
   
   }
-  const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
-  const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
-  const [feedToInteligence] = useState({})
-  
   useEffect(() => {
     document.title="Feed"
     // validar quais posts podem ser requisitados com base no usuario
     const fetchPosts = async () => {
       let result = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, token)
-      let postsJson = await result.json()
-      setPosts(postsJson.result)
+      if(!result.status)
+        return
+      setPosts(result.result)
       setLoading(false)
     }
     fetchPosts();
@@ -38,53 +55,54 @@ const Feed = () => {
     <div className='container' style={{ padding: ' 0px' }}>
       <div style={{}}>
         <h2 style={{ marginRight: '70%' }} > 📃 Feed</h2><br />
-        <div class="card gedf-card">
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">Make
-                  a publication</a>
-              </li>
-
-            </ul>
-          </div>
-          <div class="card-body">
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                <div class="form-group">
-                  <label class="sr-only" for="message">post</label>
-                  <textarea class="form-control" id="message" rows="3" placeholder="What are you thinking?"></textarea>
-                </div>
-
-              </div>
-              <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
-                <div class="form-group">
-                  <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="customFile" />
-                    <label class="custom-file-label" for="customFile">Upload image</label>
-                  </div>
-                </div>
-                <div class="py-4"></div>
+        <div className="card container gedf-card" style={{ width: '79%', marginRight: '6%', marginLeft: '2%', justifySelf: 'center' }}>
+      <div className="card-header">
+        <ul className="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+          <li className="nav-item">
+            <a className="nav-link active" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="true">
+              Make a publication
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div className="card-body">
+        <form onSubmit={handleSubmit}>
+          <div className="tab-content" id="myTabContent">
+            <div className="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+              <div className="form-group">
+                <label className="sr-only" htmlFor="message">Post</label>
+                <textarea
+                  className="form-control"
+                  id="message"
+                  rows="3"
+                  placeholder="What are you thinking?"
+                  value={postContent}
+                  onChange={handlePostChange}
+                />
               </div>
             </div>
-            <div class="btn-toolbar justify-content-between">
-              <div class="btn-group">
-                <button type="submit" class="btn btn-primary">share</button>
-              </div>
-              <div class="btn-group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
-                  <i class="fa fa-globe"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupDrop1">
-                  <a class="dropdown-item" href="#"><i class="fa fa-globe"></i> Public</a>
-                  <a class="dropdown-item" href="#"><i class="fa fa-users"></i> Friends</a>
-                  <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Just me</a>
+            <div className="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+              <div className="form-group">
+                <div className="custom-file">
+                  <input
+                    type="file"
+                    className="custom-file-input"
+                    id="customFile"
+                    onChange={handleFileChange}
+                  />
+                  <label className="custom-file-label" htmlFor="customFile">
+                    {selectedFile ? selectedFile.name : 'Upload image'}
+                  </label>
                 </div>
               </div>
+              <div className="py-4"></div>
             </div>
           </div>
-        </div>
+          <br/>
+          <button type="submit" className="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
         {loading ? (
           <p>Carregando...</p>
         ) : (

@@ -16,11 +16,11 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         try {
-            let result = await fetchConnect('auth/login', 'POST', { email, password })
-            let loginJson = await result.json()
-            if(!result)
-                throw new Error('Falha na autenticação');
-            login(`Bearer ${loginJson.token}`) // Envia as credenciais
+           
+            let result = await fetchConnect('auth/l-fdback', 'POST', { email, password })
+            if(!result.status)
+                throw new Error(result.result);
+            login(`Bearer ${result.result}`) // Envia as credenciais
             if (!login) {
                 throw new Error('Falha no login');
             }

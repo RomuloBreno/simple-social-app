@@ -17,13 +17,12 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         try {
-            debugger;
             if(password !== confirmPassword){
               throw new Error('As senhas precisam ser iguais');
             }
             let result = await fetchConnect('auth/register', 'POST', {name, email,job, password})
-            if(!result)
-                throw new Error('Falha no registro');
+            if(!result.status)
+                throw new Error(result.result);
             //implement email verification
             navigate('/login')
             // Aqui você pode redirecionar para outra página ou fazer outra ação

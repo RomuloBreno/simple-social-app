@@ -2,13 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import AppError from './AppError';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './authContext';
+import {api} from './utils/api.js'
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+// const connectApi = await api()
+const connectApi = true
 root.render(
   <React.StrictMode>
           <AuthProvider>
-            <App />
+            {connectApi
+            ?<App />
+            : <AppError />
+            }
           </AuthProvider>
   </React.StrictMode>
 );

@@ -1,24 +1,28 @@
 // src/components/Post.tsx
-import React, { useState, useEffect} from 'react';
-import {fetchApi} from '../utils/fetch';
-import {useAuth} from '../authContext';
+import React, { useState, useEffect } from 'react';
+import { fetchApi } from '../utils/fetch';
+import { useAuth } from '../authContext';
+import Feedbacks from './Feedbacks';
 
 
-const Post = ({dataUser}) => {
+const Post = ({ dataUser }) => {
     const [user, setUser] = useState(null);  // Estado para armazenar os user
-    const token = useAuth()
-    const {title , description} = dataUser
+    const token = useAuth().user.token
+    const { title, description, comments } = dataUser
     const [showComments, setShowComments] = useState(false);
+    const [feedToInteligence] = useState({})
 
     useEffect(() => {
         // validar quais posts podem ser requisitados com base no usuario
         const fetchUser = async () => {
-            let result = await fetchApi(`v1/user/${dataUser.owner}`, user, 'GET',  token)
-            let userJson = await result.json()
-            setUser(userJson.result)
+             
+            let result = await fetchApi(`v1/user/${dataUser.owner}`, user, 'GET',feedToInteligence, token)
+            if (!result.status)
+                return
+            setUser(result.result)
         }
         fetchUser();
-      }, [])
+    }, [])
 
     // const toggleComments = () => setShowComments(!showComments);
     const toggleComments = () => {
@@ -31,55 +35,57 @@ const Post = ({dataUser}) => {
 
                 <div style={styles.container}>
                     <div style={styles.blackBox}>
-                            <div class="card gedf-card">
-                                <div class="card-header">
+                        <div class="card gedf-card">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="d-flex justify-content-between align-items-center">
 
-                                            <div class="d-flex">
-                                                <img class="rounded-circle" width="65" src="https://picsum.photos/50/50" alt="" />
-                                                <div class="h7 text-muted px-2">
-                                                    {user?.name}
-                                                    <p>{user?.email}</p>
-                                                </div>
+                                        <div class="d-flex">
+                                            <img class="rounded-circle" width="65" src="https://picsum.photos/50/50" alt="" />
+                                            <div class="h7 text-muted px-2">
+                                                {user?.name}
+                                                <p>{user?.email}</p>
                                             </div>
-
-
-
                                         </div>
-                                        <div>
-                                            <div class="dropdown">
-                                                <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fa fa-ellipsis-h"></i>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                                    <div class="h6 dropdown-header">Configuration</div>
-                                                    <a class="dropdown-item" href="#">Save</a>
-                                                    <a class="dropdown-item" href="#">Hide</a>
-                                                    <a class="dropdown-item" href="#">Report</a>
-                                                </div>
+
+
+
+                                    </div>
+                                    <div>
+                                        <div class="dropdown">
+                                            <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-ellipsis-h"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                                <div class="h6 dropdown-header">Configuration</div>
+                                                <a class="dropdown-item" href="#">Save</a>
+                                                <a class="dropdown-item" href="#">Hide</a>
+                                                <a class="dropdown-item" href="#">Report</a>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                </div>
-                                {/* CONTEUDO DO POST */}
-                                <div class="card-body">
-                                    <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
-                                    <a class="card-link" href="#">
-                                        <h5 class="card-title">{title}</h5>
-                                    </a>
-                                    <img width='100%' src='https://picsum.photos/50/50' />
-                                    <p class="card-text">
-                                       {description}
-                                    </p>
-                                </div>
                             </div>
-                        
+                            {/* CONTEUDO DO POST */}
+                            <div class="card-body">
+                                <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
+                                <a class="card-link" href="#">
+                                    <h5 class="card-title">{title}</h5>
+                                </a>
+                                <img width='100%' src='https://picsum.photos/50/50' />
+                                <p class="card-text">
+                                    {description}
+                                </p>
+                            </div>
                         </div>
 
+                    </div>
+
                     {showComments && (
-                        <div style={styles.blueBox}></div>
+                        <div style={styles.blueBox}>
+                        <Feedbacks Feedbacks={comments}/>
+                        </div>
                     )}
                     <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>
                         <button>❤</button>
@@ -125,13 +131,13 @@ const styles = {
         transition: 'height 0.5s ease, opacity 0.5s ease', // Animação suave
     },
     blueBox: {
-        marginLeft: '-40px', // Animação no marginLeft
+        marginLeft: '0px', // Animação no marginLeft
         opacity: '1',
         overflow: 'auto',
         transition: 'margin-left 0.5s ease, opacity 0.5s ease', // Animação suave
         width: '30%',
         minHeight: '620px',
-        backgroundColor: '#9d8bdb',
+        backgroundColor: '#fff',
         borderRadius: '10px',
         zIndex: 0,
     },
