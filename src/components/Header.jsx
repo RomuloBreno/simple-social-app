@@ -90,10 +90,10 @@ const Header = () => {
 {
                                     IsLoged &&
                                     <a href="/feed" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Feed</a>&&
-                                <a style={{ margin: '0 30px', textDecoration: 'none', color: 'white', color: 'gray' }}>Feedbacks</a>
+                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
                                 }
-                                <a style={{ margin: '0 30px', textDecoration: 'none', color: 'white', color: 'gray' }}>Publishes</a>
-                                <a style={{ margin: '0 30px', textDecoration: 'none', color: 'white', color: 'gray' }}>Suporte</a>
+                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none',color: 'gray' }}>Publishes</a>
+                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
                                 
                             </nav>
                             <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', marginRight: '6%' }}>

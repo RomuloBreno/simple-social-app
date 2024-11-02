@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useAuth } from '../authContext';
 import { fetchApi } from '../utils/fetch';
 
@@ -29,17 +29,16 @@ const Feedbacks = ({ Feedbacks }) => {
     const toggleComment = (index) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
-
-    const getUserbyFeedback = (index) => {
+    useEffect(() => {
         // validar quais posts podem ser requisitados com base no usuario
         const fetchUser = async () => {
-            let result = await fetchApi(`v1/user/${Feedbacks.author}`, user, 'GET', token)
-            if (!result.status)
-                return
-            setUser(result.result)
-        }
+                let result = await fetchApi(`v1/user/${Feedbacks.author}`, user, 'GET', token)
+                if (!result.status)
+                    return
+                setUser(result.result)
+            }
         fetchUser();
-    }
+    }, [Feedbacks, user, token])
     return (
         <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
             {feedbacks?.map((comment, index) => {

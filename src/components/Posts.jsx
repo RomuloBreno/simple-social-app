@@ -22,7 +22,7 @@ const Post = ({ dataUser }) => {
             setUser(result.result)
         }
         fetchUser();
-    }, [])
+    }, [dataUser,user,feedToInteligence,token])
 
     // const toggleComments = () => setShowComments(!showComments);
     const toggleComments = () => {
@@ -58,9 +58,9 @@ const Post = ({ dataUser }) => {
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
                                                 <div class="h6 dropdown-header">Configuration</div>
-                                                <a class="dropdown-item" href="#">Save</a>
-                                                <a class="dropdown-item" href="#">Hide</a>
-                                                <a class="dropdown-item" href="#">Report</a>
+                                                <a class="dropdown-item" href="/">Save</a>
+                                                <a class="dropdown-item" href="/">Hide</a>
+                                                <a class="dropdown-item" href="/">Report</a>
                                             </div>
                                         </div>
                                     </div>
@@ -70,10 +70,8 @@ const Post = ({ dataUser }) => {
                             {/* CONTEUDO DO POST */}
                             <div class="card-body">
                                 <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
-                                <a class="card-link" href="#">
                                     <h5 class="card-title">{title}</h5>
-                                </a>
-                                <img width='100%' src='https://picsum.photos/50/50' />
+                                <img width='100%' src='https://picsum.photos/50/50' alt='perfil' />
                                 <p class="card-text">
                                     {description}
                                 </p>

@@ -45,7 +45,7 @@ const Feed = () => {
     }
     fetchPosts();
 
-  }, [])
+  }, [user,token,feedToInteligence,posts])
 
 
 
