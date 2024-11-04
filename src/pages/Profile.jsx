@@ -69,7 +69,7 @@ const Profile = () => {
         return (
             <div style={styles.container}>
                 <div className='align-items-center' style={{ display: 'flex' }}>
-                    <img class="rounded-circle" width="65" style={{}} src="https://picsum.photos/50/50" alt="profile" />
+                    <img className="rounded-circle" width="65" style={{}} src="https://picsum.photos/50/50" alt="profile" />
                 </div>
                 <br />
                 {/* <img src={user.profilePicture} alt="Foto de Perfil" style={styles.profilePicture} /> */}
@@ -83,7 +83,7 @@ const Profile = () => {
         return (
             <div style={styles.container}>
                 <div className='align-items-center' style={{ display: 'flex' }}>
-                    <img class="rounded-circle" width="65" style={{}} src="https://picsum.photos/50/50" alt="profile" />
+                    <img className="rounded-circle" width="65" style={{}} src="https://picsum.photos/50/50" alt="profile" />
                 </div>
                 <br />
                 {/* <img src={user.profilePicture} alt="Foto de Perfil" style={styles.profilePicture} /> */}
@@ -100,7 +100,7 @@ const Profile = () => {
 
                 <div style={styles.container}>
                     <div className='align-items-center' style={{ display: 'flex' }}>
-                        <img class="rounded-circle" width="65" style={{}} src="https://picsum.photos/50/50" alt="profile" />
+                        <img className="rounded-circle" width="65" style={{}} src="https://picsum.photos/50/50" alt="profile" />
                         <button onClick={toggleEditMode} style={{ maxHeight: 'fit-content', marginLeft: '70%' }}>x</button>
                     </div>
                     <form className="col-md-12 p-10" onSubmit={handleSubmit}>

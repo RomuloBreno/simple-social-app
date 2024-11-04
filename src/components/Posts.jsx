@@ -35,14 +35,14 @@ const Post = ({ dataUser }) => {
 
                 <div style={styles.container}>
                     <div style={styles.blackBox}>
-                        <div class="card gedf-card">
-                            <div class="card-header">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex justify-content-between align-items-center">
+                        <div className="card gedf-card">
+                            <div className="card-header">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div className="d-flex justify-content-between align-items-center">
 
-                                        <div class="d-flex">
-                                            <img class="rounded-circle" width="65" src="https://picsum.photos/50/50" alt="" />
-                                            <div class="h7 text-muted px-2">
+                                        <div className="d-flex">
+                                            <img className="rounded-circle" width="65" src="https://picsum.photos/50/50" alt="" />
+                                            <div className="h7 text-muted px-2">
                                                 {user?.name}
                                                 <p>{user?.email}</p>
                                             </div>
@@ -52,15 +52,15 @@ const Post = ({ dataUser }) => {
 
                                     </div>
                                     <div>
-                                        <div class="dropdown">
-                                            <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fa fa-ellipsis-h"></i>
+                                        <div className="dropdown">
+                                            <button className="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i className="fa fa-ellipsis-h"></i>
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                                <div class="h6 dropdown-header">Configuration</div>
-                                                <a class="dropdown-item" href="/">Save</a>
-                                                <a class="dropdown-item" href="/">Hide</a>
-                                                <a class="dropdown-item" href="/">Report</a>
+                                            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                                <div className="h6 dropdown-header">Configuration</div>
+                                                <a className="dropdown-item" href="/">Save</a>
+                                                <a className="dropdown-item" href="/">Hide</a>
+                                                <a className="dropdown-item" href="/">Report</a>
                                             </div>
                                         </div>
                                     </div>
@@ -68,11 +68,11 @@ const Post = ({ dataUser }) => {
 
                             </div>
                             {/* CONTEUDO DO POST */}
-                            <div class="card-body">
-                                <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
-                                    <h5 class="card-title">{title}</h5>
+                            <div className="card-body">
+                                <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>10 min ago</div>
+                                    <h5 className="card-title">{title}</h5>
                                 <img width='100%' src='https://picsum.photos/50/50' alt='perfil' />
-                                <p class="card-text">
+                                <p className="card-text">
                                     {description}
                                 </p>
                             </div>

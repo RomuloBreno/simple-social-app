@@ -7,8 +7,8 @@ const Footer = () => {
   const user = useAuth()
   useEffect(() => {
     if (!user.user) {
-      console.error('Acesso negado: usuário não autenticado');
-      setIsLoged(false); // Usuário não autenticado
+      setIsLoged(false);
+      return // Usuário não autenticado
     } else {
       setIsLoged(true); // Usuário autenticado
     }

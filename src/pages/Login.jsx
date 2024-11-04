@@ -3,19 +3,30 @@ import React, { useState} from 'react';
 import { useAuth } from '../context/authContext'; // Importa o hook useAuth
 import {fetchConnect} from '../utils/fetch';
 import { useNavigate } from 'react-router-dom';
-import { bcrypt } from 'bcrypt';
+import {crypto} from 'crypto-js'
 
 const Login = () => {
+
+  // Função para hash de senha
+function hashPassword(password, length) {
+  const salt = crypto.randomBytes(length).toString('hex');
+  const hash = crypto.createHmac('sha256', salt)
+                     .update(password)
+                     .digest('hex');
+  return hash;
+}
+
+
   document.title="Login"
   const navigate = useNavigate()
   const { login } = useAuth(); // Usa o contexto de autenticação
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || '')
   
   const handleSubmit = async (e) => {
-    const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || '')
-      const passwordHash = await bcrypt.hash(password, saltRounds);
+    const passwordHash = hashPassword(password, '16')
       e.preventDefault(); // Impede o recarregamento da página
       try {
         let result = await fetchConnect('auth/l-fdback', 'POST', { email, passwordHash })

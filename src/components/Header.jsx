@@ -70,7 +70,7 @@ const Header = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
     return (
-        <div class='text-center'>
+        <div className='text-center'>
             <header style={{ display: 'flex', padding: '10px', backgroundColor: '#333', color: '#fff', fontSize: '1em' }}>
                 <h2 style={{ marginLeft: '10%' }}>Fdback</h2>
                 {isMobile ? (
@@ -139,7 +139,7 @@ const Header = () => {
                                 {
                                     IsLoged &&
                                     <a href={`/profile`}>
-                                        <img class="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                        <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
                                     </a>
                                 }
                                 {

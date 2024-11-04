@@ -53,9 +53,9 @@ const Feedbacks = ({ Feedbacks }) => {
                         onClick={() => toggleComment(index)}
                         style={{ cursor: 'pointer', margin: '5px 0', color: '#333', padding: '16px', backgroundColor: isExpanded ? '#efefef' : '#fff' }}
                     >
-                        <div class="d-flex">
-                            <img class="rounded-circle" width="25" src="https://picsum.photos/50/50" alt="" />
-                            <div class="h7 text-muted px-2">
+                        <div className="d-flex">
+                            <img className="rounded-circle" width="25" src="https://picsum.photos/50/50" alt="" />
+                            <div className="h7 text-muted px-2">
                             <a style={{ textDecoration: 'none', color: 'grey' }} href={'/profile/user/' + user?.nick}> Autor:{author}</a>
                             </div>
                         </div>
