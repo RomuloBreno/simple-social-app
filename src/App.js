@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import { useAuth } from './context/authContext';
 
 const App = () => {
+  document.title = "FdBack"
   const user = useAuth();
   if(user.user !== null){
     return (

@@ -15,8 +15,6 @@ const Header = () => {
     //user
     const user = useAuth();
     const { logout } = useAuth()
-    //userFabric
-    const [userFactory, setUserFactory] = useState();
 
     useEffect(() => {
         let response;
@@ -36,7 +34,7 @@ const Header = () => {
 
 
     }, [user]);
-    
+
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
     const handlelogout = async (e) => {
