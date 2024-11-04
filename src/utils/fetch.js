@@ -33,6 +33,7 @@ export async function fetchConnect(route, methodRequest, dataToSend) {
 async function validResponseReturn(response) {
   let json = await response.json()
   return json
+  
 }
 
 export async function factoryUser(token) {
