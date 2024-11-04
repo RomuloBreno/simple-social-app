@@ -13,7 +13,7 @@ import { useAuth } from './context/authContext';
 
 const App = () => {
   const user = useAuth();
-  if(user.user !==null){
+  if(user.user !== null){
     return (
       <Router>
         <Header />
