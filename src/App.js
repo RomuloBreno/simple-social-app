@@ -18,6 +18,8 @@ const App = () => {
       <Header />
       <br />
       <Routes>
+
+        {/* redirecionamento das rotas que necessitam de login */}
      <Route
           path="/"
           element={!user.user ? <Index /> : <Navigate to="/feed" />}
@@ -25,6 +27,14 @@ const App = () => {
         <Route
           path="/feed"
           element={user.user ? <Feed /> : <Navigate to="/" />}
+        />
+         <Route
+          path={`/profile`}
+          element={user.user ? <Profile /> : <Navigate to="/" />}
+        />
+        <Route
+          path={`/profile/:profileId`}
+          element={user.user ? <Profile /> : <Navigate to="/" />}
         />
 
 {/* profile */}

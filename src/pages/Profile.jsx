@@ -63,7 +63,7 @@ const Profile = () => {
         fetchUser();
 
 
-    }, [profileId])
+    }, [profileId,token])
 
     if (!myProfile) {
         return (
