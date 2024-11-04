@@ -32,8 +32,8 @@ const Header = () => {
             return
         fetchUser();
         if (!user.user) {
-            console.error('Acesso negado: usuário não autenticado');
             setIsLoged(false); // Usuário não autenticado
+            return
         } else {
             setIsLoged(true); // Usuário autenticado
         }
