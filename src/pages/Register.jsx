@@ -9,6 +9,7 @@ const Register = () => {
     const navigate = useNavigate()
     const [name, setName] = useState('');
     const [job, setJob] = useState('');
+    const [nick, setNick] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -20,7 +21,7 @@ const Register = () => {
             if(password !== confirmPassword){
               throw new Error('As senhas precisam ser iguais');
             }
-            let result = await fetchConnect('auth/register', 'POST', {name, email,job, password})
+            let result = await fetchConnect('auth/register', 'POST', {name, nick, email,job, password})
             if(!result.status)
                 throw new Error(result.result);
             //implement email verification
@@ -44,6 +45,18 @@ const Register = () => {
               className="form-control"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+      
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">Nick:</label>
+            <input
+              type="text"
+              id="nick"
+              className="form-control"
+              value={name}
+              onChange={(e) => setNick(e.target.value)}
               required
             />
           </div>
@@ -96,7 +109,7 @@ const Register = () => {
             />
           </div>
       
-          <button type="submit" className="btn btn-primary w-100">Login</button>
+          <button type="submit" className="btn btn-primary w-100">Register</button>
       
           {error && <p className="text-danger mt-3">{error}</p>}
         </form>

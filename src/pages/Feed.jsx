@@ -1,9 +1,11 @@
 // src/pages/Feed.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Post from '../components/Posts';
 import {fetchApi} from '../utils/fetch';
-import { useAuth } from '../authContext';
+import { useAuth } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
+
+
 const Feed = () => {
   const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
   const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
@@ -45,7 +47,7 @@ const Feed = () => {
     }
     fetchPosts();
 
-  }, [user,token,feedToInteligence,posts])
+  }, [token,feedToInteligence,posts])
 
 
 

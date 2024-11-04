@@ -1,7 +1,7 @@
 // src/components/Post.tsx
 import React, { useState, useEffect } from 'react';
 import { fetchApi } from '../utils/fetch';
-import { useAuth } from '../authContext';
+import { useAuth } from '../context/authContext';
 import Feedbacks from './Feedbacks';
 
 
@@ -22,7 +22,7 @@ const Post = ({ dataUser }) => {
             setUser(result.result)
         }
         fetchUser();
-    }, [dataUser,user,feedToInteligence,token])
+    }, [dataUser.owner,user,feedToInteligence,token])
 
     // const toggleComments = () => setShowComments(!showComments);
     const toggleComments = () => {

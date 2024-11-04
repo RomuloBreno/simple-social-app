@@ -1,7 +1,7 @@
 
 // src/components/Footer.tsx
 import React, {useState, useEffect} from 'react';
-import { useAuth } from '../authContext';
+import { useAuth } from '../context/authContext';
 const Footer = () => {
   const [IsLoged, setIsLoged] = useState(false)
   const user = useAuth()

@@ -1,6 +1,6 @@
 // src/Login.js
 import React, { useState} from 'react';
-import { useAuth } from '../authContext'; // Importa o hook useAuth
+import { useAuth } from '../context/authContext'; // Importa o hook useAuth
 import {fetchConnect} from '../utils/fetch';
 import { useNavigate } from 'react-router-dom';
 

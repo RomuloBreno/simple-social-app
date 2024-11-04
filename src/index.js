@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import AppError from './AppError';
 import reportWebVitals from './reportWebVitals';
-import { AuthProvider } from './authContext';
+import { AuthProvider } from './context/authContext.js';
 import {api} from './utils/api.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

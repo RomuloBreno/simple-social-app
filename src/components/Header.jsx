@@ -1,25 +1,44 @@
 // src/components/Header.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../authContext';
+import { useAuth } from '../context/authContext';
+import { factoryUser } from '../utils/fetch';
 const Header = () => {
     const navigate = useNavigate()
-    const [IsLoged, setIsLoged]  = useState(false)
+    //mobile
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    //valid login
+    const [IsLoged, setIsLoged] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false);
+    //seach form
     const [searchQuery, setSearchQuery] = useState("");
-    const { logout } = useAuth()
+    //user
     const user = useAuth();
-    
+    const { logout } = useAuth()
+    //userFabric
+    const [userFactory, setUserFactory] = useState();
+
     useEffect(() => {
-        if (!user.user) {
-          console.error('Acesso negado: usuário não autenticado');
-          setIsLoged(false); // Usuário não autenticado
-        } else {
-          setIsLoged(true); // Usuário autenticado
+        let response;
+        const fetchUser = async () => {
+            if (!user)
+                return
+            response = await factoryUser(user.user?.token)
+            setUserFactory(response)
+
         }
-      }, [user]);
-    
+        fetchUser();
+        if (!user.user) {
+            console.error('Acesso negado: usuário não autenticado');
+            setIsLoged(false); // Usuário não autenticado
+        } else {
+            setIsLoged(true); // Usuário autenticado
+        }
+
+
+
+    }, [user]);
+
     const handlelogout = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         logout() // Envia as credenciais
@@ -29,8 +48,8 @@ const Header = () => {
         e.preventDefault(); // Impede o recarregamento da página
         navigate('/login')
     };
-    
-    
+
+
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
 
@@ -87,14 +106,14 @@ const Header = () => {
                                     !IsLoged &&
                                     <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Home</a>
                                 }
-{
+                                {
                                     IsLoged &&
-                                    <a href="/feed" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Feed</a>&&
-                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
+                                    <a href="/feed" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
+                                    <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
                                 }
-                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none',color: 'gray' }}>Publishes</a>
+                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
                                 <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
-                                
+
                             </nav>
                             <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', marginRight: '6%' }}>
                                 <input
@@ -113,14 +132,16 @@ const Header = () => {
                                     🔍
                                 </button>
                             </form>
-                            <div className='d-flex'>
+                            <div className='d-flex align-items-center'>
                                 {
                                     IsLoged &&
-                                    <button style={{ marginLeft: 'auto', marginRight: '12%' }}>Perfil</button>
+                                    <a href={`/profile`}>
+                                        <img class="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                    </a>
                                 }
                                 {
                                     IsLoged &&
-                                    <button type ="submit" onClick={handlelogout} style={{ marginLeft: 'auto', marginRight: '10%' }}>Logout</button>
+                                    <button type="submit" className='btn btn-light' onClick={handlelogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
                                 }
                                 {
                                     !IsLoged &&
