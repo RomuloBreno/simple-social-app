@@ -3,7 +3,7 @@ import React, { useState} from 'react';
 import { useAuth } from '../context/authContext'; // Importa o hook useAuth
 import {fetchConnect} from '../utils/fetch';
 import { useNavigate } from 'react-router-dom';
-
+import { bcrypt } from 'bcrypt';
 
 const Login = () => {
   document.title="Login"
@@ -13,10 +13,12 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
+    const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || '')
+      const passwordHash = await bcrypt.hash(password, saltRounds);
       e.preventDefault(); // Impede o recarregamento da página
       try {
-        let result = await fetchConnect('auth/l-fdback', 'POST', { email, password })
+        let result = await fetchConnect('auth/l-fdback', 'POST', { email, passwordHash })
         if(!result.status)
           throw new Error(result.result);
         login(`Bearer ${result.result}`) // Envia as credenciais
