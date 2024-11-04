@@ -6,33 +6,32 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
-    document.title="Login"
-    const navigate = useNavigate()
-    const { login } = useAuth(); // Usa o contexto de autenticação
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-
+  document.title="Login"
+  const navigate = useNavigate()
+  const { login } = useAuth(); // Usa o contexto de autenticação
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Impede o recarregamento da página
-        try {
-           
-            let result = await fetchConnect('auth/l-fdback', 'POST', { email, password })
-            if(!result.status)
-                throw new Error(result.result);
-            login(`Bearer ${result.result}`) // Envia as credenciais
-            if (!login) {
-                throw new Error('Falha no login');
-            }
-            navigate('/feed')
-            // Aqui você pode redirecionar para outra página ou fazer outra ação
-        } catch (error) {
-            setError(error.message);
+      e.preventDefault(); // Impede o recarregamento da página
+      try {
+        let result = await fetchConnect('auth/l-fdback', 'POST', { email, password })
+        if(!result.status)
+          throw new Error(result.result);
+        login(`Bearer ${result.result}`) // Envia as credenciais
+        if (!login) {
+          throw new Error('Falha no login');
         }
+        navigate('/feed')
+        // Aqui você pode redirecionar para outra página ou fazer outra ação
+      } catch (error) {
+        setError(error.message);
+      }
     };
-
+    
     return (
-        <div className="container mx-10 d-flex justify-content-center align-items-center vh-30" style={{height:'100%'}}>
+      <div className="container mx-10 d-flex justify-content-center align-items-center vh-30" style={{height:'100%'}}>
         <form className="col-md-6 p-10" onSubmit={handleSubmit}>
           <h2 className="text-center mb-4">Login</h2>
       

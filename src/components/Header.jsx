@@ -19,14 +19,17 @@ const Header = () => {
     const [userFactory, setUserFactory] = useState();
 
     useEffect(() => {
+        debugger
         let response;
         const fetchUser = async () => {
-            if (!user)
-                return
             response = await factoryUser(user.user?.token)
+            if(!response)
+                return
             setUserFactory(response)
 
         }
+        if (!user.user === null)
+            return
         fetchUser();
         if (!user.user) {
             console.error('Acesso negado: usuário não autenticado');
@@ -61,7 +64,7 @@ const Header = () => {
     };
     // Atualiza o valor de `isMobile` quando a janela é redimensionada
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 1368);
+        const handleResize = () => setIsMobile(window.innerWidth < 1568);
 
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);

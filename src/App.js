@@ -13,48 +13,65 @@ import { useAuth } from './context/authContext';
 
 const App = () => {
   const user = useAuth();
-  return (
-    <Router>
-      <Header />
-      <br />
-      <Routes>
+  if(user.user !==null){
+    return (
+      <Router>
+        <Header />
+        <br />
+        <Routes>
+  
+          {/* redirecionamento das rotas que necessitam de login */}
+       <Route
+            path="/"
+            element={!user.user ? <Index /> : <Navigate to="/feed" />}
+          />
+          <Route
+            path="/feed"
+            element={user.user ? <Feed /> : <Navigate to="/" />}
+          />
+           <Route
+            path={`/profile`}
+            element={user.user ? <Profile /> : <Navigate to="/" />}
+          />
+          <Route
+            path={`/profile/:profileId`}
+            element={user.user ? <Profile /> : <Navigate to="/" />}
+          />
+  
+  {/* profile */}
+          <Route
+            path={`/profile`}
+            element={!user.user ? <Index /> : <Profile/>}
+          />
+          <Route
+            path={`/profile/:profileId`}
+            element={!user.user ? <Index /> : <Profile/>}
+          />
+  
+  
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+        <br />
+        <Footer />
+      </Router>
+    )
 
-        {/* redirecionamento das rotas que necessitam de login */}
-     <Route
-          path="/"
-          element={!user.user ? <Index /> : <Navigate to="/feed" />}
-        />
-        <Route
-          path="/feed"
-          element={user.user ? <Feed /> : <Navigate to="/" />}
-        />
-         <Route
-          path={`/profile`}
-          element={user.user ? <Profile /> : <Navigate to="/" />}
-        />
-        <Route
-          path={`/profile/:profileId`}
-          element={user.user ? <Profile /> : <Navigate to="/" />}
-        />
-
-{/* profile */}
-        <Route
-          path={`/profile`}
-          element={!user.user ? <Index /> : <Profile/>}
-        />
-        <Route
-          path={`/profile/:profileId`}
-          element={!user.user ? <Index /> : <Profile/>}
-        />
-
-
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-      <br />
-      <Footer />
-    </Router>
-  )
+  }else{
+    return (
+      <Router>
+        <Header />
+        <br />
+        <Routes> 
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+        <br />
+        <Footer />
+      </Router>
+    )
+  }
 
 };
 export default App;
