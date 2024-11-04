@@ -50,12 +50,12 @@ const Register = () => {
           </div>
       
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">Nick:</label>
+            <label htmlFor="nick" className="form-label">Nick:</label>
             <input
               type="text"
               id="nick"
               className="form-control"
-              value={name}
+              value={nick}
               onChange={(e) => setNick(e.target.value)}
               required
             />
