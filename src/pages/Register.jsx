@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Register = () => {
+  function hashPassword(name, nick,email,job,password) {
+    return btoa(`${name}:${nick}:${email}:${job}:${password}`)
+  }
     document.title="Register"
     const navigate = useNavigate()
     const [name, setName] = useState('');
@@ -16,12 +19,13 @@ const Register = () => {
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
+      const passwordHash = hashPassword(name, nick,email,job,password)
         e.preventDefault(); // Impede o recarregamento da página
         try {
             if(password !== confirmPassword){
               throw new Error('As senhas precisam ser iguais');
             }
-            let result = await fetchConnect('auth/register', 'POST', {name, nick, email,job, password})
+            let result = await fetchConnect('auth/register', 'POST', {result: passwordHash})
             if(!result.status)
                 throw new Error(result.result);
             //implement email verification
