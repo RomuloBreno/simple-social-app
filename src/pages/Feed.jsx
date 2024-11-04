@@ -27,11 +27,8 @@ const Feed = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Aqui você pode lidar com o envio do postContent e selectedFile
-    console.log('Post Content:', postContent);
-    console.log('Selected File:', selectedFile);
   };
   if (!user) {
-    console.error('Acesso negado: usuário não autenticado', user);
     navigate("/")
   
   }

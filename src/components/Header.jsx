@@ -19,14 +19,10 @@ const Header = () => {
     const [userFactory, setUserFactory] = useState();
 
     useEffect(() => {
-        debugger
         let response;
         const fetchUser = async () => {
-            if(user?.user)
+            if (user?.user)
                 response = await factoryUser(user?.user?.token)
-            if(!response)
-                return
-            setUserFactory(response)
 
         }
         fetchUser();
@@ -40,6 +36,8 @@ const Header = () => {
 
 
     }, [user]);
+    
+    const toggleMenu = () => setMenuOpen(!menuOpen);
 
     const handlelogout = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
@@ -50,9 +48,6 @@ const Header = () => {
         e.preventDefault(); // Impede o recarregamento da página
         navigate('/login')
     };
-
-
-    const toggleMenu = () => setMenuOpen(!menuOpen);
 
 
     // Lógica de pesquisa
@@ -74,38 +69,38 @@ const Header = () => {
                 <h2 style={{ marginLeft: '10%' }}>Fdback</h2>
                 {isMobile ? (
                     <>
-                        <button onClick={toggleMenu} style={{ background: 'none', border:'none', marginLeft: '10%', color: 'white', fontSize: '24px' }}>
+                        <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '10%', color: 'white', fontSize: '24px' }}>
                             ☰
                         </button>
                         {menuOpen && (
                             <nav style={{ alignSelf: 'center', marginLeft: '0%', marginRight: '0%' }}>
-                            {
-                                !IsLoged &&
-                                <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</a>
-                            }
-                            {
-                                IsLoged &&
-                                <a href="/feed" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
-                                <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
-                            }
-                            <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
-                            <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
-                        
-                            {
-                                IsLoged &&
-                                <a href={`/profile`}>
-                                    <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
-                                </a>
-                            }
-                            {
-                                IsLoged &&
-                                <button type="submit" className='btn btn-light' onClick={handlelogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
-                            }
-                            {
-                                !IsLoged &&
-                                <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
-                            }
-                        </nav>
+                                {
+                                    !IsLoged &&
+                                    <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</a>
+                                }
+                                {
+                                    IsLoged &&
+                                    <a href="/feed" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
+                                    <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
+                                }
+                                <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
+                                <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
+
+                                {
+                                    IsLoged &&
+                                    <a href={`/profile`}>
+                                        <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                    </a>
+                                }
+                                {
+                                    IsLoged &&
+                                    <button type="submit" className='btn btn-light' onClick={handlelogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
+                                }
+                                {
+                                    !IsLoged &&
+                                    <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
+                                }
+                            </nav>
                         )}
                     </>
                 )
