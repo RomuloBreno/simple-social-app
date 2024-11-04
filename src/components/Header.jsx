@@ -22,14 +22,13 @@ const Header = () => {
         debugger
         let response;
         const fetchUser = async () => {
-            response = await factoryUser(user.user?.token)
+            if(user?.user)
+                response = await factoryUser(user?.user?.token)
             if(!response)
                 return
             setUserFactory(response)
 
         }
-        if (!user.user === null)
-            return
         fetchUser();
         if (!user.user) {
             setIsLoged(false); // Usuário não autenticado
@@ -75,29 +74,38 @@ const Header = () => {
                 <h2 style={{ marginLeft: '10%' }}>Fdback</h2>
                 {isMobile ? (
                     <>
-                        <button onClick={toggleMenu} style={{ background: 'none', border: 'none', color: 'black', fontSize: '24px' }}>
+                        <button onClick={toggleMenu} style={{ background: 'none', border:'none', marginLeft: '10%', color: 'white', fontSize: '24px' }}>
                             ☰
                         </button>
                         {menuOpen && (
-                            <nav
-                                style={{
-                                    position: 'absolute',
-                                    top: '60px',
-                                    left: '0',
-                                    width: '100%',
-                                    backgroundColor: '#333',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    padding: '10px 0',
-                                }}
-                            >
-                                <a href="/" style={{ margin: '10px 0', textDecoration: 'none', color: 'white' }}>Home</a>
-                                <a href="/feed" style={{ margin: '10px 0', textDecoration: 'none', color: 'white' }}>Feed</a>
-                                <a href="/feedbacks" style={{ margin: '10px 0', textDecoration: 'none', color: 'white' }}>Feedbacks</a>
-                                <a href="/publishes" style={{ margin: '10px 0', textDecoration: 'none', color: 'white' }}>Publishes</a>
-                                <a href="/support" style={{ margin: '10px 0', textDecoration: 'none', color: 'white' }}>Suporte</a>
-                            </nav>
+                            <nav style={{ alignSelf: 'center', marginLeft: '0%', marginRight: '0%' }}>
+                            {
+                                !IsLoged &&
+                                <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</a>
+                            }
+                            {
+                                IsLoged &&
+                                <a href="/feed" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
+                                <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
+                            }
+                            <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
+                            <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
+                        
+                            {
+                                IsLoged &&
+                                <a href={`/profile`}>
+                                    <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                </a>
+                            }
+                            {
+                                IsLoged &&
+                                <button type="submit" className='btn btn-light' onClick={handlelogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
+                            }
+                            {
+                                !IsLoged &&
+                                <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
+                            }
+                        </nav>
                         )}
                     </>
                 )
@@ -131,7 +139,7 @@ const Header = () => {
                                         marginRight: '5px',
                                     }}
                                 />
-                                <button type="submit" style={{ padding: '5px 10px', borderRadius: '4px', backgroundColor: '#555', color: 'white', border: 'none' }}>
+                                <button type="submit" className='btn btn-light' style={{ padding: '5px 10px', borderRadius: '4px', backgroundColor: '#555', color: 'white', border: 'none' }}>
                                     🔍
                                 </button>
                             </form>
@@ -148,7 +156,7 @@ const Header = () => {
                                 }
                                 {
                                     !IsLoged &&
-                                    <button type='submit' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
+                                    <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
                                 }
 
                             </div>

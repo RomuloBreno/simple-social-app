@@ -38,16 +38,18 @@ const Feed = () => {
   useEffect(() => {
     document.title="Feed"
     // validar quais posts podem ser requisitados com base no usuario
+    let response =''
     const fetchPosts = async () => {
-      let result = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, token)
-      if(!result.status)
+      if(user?.user)
+        response = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, token)
+      if(!response.status)
         return
-      setPosts(result.result)
+      setPosts(response.result)
       setLoading(false)
     }
     fetchPosts();
 
-  }, [token,feedToInteligence,posts])
+  }, [token,feedToInteligence,posts,user])
 
 
 

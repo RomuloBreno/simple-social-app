@@ -14,12 +14,13 @@ const Post = ({ dataUser }) => {
 
     useEffect(() => {
         // validar quais posts podem ser requisitados com base no usuario
+        let response=''
         const fetchUser = async () => {
-             
-            let result = await fetchApi(`v1/user/${dataUser.owner}`, user, 'GET',feedToInteligence, token)
-            if (!result.status)
+            if(user?.user)
+                response = await fetchApi(`v1/user/${dataUser.owner}`, user, 'GET',feedToInteligence, token)
+            if (!response.status)
                 return
-            setUser(result.result)
+            setUser(response.result)
         }
         fetchUser();
     }, [dataUser.owner,user,feedToInteligence,token])
