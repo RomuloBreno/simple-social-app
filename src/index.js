@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import AppError from './AppError';
 import reportWebVitals from './reportWebVitals';
-import { AuthProvider } from './context/authContext.js';
+import {  UserProvider } from './context/authContext.js';
 import {api} from './utils/api.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -12,12 +12,14 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const connectApi = true
 root.render(
   <React.StrictMode>
-          <AuthProvider>
+         
+          <UserProvider>
             {connectApi
             ?<App />
             : <AppError />
             }
-          </AuthProvider>
+          </UserProvider>
+   
   </React.StrictMode>
 );
 

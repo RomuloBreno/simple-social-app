@@ -15,7 +15,7 @@ const Feed = () => {
   const [postContent, setPostContent] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   // const navigate = useNavigate()
-  const token = useAuth().token;
+  const data = useAuth().data;
     const handlePostChange = (event) => {
     setPostContent(event.target.value);
   };
@@ -32,10 +32,13 @@ const Feed = () => {
     // validar quais posts podem ser requisitados com base no usuario
     let response =''
     const fetchPosts = async () => {
-      if(token)
-        response = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, token)
+      if(!data?.token)
+        setLoading(true)
+
+      response = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, data?.token)
       if(!response.status)
-        return
+        setLoading(true)
+
       setPosts(response.result)
       setLoading(false)
     }

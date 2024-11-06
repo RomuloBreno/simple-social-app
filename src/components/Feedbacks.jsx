@@ -5,16 +5,16 @@ import { fetchApi } from '../utils/fetch';
 const Feedbacks = ({ Feedbacks }) => {
     //mock
     const [feedbacks, setFeedbacks] = useState([
-        { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
-        { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
-        { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
+        // { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
+        // { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
+        // { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
 
     ]);
 
     const [expandedIndex, setExpandedIndex] = useState(null);
     const [newComment, setNewComment] = useState("");
     const [user, setUser] = useState(null);  // Estado para armazenar os user
-    const token = useAuth().user.token
+    const data = useAuth().data
     //   const [feedbacks, setFeedbacks] = useState([]);
 
     const handleAddComment = (e) => {
@@ -32,13 +32,13 @@ const Feedbacks = ({ Feedbacks }) => {
     useEffect(() => {
         // validar quais posts podem ser requisitados com base no usuario
         const fetchUser = async () => {
-                let result = await fetchApi(`v1/user/${Feedbacks.author}`, user, 'GET', token)
-                if (!result.status)
+                let authorFeedback = await fetchApi(`v1/user/${Feedbacks.author}`, user, 'GET', data?.token)
+                if (!authorFeedback.status)
                     return
-                setUser(result.result)
+                setUser(authorFeedback.result)
             }
         fetchUser();
-    }, [Feedbacks, user, token])
+    }, [Feedbacks, data])
     return (
         <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
             {feedbacks?.map((comment, index) => {

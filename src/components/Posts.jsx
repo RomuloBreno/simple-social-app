@@ -6,24 +6,21 @@ import Feedbacks from './Feedbacks';
 
 
 const Post = ({ dataUser }) => {
+    const data = useAuth().data
     const [user, setUser] = useState(null);  // Estado para armazenar os user
-    const token = useAuth().token
-    const { title, description, comments } = dataUser
+    const { title, description, comments, owner } = dataUser
     const [showComments, setShowComments] = useState(false);
     const [feedToInteligence] = useState({})
 
     useEffect(() => {
-        // validar quais posts podem ser requisitados com base no usuario
-        let response=''
         const fetchUser = async () => {
-            if(user?.user)
-                response = await fetchApi(`v1/user/${dataUser.owner}`, user, 'GET', feedToInteligence, token)
-            if (!response.status)
+              const ownerPost = await fetchApi(`v1/user/${owner}`, user, 'GET', feedToInteligence, data?.token)
+            if (!ownerPost.status)
                 return
-            setUser(response.result)
+            setUser(ownerPost.result)
         }
         fetchUser();
-    }, [dataUser.owner,user,feedToInteligence,token])
+    }, [user,feedToInteligence,data])
 
     // const toggleComments = () => setShowComments(!showComments);
     const toggleComments = () => {

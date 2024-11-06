@@ -13,18 +13,12 @@ const Header = () => {
     //seach form
     const [searchQuery, setSearchQuery] = useState("");
     //user
-    const user = useAuth();
+    const data = useAuth().data;
 
     const { logout } = useAuth();
 
     useEffect(() => {
-        let response;
-        const fetchUser = async () => {
-            if (user?.token)
-                response = await factoryUser(user?.token)
-        }
-        fetchUser();
-        if (!user.token) {
+        if (!data?.user) {
             setIsLoged(false); // Usuário não autenticado
             return
         } else {
@@ -33,7 +27,16 @@ const Header = () => {
 
 
 
-    }, [user?.token]);
+    }, [data?.user]);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 1568);
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -55,16 +58,10 @@ const Header = () => {
         // Adicione a lógica de pesquisa aqui, como redirecionar ou fazer uma requisição
     };
     // Atualiza o valor de `isMobile` quando a janela é redimensionada
-    useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 1568);
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
     return (
         <div className='text-center'>
             <header style={{ display: 'flex', padding: '10px', backgroundColor: '#333', color: '#fff', fontSize: '1em' }}>
-                <h2 className='' style={{ marginLeft: '10%', alignContent: 'center'}}>Fdback</h2>
+                <h2 className='' style={{ marginLeft: '10%', alignContent: 'center' }}>Fdback</h2>
                 {isMobile ? (
                     <>
                         <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '10%', color: 'white', fontSize: '24px' }}>
@@ -101,60 +98,58 @@ const Header = () => {
                             </nav>
                         )}
                     </>
-                )
-                    :
-                    (
-                        <>
-                            <nav style={{ alignSelf: 'center', marginLeft: '8%', marginRight: '8%' }}>
-                                {
-                                    !IsLoged &&
-                                    <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Home</a>
-                                }
-                                {
-                                    IsLoged &&
-                                    <a href="/feed" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
-                                    <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
-                                }
-                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
-                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
+                ) : (
+                    <>
+                        <nav style={{ alignSelf: 'center', marginLeft: '8%', marginRight: '8%' }}>
+                            {
+                                !IsLoged &&
+                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Home</a>
+                            }
+                            {
+                                IsLoged &&
+                                <a href="/feed" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
+                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
+                            }
+                            <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
+                            <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
 
-                            </nav>
-                            <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', marginRight: '6%' }}>
-                                <input
-                                    type="text"
-                                    placeholder="Pesquisar..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    style={{
-                                        padding: '5px',
-                                        borderRadius: '4px',
-                                        border: '1px solid #ccc',
-                                        marginRight: '5px',
-                                    }}
-                                />
-                                <button type="submit" className='btn btn-light' style={{ padding: '5px 10px', borderRadius: '4px', backgroundColor: '#555', color: 'white', border: 'none' }}>
-                                    🔍
-                                </button>
-                            </form>
-                            <div className='d-flex align-items-center'>
-                                {
-                                    IsLoged &&
-                                    <a href={`/profile`}>
-                                        <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
-                                    </a>
-                                }
-                                {
-                                    IsLoged &&
-                                    <button type="submit" className='btn btn-light' onClick={handlelogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
-                                }
-                                {
-                                    !IsLoged &&
-                                    <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
-                                }
+                        </nav>
+                        <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', marginRight: '6%' }}>
+                            <input
+                                type="text"
+                                placeholder="Pesquisar..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                style={{
+                                    padding: '5px',
+                                    borderRadius: '4px',
+                                    border: '1px solid #ccc',
+                                    marginRight: '5px',
+                                }}
+                            />
+                            <button type="submit" className='btn btn-light' style={{ padding: '5px 10px', borderRadius: '4px', backgroundColor: '#555', color: 'white', border: 'none' }}>
+                                🔍
+                            </button>
+                        </form>
+                        <div className='d-flex align-items-center'>
+                            {
+                                IsLoged &&
+                                <a href={`/profile`}>
+                                    <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                </a>
+                            }
+                            {
+                                IsLoged &&
+                                <button type="submit" className='btn btn-light' onClick={handlelogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
+                            }
+                            {
+                                !IsLoged &&
+                                <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
+                            }
 
-                            </div>
-                        </>
-                    )}
+                        </div>
+                    </>
+                )}
 
             </header>
         </div>

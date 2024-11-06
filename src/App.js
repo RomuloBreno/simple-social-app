@@ -9,19 +9,14 @@ import Feed from './pages/Feed';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import { useAuth, UserProvider, useUser } from './context/authContext';
-import { factoryUser } from './utils/fetch';
+import { useAuth } from './context/authContext';
 
 const App =  () => {
   document.title = "FdBack"
-  const [userData, setUserData] = useState()
-  const token = useAuth() || null
-  useEffect(async () => {
-    const response = await factoryUser(token?.token?.token)
-    setUserData(response)
-  }, [])
-  if (token?.token && userData?.status) {
+  const data = useAuth().data || null
+  if (data?.token && data?.user) {
     return (
+ 
       <Router>
          <Header /> 
          
@@ -46,8 +41,8 @@ const App =  () => {
             element={ <Profile />}
           />
 
-          <Route path="/login" element={<Navigate to="/" />} />
-          <Route path="/register" element={<Navigate to="/" />} />
+          <Route path="/login" element={<Navigate to="/feed" />} />
+          <Route path="/register" element={<Navigate to="/feed" />} />
         </Routes>
         <br />
 
