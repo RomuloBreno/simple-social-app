@@ -14,17 +14,17 @@ const Header = () => {
     const [searchQuery, setSearchQuery] = useState("");
     //user
     const user = useAuth();
-    const { logout } = useAuth()
+
+    const { logout } = useAuth();
 
     useEffect(() => {
         let response;
         const fetchUser = async () => {
-            if (user?.user)
-                response = await factoryUser(user?.user?.token)
-
+            if (user?.token)
+                response = await factoryUser(user?.token)
         }
         fetchUser();
-        if (!user.user) {
+        if (!user.token) {
             setIsLoged(false); // Usuário não autenticado
             return
         } else {
@@ -33,7 +33,7 @@ const Header = () => {
 
 
 
-    }, [user]);
+    }, [user?.token]);
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -64,7 +64,7 @@ const Header = () => {
     return (
         <div className='text-center'>
             <header style={{ display: 'flex', padding: '10px', backgroundColor: '#333', color: '#fff', fontSize: '1em' }}>
-                <h2 style={{ marginLeft: '10%' }}>Fdback</h2>
+                <h2 className='' style={{ marginLeft: '10%', alignContent: 'center'}}>Fdback</h2>
                 {isMobile ? (
                     <>
                         <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '10%', color: 'white', fontSize: '24px' }}>

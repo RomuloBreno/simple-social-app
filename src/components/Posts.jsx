@@ -7,7 +7,7 @@ import Feedbacks from './Feedbacks';
 
 const Post = ({ dataUser }) => {
     const [user, setUser] = useState(null);  // Estado para armazenar os user
-    const token = useAuth().user.token
+    const token = useAuth().token
     const { title, description, comments } = dataUser
     const [showComments, setShowComments] = useState(false);
     const [feedToInteligence] = useState({})
@@ -17,7 +17,7 @@ const Post = ({ dataUser }) => {
         let response=''
         const fetchUser = async () => {
             if(user?.user)
-                response = await fetchApi(`v1/user/${dataUser.owner}`, user, 'GET',feedToInteligence, token)
+                response = await fetchApi(`v1/user/${dataUser.owner}`, user, 'GET', feedToInteligence, token)
             if (!response.status)
                 return
             setUser(response.result)

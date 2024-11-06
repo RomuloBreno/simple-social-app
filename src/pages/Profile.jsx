@@ -6,11 +6,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 
 const Profile = () => {
+    const userData = null
     const navigate = useNavigate()
     const { profileId } = useParams();
 
     //auth
-    const token = useAuth().user.token
+    const token = useAuth().token.token
     const [user, setUser] = useState()
     const [anotherUser, setAnotherUser] = useState()
     const [editMode, setEditMode] = useState(false);
@@ -41,29 +42,28 @@ const Profile = () => {
             setError(error.message);
         }
     };
-    navigate(`/profile/${profileId}`)
     useEffect(() => {
+        console.log(userData)
+        navigate(`/profile/${profileId || userData?.nick }`)
         // validar quais posts podem ser requisitados com base no usuario
         const fetchUser = async () => {
-            let response;
-            if (!token)
-                return
-            response = await factoryUser(token)
-            setUser(response)
-    
-            if (profileId === response?.nick) {
+            setUser(userData.data)  
+            let response=''    
+            if (profileId === user?.nick) {
                 setMyProfile(true)
-            } else {
+            } else if(profileId !== user?.nick) {
                 setMyProfile(false)
                 response = await fetchApi(`v1/user/nick/${profileId}`, null, 'GET', null, token)
                 if (!response.status)
                     setAnotherUser(response.result)
+            }else{
+                navigate(`/profile/${profileId || userData?.nick }`)
             }
         }
         fetchUser();
 
 
-    }, [profileId,token])
+    }, [token])
 
     if (!myProfile) {
         return (

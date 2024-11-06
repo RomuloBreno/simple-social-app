@@ -2,42 +2,37 @@
 import React, { useState, useEffect } from 'react';
 import Post from '../components/Posts';
 import {fetchApi} from '../utils/fetch';
-import { useAuth } from '../context/authContext';
-import { useNavigate } from 'react-router-dom';
+import { useAuth, useUser } from '../context/authContext';
+// import { useNavigate } from 'react-router-dom';
 
 
 const Feed = () => {
+  document.title="Feed"
+
   const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
   const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
   const [feedToInteligence] = useState({})
   const [postContent, setPostContent] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
-  const navigate = useNavigate()
-  const user = useAuth();
-  const token = user.user.token
-
-  const handlePostChange = (event) => {
+  // const navigate = useNavigate()
+  const token = useAuth().token;
+    const handlePostChange = (event) => {
     setPostContent(event.target.value);
   };
-
+  
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     // Aqui você pode lidar com o envio do postContent e selectedFile
   };
-  if (!user) {
-    navigate("/")
-  
-  }
   useEffect(() => {
-    document.title="Feed"
     // validar quais posts podem ser requisitados com base no usuario
     let response =''
     const fetchPosts = async () => {
-      if(user?.user)
+      if(token)
         response = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, token)
       if(!response.status)
         return
@@ -45,8 +40,7 @@ const Feed = () => {
       setLoading(false)
     }
     fetchPosts();
-
-  }, [token,feedToInteligence,posts,user])
+  }, [])
 
 
 

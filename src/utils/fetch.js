@@ -39,7 +39,7 @@ async function validResponseReturn(response) {
 export async function factoryUser(token) {
   let resultWithid = await fetchApi(`auth/t-fdback`, null, 'GET', null, token)
   if (!resultWithid.status)
-    return false
+    return resultWithid.status
   let user = await fetchApi(`v1/user/${resultWithid?.result.userId}`, null, 'GET', null, token)
   if (!user.status)
     return false

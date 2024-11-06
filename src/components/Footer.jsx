@@ -2,17 +2,27 @@
 // src/components/Footer.tsx
 import React, {useState, useEffect} from 'react';
 import { useAuth } from '../context/authContext';
+import { factoryUser } from '../utils/fetch';
 const Footer = () => {
   const [IsLoged, setIsLoged] = useState(false)
   const user = useAuth()
   useEffect(() => {
-    if (!user.user) {
-      setIsLoged(false);
-      return // Usuário não autenticado
-    } else {
-      setIsLoged(true); // Usuário autenticado
+    let response;
+    const fetchUser = async () => {
+        if (user?.token)
+            response = await factoryUser(user?.token)
     }
-  }, [user]);
+    fetchUser();
+    if (!user.token) {
+        setIsLoged(false); // Usuário não autenticado
+        return
+    } else {
+        setIsLoged(true); // Usuário autenticado
+    }
+
+
+
+}, [user?.token]);
   return (
     <footer style={{ backgroundColor: '#333', color: '#fff', padding: '10px', textAlign: 'center' }}>
       <br/>
