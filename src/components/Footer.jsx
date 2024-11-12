@@ -5,15 +5,10 @@ import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
 const Footer = () => {
   const [IsLoged, setIsLoged] = useState(false)
-  const user = useAuth()
+  const data = useAuth()
+ 
   useEffect(() => {
-    let response;
-    const fetchUser = async () => {
-        if (user?.token)
-            response = await factoryUser(user?.token)
-    }
-    fetchUser();
-    if (!user.token) {
+    if (!data?.user) {
         setIsLoged(false); // Usuário não autenticado
         return
     } else {
@@ -22,7 +17,8 @@ const Footer = () => {
 
 
 
-}, [user?.user]);
+}, [data?.user]);
+
   return (
     <footer style={{ backgroundColor: '#333', color: '#fff', padding: '10px', textAlign: 'center' }}>
       <br/>
