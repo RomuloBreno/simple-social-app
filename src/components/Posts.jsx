@@ -1,26 +1,46 @@
 // src/components/Post.tsx
 import React, { useState, useEffect } from 'react';
-import { fetchApi } from '../utils/fetch';
+import { fetchApi, fetchImage } from '../utils/fetch';
+import { formatDate } from '../utils/formatText';
 import { useAuth } from '../context/authContext';
 import Feedbacks from './Feedbacks';
 
 
-const Post = ({ dataUser }) => {
+const Post = ({postContent }) => {
     const data = useAuth().data
     const [user, setUser] = useState(null);  // Estado para armazenar os user
-    const { title, description, comments, owner } = dataUser
+    const { title, description, comments, owner, path, creationDate } = postContent
+    const [images, setImages] = useState([null])
     const [showComments, setShowComments] = useState(false);
     const [feedToInteligence] = useState({})
+    
 
+    const convertDate = (givenDate) =>{
+        return formatDate(givenDate)
+    }
+
+    const getImagesUrls= async () => {
+        if (path?.length !== 0){
+            path?.map((fileName) => {
+                const imagesGet = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/${postContent._id}/${owner}-${fileName}`;
+                setImages(prevImages => [...prevImages, imagesGet]);
+            })
+        }
+    }
     useEffect(() => {
+        console.log()
+        setImages([]);
         const fetchUser = async () => {
-              const ownerPost = await fetchApi(`v1/user/${owner}`, user, 'GET', feedToInteligence, data?.token)
+            debugger
+            const ownerPost = await fetchApi(`v1/user/${owner}`, user, 'GET', feedToInteligence, data?.token)
             if (!ownerPost.status)
                 return
-            setUser(ownerPost.result)
+            setUser(ownerPost.result)            
         }
+        getImagesUrls();
         fetchUser();
-    }, [user,feedToInteligence,data])
+        // 
+    }, [feedToInteligence, data.user])
 
     // const toggleComments = () => setShowComments(!showComments);
     const toggleComments = () => {
@@ -66,13 +86,20 @@ const Post = ({ dataUser }) => {
 
                             </div>
                             {/* CONTEUDO DO POST */}
-                            <div className="card-body">
-                                <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>10 min ago</div>
-                                    <h5 className="card-title">{title}</h5>
-                                <img width='100%' src='https://picsum.photos/50/50' alt='perfil' />
+                            <div className="card-body container">
+                                <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>publicado em: {convertDate(creationDate)}</div>
+                                <h4 className="card-title">{title}</h4>
                                 <p className="card-text">
                                     {description}
                                 </p>
+                                {images.length !== 0 ? images.map((image, index) => (
+                                    <img
+                                        key={index}
+                                        src={image}
+                                        alt={`Preview ${index + 1}`}
+                                        style={{ width: 'auto', height: 'auto', maxHeight:'100%', maxWidth:'100%' }}
+                                    />
+                                )):<></>}
                             </div>
                         </div>
 
@@ -80,7 +107,7 @@ const Post = ({ dataUser }) => {
 
                     {showComments && (
                         <div style={styles.blueBox}>
-                        <Feedbacks Feedbacks={comments}/>
+                            <Feedbacks Feedbacks={comments} postId={postContent._id} />
                         </div>
                     )}
                     <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>

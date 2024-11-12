@@ -45,3 +45,26 @@ export async function factoryUser(token) {
     return false
   return user.result
 }
+
+export async function fetchImage(imageUrl) {
+  try {
+    const response = await fetch(imageUrl);
+    
+    // Verifica se a requisição foi bem-sucedida
+    if (!response.ok) {
+      throw new Error(`Erro ao carregar a imagem: ${response.statusText}`);
+    }
+    // Obtém o Blob da imagem para poder manipulá-la
+    const imageBlob = await response.blob();
+    
+    // Cria uma URL de objeto temporária a partir do Blob para uso em `<img src="...">`
+    const imageObjectUrl = URL.createObjectURL(imageBlob);
+    
+    // Exemplo de uso: exibir a imagem em um elemento img no DOM
+    return imageObjectUrl
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+fetchImage();

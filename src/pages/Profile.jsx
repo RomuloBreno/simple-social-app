@@ -1,69 +1,74 @@
 // src/Login.js
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/authContext'; // Importa o hook useAuth
-import { fetchApi, factoryUser } from '../utils/fetch';
+import { fetchApi } from '../utils/fetch';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
 const Profile = () => {
-    const userData = null
+
     const navigate = useNavigate()
     const { profileId } = useParams();
 
     //auth
-    const token = useAuth().token.token
-    const [user, setUser] = useState()
+    const data = useAuth().data
+    const {name, nick, job, email} = data?.user
+    const [user, setUser] = useState(data?.user)
     const [anotherUser, setAnotherUser] = useState()
     const [editMode, setEditMode] = useState(false);
 
     //fields
-    const [name, setName] = useState('');
-    const [job, setJob] = useState('');
-    const [nick, setNick] = useState('');
-    const [email, setEmail] = useState('');
+    const [formName, setFormName] = useState(name);
+    const [formJob, setFormJob] = useState(job);
+    const [formNick, setFormNick] = useState(nick);
+    const [formEmail, setFormEmail] = useState(email);
     const [error, setError] = useState('');
 
     //profile validation
     const [myProfile, setMyProfile] = useState(false)
 
     const toggleEditMode = () => {
+        if(data?.user.nick === profileId)
         setEditMode(!editMode);
     }
     const handleSubmit = async (e) => {
+        
         e.preventDefault(); // Impede o recarregamento da página
         try {
-            let result = await fetchApi(`v1/update/user/${user.userId}`, 'POST', { name, nick, email, job })
+            let result = await fetchApi(`v1/update/user/${user._id}`,null, 'POST', { name:formName, nick:formNick, email:formEmail, job:formJob }, data?.token)
             if (!result.status)
                 throw new Error(result.result);
             //implement email verification
-            navigate('/profile')
+            window.location.href = `/profile/${data?.user.nick}`
             // Aqui você pode redirecionar para outra página ou fazer outra ação
         } catch (error) {
             setError(error.message);
         }
     };
+
+
     useEffect(() => {
-        console.log(userData)
-        navigate(`/profile/${profileId || userData?.nick }`)
         // validar quais posts podem ser requisitados com base no usuario
         const fetchUser = async () => {
-            setUser(userData.data)  
-            let response=''    
-            if (profileId === user?.nick) {
+                        
+            if(profileId === data?.user.nick){
                 setMyProfile(true)
-            } else if(profileId !== user?.nick) {
-                setMyProfile(false)
-                response = await fetchApi(`v1/user/nick/${profileId}`, null, 'GET', null, token)
-                if (!response.status)
-                    setAnotherUser(response.result)
+                setAnotherUser(null)
+
             }else{
-                navigate(`/profile/${profileId || userData?.nick }`)
+                setMyProfile(false)
+                const userByProfileParam = await fetchApi(`v1/user/nick/${profileId}`, null, 'GET', null, data?.token)
+                if (userByProfileParam?.status)
+                    setAnotherUser(userByProfileParam.result)
+                if(userByProfileParam?.status === false)
+                    navigate(`/profile/${user?.nick }`)
             }
+            
         }
         fetchUser();
 
 
-    }, [token])
+    }, [data?.user,profileId,editMode])
 
     if (!myProfile) {
         return (
@@ -79,11 +84,12 @@ const Profile = () => {
             </div>
 
         );
-    } else if (myProfile) {
+    } else if (myProfile && !editMode) {
         return (
             <div style={styles.container}>
                 <div className='align-items-center' style={{ display: 'flex' }}>
                     <img className="rounded-circle" width="65" style={{}} src="https://picsum.photos/50/50" alt="profile" />
+                    <button onClick={toggleEditMode} style={{ maxHeight: 'fit-content', marginLeft: '70%' }}>🖍</button>
                 </div>
                 <br />
                 {/* <img src={user.profilePicture} alt="Foto de Perfil" style={styles.profilePicture} /> */}
@@ -112,8 +118,8 @@ const Profile = () => {
                                 type="text"
                                 id="name"
                                 className="form-control"
-                                value={user.name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={formName}
+                                onChange={(e) => setFormName(e.target.value)}
                                 required
                             />
                         </div>
@@ -124,8 +130,8 @@ const Profile = () => {
                                 type="text"
                                 id="nick"
                                 className="form-control"
-                                value={user.nick}
-                                onChange={(e) => setNick(e.target.value)}
+                                value={formNick}
+                                onChange={(e) => setFormNick(e.target.value)}
                                 required
                             />
                         </div>
@@ -136,8 +142,8 @@ const Profile = () => {
                                 type="text"
                                 id="email"
                                 className="form-control"
-                                value={user.email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={formEmail}
+                                onChange={(e) => setFormEmail(e.target.value)}
                                 required
                             />
                         </div>
@@ -147,8 +153,8 @@ const Profile = () => {
                                 type="text"
                                 id="job"
                                 className="form-control"
-                                value={user.job}
-                                onChange={(e) => setJob(e.target.value)}
+                                value={formJob}
+                                onChange={(e) => setFormJob(e.target.value)}
                                 required
                             />
                         </div>
@@ -160,7 +166,7 @@ const Profile = () => {
                 </div >
             </div>
         );
-    } 
+    }
 };
 
 const styles = {

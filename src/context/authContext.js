@@ -18,33 +18,36 @@ export const UserProvider = ({ children }) => {
   const [data, setData] = useState(null);   // Armazena os dados
   const [token, setToken] = useState(tokenInit);   // Armazena os dados
 
-  const fetchData = async () => {
-  const initCredencials = await initContext(token);
-  setData({ user: initCredencials ? initCredencials: null, token: tokenInit }) // Atualiza o estado com os dados recebidos
+  
+  
+  const add = (token) => {
+    fetchData(token) // Armazena
   };
-
-  const add = (getUser) => {
-    setData({ getUser }); // Armazena
-  };
-
+  
   const remove = () => {
     setData(null); // Remove
   };
-
+  
   const login = (token) => {
     setToken({token })
     localStorage.setItem('authToken', token); // Armazena o token no localStorage
   };
-
+  
   const logout = () => {
     setToken(null);
     localStorage.removeItem('authToken'); // Remove o token do localStorage
   };
+  
+  const fetchData = async (tokenParam) => {
+  const initCredencials = await initContext(token ?token : tokenParam);
+  setData({ user: initCredencials ? initCredencials: null, token: tokenInit ? tokenInit : tokenParam }) // Atualiza o estado com os dados recebidos
+  };
+
 
   // 4. Use useEffect para disparar a função assíncrona no início
   useEffect(() => {
     fetchData();
-  }, [token]);
+  }, [data?.token]);
 
   return (
     <UserContext.Provider value={{ data, refetch: fetchData, add, remove, login, logout }}>

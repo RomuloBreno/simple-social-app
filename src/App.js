@@ -1,5 +1,5 @@
 // src/App.tsx
-import React, { useState, useEffect } from 'react';
+import React, {useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './components/Header';
@@ -14,7 +14,11 @@ import { useAuth } from './context/authContext';
 const App =  () => {
   document.title = "FdBack"
   const data = useAuth().data || null
-  if (data?.token && data?.user) {
+
+  useEffect(() => {
+   
+  }, [data?.user])
+  if (data?.token && data?.user && data) {
     return (
  
       <Router>

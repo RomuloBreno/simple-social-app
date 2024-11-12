@@ -3,19 +3,19 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
-const Header = () => {
+const Header = (loged) => {
     const navigate = useNavigate()
     //mobile
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     //valid login
-    const [IsLoged, setIsLoged] = useState(false)
+    const [IsLoged, setIsLoged] = useState(loged)
     const [menuOpen, setMenuOpen] = useState(false);
     //seach form
     const [searchQuery, setSearchQuery] = useState("");
     //user
     const data = useAuth().data;
 
-    const { logout } = useAuth();
+    const { logout, remove } = useAuth();
 
     useEffect(() => {
         if (!data?.user) {
@@ -43,6 +43,7 @@ const Header = () => {
     const handlelogout = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         logout() // Envia as credenciais
+        remove() // Envia as credenciais
         navigate('/')
     };
     const handlelogin = async (e) => {
@@ -100,21 +101,21 @@ const Header = () => {
                     </>
                 ) : (
                     <>
-                        <nav style={{ alignSelf: 'center', marginLeft: '8%', marginRight: '8%' }}>
+                        <nav style={{ width:'36%', alignSelf: 'center',fontSize:'0.8em', marginLeft: '8%', marginRight: '8%' }}>
                             {
                                 !IsLoged &&
-                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Home</a>
+                                <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Home</a>
                             }
                             {
                                 IsLoged &&
-                                <a href="/feed" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
-                                <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
+                                <a href="/feed" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Feed</a> &&
+                                <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
                             }
-                            <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
-                            <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
+                            <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Publishes</a>
+                            <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Suporte</a>
 
                         </nav>
-                        <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', marginRight: '6%' }}>
+                        <form onSubmit={handleSearch} style={{ marginLeft:'10%', display: 'flex', alignItems: 'center', marginRight: '6%' }}>
                             <input
                                 type="text"
                                 placeholder="Pesquisar..."
@@ -125,6 +126,8 @@ const Header = () => {
                                     borderRadius: '4px',
                                     border: '1px solid #ccc',
                                     marginRight: '5px',
+                                    width:'80%',
+                                    display:'none'
                                 }}
                             />
                             <button type="submit" className='btn btn-light' style={{ padding: '5px 10px', borderRadius: '4px', backgroundColor: '#555', color: 'white', border: 'none' }}>
