@@ -9,6 +9,7 @@ import Feed from './pages/Feed';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import Post from './pages/Post';
 import { useAuth } from './context/authContext';
 
 const App =  () => {
@@ -44,7 +45,12 @@ const App =  () => {
             path={`/profile/:profileId`}
             element={ <Profile />}
           />
+          <Route
+            path={`/post/:postId`}
+            element={ <Post />}
+          />
 
+          <Route path="/post" element={<Navigate to="/feed" />} />
           <Route path="/login" element={<Navigate to="/feed" />} />
           <Route path="/register" element={<Navigate to="/feed" />} />
         </Routes>

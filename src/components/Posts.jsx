@@ -1,6 +1,6 @@
 // src/components/Post.tsx
 import React, { useState, useEffect } from 'react';
-import { fetchApi, fetchImage } from '../utils/fetch';
+import { fetchApi} from '../utils/fetch';
 import { formatDate } from '../utils/formatText';
 import { useAuth } from '../context/authContext';
 import Feedbacks from './Feedbacks';
@@ -9,7 +9,8 @@ import Feedbacks from './Feedbacks';
 const Post = ({postContent }) => {
     const data = useAuth().data
     const [user, setUser] = useState(null);  // Estado para armazenar os user
-    const { title, description, comments, owner, path, creationDate } = postContent
+    const { title, description, owner, path, creationDate } = postContent
+    const [comments, setComments] = useState()
     const [images, setImages] = useState([null])
     const [showComments, setShowComments] = useState(false);
     const [feedToInteligence] = useState({})
@@ -27,17 +28,24 @@ const Post = ({postContent }) => {
             })
         }
     }
+    const getCommentsUrls= async () => {
+        let getFeedback = await fetchApi(`v1/feedbacks/${postContent._id}`, null, 'GET', null, data?.token)
+        if (!getFeedback.status)
+            return 
+        setComments(getFeedback.result)
+    }
     useEffect(() => {
         console.log()
         setImages([]);
         const fetchUser = async () => {
-            debugger
+            // debugger
             const ownerPost = await fetchApi(`v1/user/${owner}`, user, 'GET', feedToInteligence, data?.token)
             if (!ownerPost.status)
                 return
             setUser(ownerPost.result)            
         }
         getImagesUrls();
+        getCommentsUrls();
         fetchUser();
         // 
     }, [feedToInteligence, data.user])
@@ -86,6 +94,7 @@ const Post = ({postContent }) => {
 
                             </div>
                             {/* CONTEUDO DO POST */}
+                            <a style={{textDecoration:'none', color:'black'}} href={`/post/${postContent._id}`}>
                             <div className="card-body container">
                                 <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>publicado em: {convertDate(creationDate)}</div>
                                 <h4 className="card-title">{title}</h4>
@@ -101,13 +110,14 @@ const Post = ({postContent }) => {
                                     />
                                 )):<></>}
                             </div>
+                            </a>
                         </div>
 
                     </div>
 
                     {showComments && (
                         <div style={styles.blueBox}>
-                            <Feedbacks Feedbacks={comments} postId={postContent._id} />
+                            <Feedbacks postId={postContent._id} />
                         </div>
                     )}
                     <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>
@@ -154,12 +164,11 @@ const styles = {
         transition: 'height 0.5s ease, opacity 0.5s ease', // Animação suave
     },
     blueBox: {
+        padding:'30px',
         marginLeft: '0px', // Animação no marginLeft
         opacity: '1',
         overflow: 'auto',
         transition: 'margin-left 0.5s ease, opacity 0.5s ease', // Animação suave
-        width: '30%',
-        minHeight: '620px',
         backgroundColor: '#fff',
         borderRadius: '10px',
         zIndex: 0,
