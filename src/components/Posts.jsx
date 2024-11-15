@@ -66,13 +66,19 @@ const Post = ({postContent }) => {
                                 <div className="d-flex justify-content-between align-items-center">
                                     <div className="d-flex justify-content-between align-items-center">
 
-                                        <div className="d-flex">
-                                            <img className="rounded-circle" width="65" src="https://picsum.photos/50/50" alt="" />
-                                            <div className="h7 text-muted px-2">
-                                                {user?.name}
-                                                <p>{user?.email}</p>
+                                        <a href={`/profile/${user?.nick}`} style={{textDecoration:'none'}}>
+                                        <div className="">
+                                            <div className="h7 d-flex">
+                                            <img className="rounded-circle" width={70} src="https://picsum.photos/50/50" alt="" />
+<div style={{margin:'10px'}}>
+                                                <span className='text-muted'>
+                                                 {user?.nick}<br/>
+                                                </span> 
+                                                {user?.job}
+</div>
                                             </div>
                                         </div>
+                                            </a>
 
 
 
