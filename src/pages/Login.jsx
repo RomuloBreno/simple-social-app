@@ -19,6 +19,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Estado para gerenciar o carregamento
 
 
   const handleCaptchaChange = (token) => {
@@ -32,13 +33,14 @@ const Login = () => {
     return emailRegex.test(this); // true para um email válido
   }
   const handleSubmit = async (e) => {
-    const passUserHash = hashPassword(email,password)
     e.preventDefault(); // Impede o recarregamento da página
+    const passUserHash = hashPassword(email,password)
     try {
       if (!email.ValidEmail())
         throw new Error('E-mail invalido, verifique e tente novamente');
         if (!captchaToken)
           throw new Error('Erro: falta ou problemas no envio do recaptcha');
+        setLoading(true)
         let result = await fetchConnect('auth/l-fdback', 'POST', { result: passUserHash, rcapt:captchaToken })
         if (!result.status)
           throw new Error(result.result);
@@ -47,6 +49,7 @@ const Login = () => {
       window.location.href = "/feed"
       // Aqui você pode redirecionar para outra página ou fazer outra ação
       setCaptchaToken(null)
+      setLoading(false)
     } catch (error) {
       setError(error.message);
     }
@@ -54,47 +57,72 @@ const Login = () => {
 
   return (
     <div className="container mx-10 d-flex justify-content-center align-items-center vh-30" style={{ height: '100%' }}>
+    
+     {loading ? (
+      <div style={{ textAlign: 'center',marginTop: '2%', width: '100%',height: '100%',zIndex: '12',position: 'absolute',alignContent: 'center', background: '#808080ad' }}>
+        <div className="container spinner-border p-10"role="status" >
+          <span className="sr-only"></span>
+        </div>
+      </div>
+      ):(
+        <div>
+
+        </div>
+      )}
+
+        
       <form className="col-md-6 p-10" onSubmit={handleSubmit}>
-        <h2 className="text-center mb-4">Login</h2>
+      <h2 className="text-center mb-4">Login</h2>
 
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Usuário:</label>
-          <input
-            type="text"
-            id="email"
-            className="form-control"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+      <div className="mb-3">
+        <label htmlFor="email" className="form-label">Usuário:</label>
+        <input
+          type="text"
+          id="email"
+          className="form-control"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
 
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Senha:</label>
-          <input
-            type="password"
-            id="password"
-            className="form-control"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+      <div className="mb-3">
+        <label htmlFor="password" className="form-label">Senha:</label>
+        <input
+          type="password"
+          id="password"
+          className="form-control"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
 
-        <button type="submit" className="btn btn-primary w-100">Login</button>
+      <button type="submit" className="btn btn-primary w-100">Login</button>
 
-        <br />
-        {error && <p className="text-danger mt-3">{error}</p>}
-        <br />
-      <ReCAPTCHA
-        sitekey={process.env.REACT_APP_RECAPTCHA_KEY}
-        onChange={handleCaptchaChange}
-      />
       <br />
-        <a href="/register" className="btn border w-20">Registrar</a>
-      </form>
-  
+      {error && <p className="text-danger mt-3">{error}</p>}
+      <br />
+    <ReCAPTCHA
+      sitekey={process.env.REACT_APP_RECAPTCHA_KEY}
+      onChange={handleCaptchaChange}
+    />
+    <br />
+      <a href="/register" className="btn border w-20">Registrar</a>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
 
+    </form>
     </div>
 
   );
