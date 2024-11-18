@@ -1,54 +1,81 @@
 // src/components/Post.tsx
 import React, { useState, useEffect } from 'react';
-import { fetchApi} from '../utils/fetch';
+import { fetchApi } from '../utils/fetch';
 import { formatDate } from '../utils/formatText';
 import { useAuth } from '../context/authContext';
 import Feedbacks from './Feedbacks';
 
 
-const Post = ({postContent }) => {
+const Post = ({ postContent }) => {
     const data = useAuth().data
     const [user, setUser] = useState(null);  // Estado para armazenar os user
     const { title, description, owner, path, creationDate } = postContent
     const [comments, setComments] = useState()
     const [images, setImages] = useState([null])
     const [showComments, setShowComments] = useState(false);
+    const [isClickedLike, setIsClickedLike] = useState(false);
+    const [qtdLikes, setQtdLikes] = useState();
+    const [qtdCommnets, setQtdCommnets] = useState();
+    const [toggleLike, setToggleLike] = useState();
+    const [youLikedPost, setYouLikedPost] = useState();
     const [feedToInteligence] = useState({})
-    
 
-    const convertDate = (givenDate) =>{
+    const convertDate = (givenDate) => {
         return formatDate(givenDate)
     }
-
-    const getImagesUrls= async () => {
-        if (path?.length !== 0){
+    const getImagesUrls = async () => {
+        if (path?.length !== 0) {
             path?.map((fileName) => {
                 const imagesGet = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/${postContent._id}/${owner}-${fileName}`;
                 setImages(prevImages => [...prevImages, imagesGet]);
             })
         }
     }
-    const getCommentsUrls= async () => {
+    const getCommentsUrls = async () => {
         let getFeedback = await fetchApi(`v1/feedbacks/${postContent._id}`, null, 'GET', null, data?.token)
         if (!getFeedback.status)
-            return 
+            return
         setComments(getFeedback.result)
+        setQtdCommnets(getFeedback?.result.length)
+    }
+    const postToggleLike = async () => {
+        setIsClickedLike(true)
+        let toggleLike = await fetchApi(`v1/publish-like/${postContent._id}`, null, 'POST', { userId: data?.user?._id }, data?.token)
+        if (!toggleLike.status)
+            return
+        setToggleLike(toggleLike.result)
+        setYouLikedPost(!youLikedPost)
+    }
+    const getYouLiked = async () => {
+        let youLiked = await fetchApi(`v1/you-like-post/${postContent._id}/${data?.user?._id}`, null, 'GET', null, data?.token)
+        if (!youLiked.status)
+            return
+        setYouLikedPost(youLiked.result)
+    }
+    const getQtdLikes = async () => {
+        debugger
+        let qtdLikes = await fetchApi(`v1/likes-qtd/${postContent._id}`, null, 'GET', null, data?.token)
+        if (!qtdLikes.status)
+            return
+        setQtdLikes(qtdLikes.result)
+    }
+    const fetchUser = async () => {
+        const ownerPost = await fetchApi(`v1/user/${owner}`, user, 'GET', feedToInteligence, data?.token)
+        if (!ownerPost.status)
+            return
+        setUser(ownerPost.result)
     }
     useEffect(() => {
-        console.log()
         setImages([]);
-        const fetchUser = async () => {
-            // debugger
-            const ownerPost = await fetchApi(`v1/user/${owner}`, user, 'GET', feedToInteligence, data?.token)
-            if (!ownerPost.status)
-                return
-            setUser(ownerPost.result)            
-        }
         getImagesUrls();
         getCommentsUrls();
         fetchUser();
-        // 
     }, [feedToInteligence, data.user])
+
+    useEffect(() => {
+        getYouLiked();
+        getQtdLikes();
+    }, [data?.user, toggleLike,youLikedPost])
 
     // const toggleComments = () => setShowComments(!showComments);
     const toggleComments = () => {
@@ -66,19 +93,19 @@ const Post = ({postContent }) => {
                                 <div className="d-flex justify-content-between align-items-center">
                                     <div className="d-flex justify-content-between align-items-center">
 
-                                        <a href={`/profile/${user?.nick}`} style={{textDecoration:'none'}}>
-                                        <div className="">
-                                            <div className="h7 d-flex">
-                                            <img className="rounded-circle" width={70} src="https://picsum.photos/50/50" alt="" />
-<div style={{margin:'10px'}}>
-                                                <span className='text-muted'>
-                                                 {user?.nick}<br/>
-                                                </span> 
-                                                {user?.job}
-</div>
+                                        <a href={`/profile/${user?.nick}`} style={{ textDecoration: 'none' }}>
+                                            <div className="">
+                                                <div className="h7 d-flex">
+                                                    <img className="rounded-circle" width={70} src="https://picsum.photos/50/50" alt="" />
+                                                    <div style={{ margin: '10px' }}>
+                                                        <span className='text-muted'>
+                                                            {user?.nick}<br />
+                                                        </span>
+                                                        {user?.job}
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                            </a>
+                                        </a>
 
 
 
@@ -100,22 +127,22 @@ const Post = ({postContent }) => {
 
                             </div>
                             {/* CONTEUDO DO POST */}
-                            <a style={{textDecoration:'none', color:'black'}} href={`/post/${postContent._id}`}>
-                            <div className="card-body container">
-                                <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>publicado em: {convertDate(creationDate)}</div>
-                                <h4 className="card-title">{title}</h4>
-                                <p className="card-text">
-                                    {description}
-                                </p>
-                                {images.length !== 0 ? images.map((image, index) => (
-                                    <img
-                                        key={index}
-                                        src={image}
-                                        alt={`Preview ${index + 1}`}
-                                        style={{ width: 'auto', height: 'auto', maxHeight:'100%', maxWidth:'100%' }}
-                                    />
-                                )):<></>}
-                            </div>
+                            <a style={{ textDecoration: 'none', color: 'black' }} href={`/post/${postContent._id}`}>
+                                <div className="card-body container">
+                                    <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>publicado em: {convertDate(creationDate)}</div>
+                                    <h4 className="card-title">{title}</h4>
+                                    <p className="card-text">
+                                        {description}
+                                    </p>
+                                    {images.length !== 0 ? images.map((image, index) => (
+                                        <img
+                                            key={index}
+                                            src={image}
+                                            alt={`Preview ${index + 1}`}
+                                            style={{ width: 'auto', height: 'auto', maxHeight: '100%', maxWidth: '100%' }}
+                                        />
+                                    )) : <></>}
+                                </div>
                             </a>
                         </div>
 
@@ -126,10 +153,18 @@ const Post = ({postContent }) => {
                             <Feedbacks postId={postContent._id} />
                         </div>
                     )}
-                    <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '10px' }}>
-                        <button>❤</button>
-                        <button onClick={toggleComments}>💬</button>
-                        <button>🔗</button>
+                    <div style={{ display: '', textAlign: 'center', flexDirection: 'column', marginLeft: '10px' }}>
+                        <div className='d-flex' style={{ alignItems: 'center' }}>
+                            <button style={youLikedPost ? styles.buttonLiked : styles.buttonLike} onClick={!isClickedLike ? postToggleLike : null}>❤</button>
+                            <span>{qtdLikes || 0}</span>
+                        </div>
+                        <div className='d-flex' style={{ alignItems: 'center' }}>
+                            <button className={styles.buttonPost} onClick={toggleComments}>💬</button>
+                            <span>{qtdCommnets}</span>
+                        </div>
+                        <div className='d-flex' style={{ alignItems: 'center' }}>
+                            <button className={styles.buttonPost}>🔗</button>
+                        </div>
                     </div>
 
                 </div>
@@ -146,6 +181,19 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff', // Cor de fundo para facilitar a visualização
+    },
+    buttonPost: {
+        width: '100%',
+    },
+    buttonLiked: {
+        width: '100%',
+        cursor: 'grab',
+        color: 'red',
+    },
+    buttonLike: {
+        width: '100%',
+        cursor: 'grab',
+        color: 'white'
     },
     circle: {
         backgroundColor: 'black',
@@ -170,7 +218,7 @@ const styles = {
         transition: 'height 0.5s ease, opacity 0.5s ease', // Animação suave
     },
     blueBox: {
-        padding:'30px',
+        padding: '30px',
         marginLeft: '0px', // Animação no marginLeft
         opacity: '1',
         overflow: 'auto',
