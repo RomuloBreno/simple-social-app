@@ -12,25 +12,39 @@ const Feed = () => {
 
   const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
   const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
+  const [postsFollowing, setPostsFollowing] = useState()
   const [feedToInteligence] = useState({})
 
   // const navigate = useNavigate()
   const data = useAuth().data;
+  const fetchPosts = async () => {
+    let response =''
+    if(!data?.token)
+      setLoading(true)
+
+    response = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, data?.token)
+    if(!response.status)
+      setLoading(true)
+
+    setPosts(response.result)
+    setLoading(false)
+  }
+  const fetchPostsFollowing = async () => {
+    let response =''
+    if(!data?.token)
+      setLoading(true)
+
+    response = await fetchApi(`v1/posts-feed-following/${data?.user?._id}`, posts, 'GET', feedToInteligence, data?.token)
+    if(!response.status)
+      setLoading(true)
+
+    setPostsFollowing(response.result)
+    setLoading(false)
+  }
    
   useEffect(() => {
     // validar quais posts podem ser requisitados com base no usuario
-    let response =''
-    const fetchPosts = async () => {
-      if(!data?.token)
-        setLoading(true)
-
-      response = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, data?.token)
-      if(!response.status)
-        setLoading(true)
-
-      setPosts(response.result)
-      setLoading(false)
-    }
+    fetchPostsFollowing();
     fetchPosts();
   }, [data?.user])
 
@@ -48,7 +62,8 @@ const Feed = () => {
         {loading ? (
           <p>Carregando...</p>
         ) : (
-          posts?.map((post) => (
+          // posts?.map((post) => (
+          postsFollowing?.map((post) => (
             <Post key={post._id} postContent={post} />
           ))
         )}

@@ -9,8 +9,8 @@ import Feedbacks from './Feedbacks';
 const Post = ({ postContent }) => {
     const data = useAuth().data
     const [user, setUser] = useState(null);  // Estado para armazenar os user
-    const { title, description, owner, path, creationDate } = postContent
-    const [comments, setComments] = useState()
+    const { title, description, owner, path, creationDate, comments } = postContent
+    //const [comments, setComments] = useState()
     const [images, setImages] = useState([null])
     const [showComments, setShowComments] = useState(false);
     const [isClickedLike, setIsClickedLike] = useState(false);
@@ -31,13 +31,6 @@ const Post = ({ postContent }) => {
             })
         }
     }
-    const getCommentsUrls = async () => {
-        let getFeedback = await fetchApi(`v1/feedbacks/${postContent._id}`, null, 'GET', null, data?.token)
-        if (!getFeedback.status)
-            return
-        setComments(getFeedback.result)
-        setQtdCommnets(getFeedback?.result.length)
-    }
     const postToggleLike = async () => {
         setIsClickedLike(true)
         let toggleLike = await fetchApi(`v1/publish-like/${postContent._id}`, null, 'POST', { userId: data?.user?._id }, data?.token)
@@ -53,7 +46,7 @@ const Post = ({ postContent }) => {
         setYouLikedPost(youLiked.result)
     }
     const getQtdLikes = async () => {
-        debugger
+        
         let qtdLikes = await fetchApi(`v1/likes-qtd/${postContent._id}`, null, 'GET', null, data?.token)
         if (!qtdLikes.status)
             return
@@ -65,22 +58,19 @@ const Post = ({ postContent }) => {
             return
         setUser(ownerPost.result)
     }
+    const toggleComments = () => {
+        setShowComments(!showComments);
+    }
     useEffect(() => {
         setImages([]);
         getImagesUrls();
-        getCommentsUrls();
         fetchUser();
-    }, [feedToInteligence, data.user])
+    }, [data?.user])
 
     useEffect(() => {
         getYouLiked();
         getQtdLikes();
-    }, [data?.user, toggleLike,youLikedPost])
-
-    // const toggleComments = () => setShowComments(!showComments);
-    const toggleComments = () => {
-        setShowComments(!showComments);
-    }
+    }, [data?.user, toggleLike])
     return (
         <div className="container" style={{ display: 'flex', border: '0px solid #ddd', padding: '10px', margin: '10px 0', maxHeight: 'auto' }}>
             <div style={{ flex: 1 }}>
@@ -160,7 +150,7 @@ const Post = ({ postContent }) => {
                         </div>
                         <div className='d-flex' style={{ alignItems: 'center' }}>
                             <button className={styles.buttonPost} onClick={toggleComments}>💬</button>
-                            <span>{qtdCommnets}</span>
+                            <span>{comments.length > 0 ? comments.length - 1 : 0 }</span>
                         </div>
                         <div className='d-flex' style={{ alignItems: 'center' }}>
                             <button className={styles.buttonPost}>🔗</button>

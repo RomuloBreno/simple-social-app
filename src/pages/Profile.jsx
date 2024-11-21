@@ -37,14 +37,14 @@ const Profile = () => {
             setEditMode(!editMode);
     }
     const handlerFollow = async () => {
-        debugger
+        
         let result = await fetchApi(`v1/follow-user/${anotherUser?._id}`, null, 'POST', { follower: user?._id }, data?.token)
         if (!result.status)
             return false
         setFollowClick(true)
     }
     const handlerUnfollow = async () => {
-        debugger
+        
         let result = await fetchApi(`v1/unfollow-user/${anotherUser?._id}`, null, 'POST', { follower: user?._id }, data?.token)
         if (!result.status)
             return false
@@ -57,7 +57,7 @@ const Profile = () => {
         setYouFollowMe(YouFollowMe.result)
     }
     const getFollows = async (id) => {
-        debugger
+        
         if(id==undefined)
             return false
         let getFollows = await fetchApi(`v1/follows-qtd/${id}`, null, 'GET', null, data?.token)
@@ -265,6 +265,7 @@ const Profile = () => {
                                 value={formJob}
                                 onChange={(e) => setFormJob(e.target.value)}
                                 required
+                                placeholder='Senior | VueJs | NodeJS'
                             />
                         </div>
                         <button className='btn btn-primary col-md-12 '>Save</button>

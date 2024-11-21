@@ -8,7 +8,7 @@
 // const FeedbackComment = ({ index, isExpanded, displayText, owner }) => {
 //   const data = useAuth().data
 //   const [userOwnerComment] = useState(owner); 
-//   debugger
+//   
   
 //   useEffect(() => {
 //   }, [data?.user,userOwnerComment]);

@@ -90,6 +90,7 @@ const Register = () => {
             value={job}
             onChange={(e) => setJob(e.target.value)}
             required
+            placeholder='Senior | VueJs | NodeJS'
           />
         </div>
 

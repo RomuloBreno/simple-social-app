@@ -21,10 +21,9 @@ const Feedbacks = ({ postId }) => {
     const data = useAuth().data
 
     const [feedbacks, setFeedbacks] = useState([]);
-
     const handleAddComment = async (e) => {
         setLoading(true)
-        debugger
+        
         const arrFeedbackForUser = []
         e.preventDefault();
         if (newComment.trim()) {
@@ -38,12 +37,9 @@ const Feedbacks = ({ postId }) => {
         }
         setLoading(false)
     };
-
-
     const toggleComment = (index) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
-
     const getFeedbacks = async () => {
         const arrFeedbackForUser = [];
         if(!postId)
@@ -62,14 +58,6 @@ const Feedbacks = ({ postId }) => {
             setFeedbacks(arrFeedbackForUser);
         });
     }
-    
-    useEffect(() => {
-        getFeedbacks();
-    }, [loading])
-
-    // useEffect(() => {
-    // }, [feedbacks])
-
     function formComment(){
         return(
             <form onSubmit={handleAddComment} style={{ marginTop: '20px' }}>
@@ -108,6 +96,14 @@ const Feedbacks = ({ postId }) => {
         </form>
         )
     }
+    
+    useEffect(() => {
+        getFeedbacks();
+    }, [data?.user])
+
+    // useEffect(() => {
+    // }, [feedbacks])
+
     if (feedbacks.length) {
         // if(false){
         return (
