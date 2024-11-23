@@ -110,7 +110,7 @@ return (
                  {loading && feedbacks?.length == 0 ? (
                     <>
                     <div style={{ padding: '10%' }}>
-                       {qtdFeedbacks != 0 
+                       {qtdFeedbacks != 0  && qtdFeedbacks != null
                        ? (<>
                         <div className="container spinner-border p-10" role="status" >
                             <span className="sr-only"></span>

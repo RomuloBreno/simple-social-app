@@ -95,7 +95,7 @@ const Register = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="email" className="form-label">Usuário:</label>
+          <label htmlFor="email" className="form-label">E-mail:</label>
           <input
             type="text"
             id="email"

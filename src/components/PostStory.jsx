@@ -3,120 +3,141 @@ import React, { useState, useEffect } from 'react';
 import { fetchApi } from '../utils/fetch';
 import { formatDate } from '../utils/formatText';
 import { useAuth } from '../context/authContext';
-import Feedbacks from './Feedbacks';
+import FeedbacksPost from './FeedbacksPost';
+import { useParams } from 'react-router-dom';
 
 
-const Post = ({ postContent }) => {
+const PostStory = ({postContent}) => {
     const data = useAuth().data
     const [user, setUser] = useState(null);  // Estado para armazenar os user
-    const { title, description, owner, path, creationDate, comments, postStoryPattern } = postContent
-    //const [comments, setComments] = useState()
+    // const [comments, setComments] = useState()
     const [images, setImages] = useState([null])
-    const [showComments, setShowComments] = useState(false);
-    const [isClickedLike, setIsClickedLike] = useState(false);
+    const [showComments, setShowComments] = useState(true);
+    const [feedToInteligence] = useState({})
+    const [post, setPost] = useState();
+    
+    const {title, owner,creationDate,description,comments,path} = postContent
+
     const [qtdLikes, setQtdLikes] = useState();
     const [qtdCommnets, setQtdCommnets] = useState();
     const [toggleLike, setToggleLike] = useState();
     const [youLikedPost, setYouLikedPost] = useState();
-    const [feedToInteligence] = useState({})
 
+    const [isClickedLike, setIsClickedLike] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
-
+    const [loading, setLoading] = useState(null);
+    console.log(creationDate)
     // Função de toggle para alterar o estado
     const toggleDivShare = () => {
         setIsVisible((prevState) => !prevState); // Inverte o estado atual
     };
 
-    const convertDate = (givenDate) => {
-        return formatDate(givenDate)
-    }
-    const getImagesUrls = async () => {
-        if (path?.length !== 0) {
-            path?.map((fileName) => {
-                const imagesGet = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/${postContent._id}/${owner}-${fileName}`;
-                setImages(prevImages => [...prevImages, imagesGet]);
-            })
-        }
-    }
     const postToggleLike = async () => {
         setIsClickedLike(true)
         setYouLikedPost(!youLikedPost)
-        let toggleLike = await fetchApi(`v1/publish-like/${postContent._id}`, null, 'POST', { userId: data?.user?._id }, data?.token)
+        let toggleLike = await fetchApi(`v1/publish-like/${postContent?._id}`, null, 'POST', { userId: data?.user?._id }, data?.token)
         if (!toggleLike.status)
             return
         setToggleLike(toggleLike.result)
+        window.location.reload()
     }
+
     const getYouLiked = async () => {
-        let youLiked = await fetchApi(`v1/you-like-post/${postContent._id}/${data?.user?._id}`, null, 'GET', null, data?.token)
+        let youLiked = await fetchApi(`v1/you-like-post/${postContent?._id}/${data?.user?._id}`, null, 'GET', null, data?.token)
         if (!youLiked.status)
             return
         setYouLikedPost(youLiked.result)
     }
     const getQtdLikes = async () => {
-
-        let qtdLikes = await fetchApi(`v1/likes-qtd/${postContent._id}`, null, 'GET', null, data?.token)
+        if(!postContent?._id)
+            return
+        let qtdLikes = await fetchApi(`v1/likes-qtd/${postContent?._id}`, null, 'GET', null, data?.token)
         if (!qtdLikes.status)
             return
         setQtdLikes(qtdLikes.result)
     }
-    const fetchUser = async () => {
-        const ownerPost = await fetchApi(`v1/user/${owner}`, user, 'GET', feedToInteligence, data?.token)
+
+    const convertDate = (givenDate) => {
+        return formatDate(givenDate)
+    }
+
+    const getImagesUrls = async () => {
+        if (path?.length !== 0) {
+            path?.map((fileName) => {
+                const imagesGet = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/${postContent?._id}/${owner}-${fileName}`;
+                setImages(prevImages => [...prevImages, imagesGet]);
+            })
+        }
+    }
+    // const getCommentsUrls = async () => {
+    //     let getFeedback = await fetchApi(`v1/feedbacks/${post?._id}`, null, 'GET', null, data?.token)
+    //     if (!getFeedback.status)
+    //         return
+    //     setComments(getFeedback.result)
+    // }
+     const fetchUser = async () => {
+        // debugger
+        if (!owner)
+            return
+        const ownerPost = await fetchApi(`v1/user/${owner}`, null, 'GET', null, data?.token)
         if (!ownerPost.status)
             return
         setUser(ownerPost.result)
     }
+    // const toggleComments = () => setShowComments(!showComments);
     const toggleComments = () => {
         setShowComments(!showComments);
+        // setShowComments(true);
     }
+
+
     useEffect(() => {
         setImages([]);
         getImagesUrls();
+        toggleComments();
         fetchUser();
-        console.log(postStoryPattern)
-    }, [data?.user])
+        // 
+    }, [feedToInteligence, data.user])
 
+    useEffect(() => {
+        // 
+    }, [showComments, path])
+    
     useEffect(() => {
         getYouLiked();
         getQtdLikes();
-    }, [data?.user])
+    }, [data?.user, toggleLike])
+
     return (
-        <div className="container" style={{ display: 'flex', border: '0px solid #ddd', padding: '10px', margin: '10px 0', maxHeight: 'auto' }}>
-            <div style={{ flex: 1 }}>
+        <div className="container">
+            <div className="container" style={{ display: '', border: '0px solid #ddd', padding: '10px', margin: '10px 0', maxHeight: 'auto' }}>
+                <div>
 
 
-                <div style={styles.container}>
-                    <div style={styles.blackBox}>
-                        <div className="card gedf-card">
-                            <div className="card-header">
-                                <div className="d-flex justify-content-between align-items-center">
+                    <div style={styles.container}>
+                        <div style={styles.blackBox}>
+                            <div className="card gedf-card">
+                                <div className="card-header">
                                     <div className="d-flex justify-content-between align-items-center">
+                                        <div className="d-flex justify-content-between align-items-center">
 
-                                        <a href={`/profile/${user?.nick}`} style={{ textDecoration: 'none' }}>
-                                            <div className="">
-                                                <div className="h7 d-flex">
-                                                    <img className="rounded-circle" width={70} src="https://picsum.photos/50/50" alt="" />
-                                                    <div style={{ margin: '10px' }}>
-                                                        <span className='text-muted'>
-                                                            {user?.nick}<br />
-                                                        </span>
-                                                        {user?.job}
-                                                    </div>
+                                            <div className="d-flex">
+                                                <img className="rounded-circle" width="65" src="https://picsum.photos/50/50" alt="" />
+                                                <div className="h7 text-muted px-2">
+                                                    {user?.name}
+                                                    <p>{user?.email}</p>
                                                 </div>
                                             </div>
-                                        </a>
 
 
 
-                                    </div>
-                                    <div>
-                                        <div className="dropdown">
-                                            
-                                            {postStoryPattern ? (<><span title='quando o post tem essa marcação é possivel ver outros posts que fazem aprte de um mesmo historico'>Story</span></>) : (<></>)}
+                                        </div>
+                                        <div>
+                                            <div className="dropdown">
                                             <button className="btn btn-link dropdown-toggle" onClick={toggleDivShare} type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i className="fa fa-ellipsis-h"></i>
                                             </button>
-
-                                            {isVisible && (
+                                                {isVisible && (
                                                 <div className="dropdown-menu dropdown-menu-right d-block" aria-labelledby="gedf-drop1">
                                                     <div className="h6 dropdown-header">Configuration</div>
                                                     <div className='d-flex' style={{ alignItems: 'center', padding:'0px', margin:'10px' }}>
@@ -126,14 +147,12 @@ const Post = ({ postContent }) => {
                                                     <a className="dropdown-item" href="/report">Report</a> {/* //TODO: Criar Formulário de report */}
                                                 </div>
                                             )}
-
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </div>
-                            {/* CONTEUDO DO POST */}
-                            <a style={{ textDecoration: 'none', color: 'black' }} href={postStoryPattern != null && postStoryPattern != '' ? `/post-story/${postStoryPattern}` : `/post/${postContent._id}`}>
+                                </div>
+                                {/* CONTEUDO DO POST */}
                                 <div className="card-body container">
                                     <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>publicado em: {convertDate(creationDate)}</div>
                                     <h4 className="card-title">{title}</h4>
@@ -149,31 +168,35 @@ const Post = ({ postContent }) => {
                                         />
                                     )) : <></>}
                                 </div>
-                            </a>
-                        </div>
+                            </div>
 
-                    </div>
-
-                    {showComments && (
-                        <div style={styles.blueBox}>
-                            <Feedbacks postId={postContent._id} qtdFeedbacks={comments.length} />
                         </div>
-                    )}
-                    <div style={{ display: '', textAlign: 'center', flexDirection: 'column', marginLeft: '10px' }}>
-                        <div className='d-flex' style={{ alignItems: 'center' }}>
+                        <br />
+                        <div style={{ display: '', flexDirection: 'column', marginLeft: '10px' }}>
+                        <div className='d-flex text-center' style={{ alignItems: 'center' }}>
+                        </div>
+                        <div className='text-center d-flex' style={{ alignItems: 'center' }}>
+                            <div>
                             <button style={youLikedPost ? styles.buttonLiked : styles.buttonLike} onClick={!isClickedLike ? postToggleLike : null}>❤</button>
-                        </div>
-                        <div className='text-center' style={{ alignItems: 'center' }}>
+                            <br />
+                            <span>{qtdLikes | ''}</span>
+                            </div>
+                            <div>
                             <button className={styles.buttonPost} onClick={toggleComments}>💬</button>
                             <br />
-                            <span>{comments.length | ''}</span>
+                            <span>{comments?.length | ''}</span>
+                            </div>
                         </div>
-
+                        </div>
+                        {showComments && (
+                            <div style={styles.blueBox}>
+                                <FeedbacksPost postId={postContent?._id} />
+                            </div>
+                        )}
                     </div>
-
                 </div>
-            </div>
 
+            </div>
         </div>
     );
 };
@@ -181,7 +204,7 @@ const Post = ({ postContent }) => {
 const styles = {
     container: {
         position: 'relative',
-        display: 'flex',
+        display: '',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff', // Cor de fundo para facilitar a visualização
@@ -190,12 +213,10 @@ const styles = {
         width: '100%',
     },
     buttonLiked: {
-        width: '100%',
         cursor: 'grab',
         color: 'red',
     },
     buttonLike: {
-        width: '100%',
         cursor: 'grab',
         color: 'white'
     },
@@ -213,7 +234,7 @@ const styles = {
         borderRadius: '10px',
     },
     blackBox: {
-        width: '80%',
+        width: '100%',
         height: 'auto',//deve ser auto
         maxHeight: 'auto',
         backgroundColor: 'white',
@@ -233,4 +254,4 @@ const styles = {
     },
 };
 
-export default Post;
+export default PostStory;

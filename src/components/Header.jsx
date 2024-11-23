@@ -115,7 +115,9 @@ const Header = (loged) => {
                             <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Suporte</a>
 
                         </nav>
-                        <form onSubmit={handleSearch} style={{ marginLeft:'10%', display: 'flex', alignItems: 'center', marginRight: '6%' }}>
+                        {
+                                IsLoged &&
+                                <form onSubmit={handleSearch} style={{ marginLeft:'10%', display: 'flex', alignItems: 'center', marginRight: '6%' }}>
                             <input
                                 type="text"
                                 placeholder="Pesquisar..."
@@ -134,6 +136,8 @@ const Header = (loged) => {
                                 🔍
                             </button>
                         </form>
+                            }
+                       
                         <div className='d-flex align-items-center'>
                             {
                                 IsLoged &&

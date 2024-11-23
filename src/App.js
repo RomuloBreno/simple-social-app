@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Post from './pages/Post';
+import FeedStory from './pages/FeedStory';
 import { useAuth } from './context/authContext';
 
 const App =  () => {
@@ -48,6 +49,10 @@ const App =  () => {
           <Route
             path={`/post/:postId`}
             element={ <Post />}
+          />
+          <Route
+            path={`/post-story/:postStoryPatternId`}
+            element={ <FeedStory />}
           />
 
           <Route path="/post" element={<Navigate to="/feed" />} />
