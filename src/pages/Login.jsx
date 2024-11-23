@@ -42,8 +42,10 @@ const Login = () => {
           throw new Error('Erro: falta ou problemas no envio do recaptcha');
         setLoading(true)
         let result = await fetchConnect('auth/l-fdback', 'POST', { result: passUserHash, rcapt:captchaToken })
-        if (!result.status)
+        if (!result.status){
+          setLoading(false)
           throw new Error(result.result);
+        }
         login(`Bearer ${result.result}`) 
         add(`Bearer ${result.result}`)// Envia as credenciais
       window.location.href = "/feed"
