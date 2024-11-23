@@ -33,11 +33,11 @@ const FormPost = () => {
     const checked = event.target.checked
     debugger
     let posts = await fetchApi(`v1/posts-story-owner/${data?.user?._id}`, null, 'GET', null, data?.token)
-    if(!posts.status)
+    if (!posts.status)
       return
     setPostsStory(posts.result)
     setPostStoryChecked(checked)
-   
+
   };
 
   const handleDeleteFileChange = (index) => {
@@ -54,42 +54,67 @@ const FormPost = () => {
     event.preventDefault();
     setLoading(true);
 
-    //pega todos os nomes dos arquivos para salavr no banco
-    const pathsName = getNameFiles(selectedFiles)
-    //faz request para criação de post
-    const dataPost = { title: title, description: postContent, path: pathsName, owner: data?.user._id, postStoryPattern:postStoryChecked ? selectedPostsStoryValue: null }
-    let postPublished = await fetchApi('v1/publish', null, 'POST', dataPost, data?.token)
-    if (!postPublished.status) {
-      setError(postPublished.result)
-      setLoading(false)
-    }
-    setLoading(false)
+    try {
+      // Obtém todos os nomes dos arquivos para salvar no banco
+      const pathsName = getNameFiles(selectedFiles);
 
-    // para cada arquivo cria uma URL assinada para publicação
-    selectedFiles.map(async (file, index) => {
-
-      const keyPath = `${postPublished.result.id}/${data?.user._id}-${file.name}`
-
-      let signedUrl = await fetchApi(`auth/s3-post-img-url`, null, 'POST', { key: keyPath, fileName: file.name }, data?.token)
-      if (!signedUrl.status)
-        return
-
-      //envia file pro storage
-      const optionsS3 = {
-        method: 'PUT',
-        headers: {
-          'Content-Type': `image/${file.type}` // Define o tipo de conteúdo do arquivo
-        },
-        body: file
+      // Faz request para criação de post
+      const dataPost = {
+        title,
+        description: postContent,
+        path: pathsName,
+        owner: data?.user._id,
+        postStoryPattern: postStoryChecked ? selectedPostsStoryValue : null,
       };
-      const storageStatus = await fetch(signedUrl.result, optionsS3);
 
-      if (!storageStatus.status) {
-        let storageResponsJson = await storageStatus.json()
-        setError(storageResponsJson.message)
+      const postPublished = await fetchApi('v1/publish', null, 'POST', dataPost, data?.token);
+
+      // Verifica se a publicação do post falhou
+      if (!postPublished.status) {
+        setError(postPublished.result);
+        setLoading(false);
+        return;
       }
-      window.location.href = "/"
-    })
+
+      // Cria URLs assinadas e faz upload de cada arquivo ao S3
+      const uploadPromises = selectedFiles.map(async (file) => {
+        const keyPath = `${postPublished.result.id}/${data?.user._id}-${file.name}`;
+
+        // Solicita URL assinada para upload
+        const signedUrl = await fetchApi('auth/s3-post-img-url', null, 'POST', { key: keyPath, fileName: file.name }, data?.token);
+
+        if (!signedUrl.status) {
+          throw new Error(`Erro ao obter URL assinada para o arquivo ${file.name}`);
+        }
+
+        // Envia o arquivo para o storage S3
+        const optionsS3 = {
+          method: 'PUT',
+          headers: {
+            'Content-Type': file.type, // Define o tipo de conteúdo corretamente
+          },
+          body: file,
+        };
+
+        const storageStatus = await fetch(signedUrl.result, optionsS3);
+
+        if (!storageStatus.ok) {
+          const storageResponseJson = await storageStatus.json();
+          throw new Error(`Erro ao enviar arquivo ${file.name}: ${storageResponseJson.message}`);
+        }
+      });
+
+      // Aguarda que todas as operações de upload sejam concluídas
+      await Promise.all(uploadPromises);
+
+      // Redireciona após o sucesso do upload
+      window.location.href = '/';
+    } catch (error) {
+      // Exibe qualquer erro capturado durante o processo
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleTabChange = (tab) => {
@@ -97,13 +122,13 @@ const FormPost = () => {
   };
 
   useEffect(() => {
-    if(!postsStory.length){
+    if (!postsStory.length) {
       setPostStoryChecked(false)
       return
     }
   }, [loading, path])
 
- 
+
 
   // Função para capturar o valor do select
   const handleSelectChange = (event) => {
@@ -213,30 +238,30 @@ const FormPost = () => {
             </div>
             <br />
             <div>
-              <input type="checkbox" className="btn btn-primary" onClick={handleCheckPostStory}  />
+              <input type="checkbox" className="btn btn-primary" onClick={handleCheckPostStory} />
               <span style={{ padding: '2px' }}> post story</span>
               {/* select post pattern */}
-              {postStoryChecked 
-              ? (
-              <>
-              <select
-                  id="select"
-                  value={selectedPostsStoryValue}
-                  onChange={handleSelectChange}
-                  style={{ marginLeft: "10px" }}
-                >
-                  <option value="">Selecione...</option>
-                  {/* Gerando opções dinamicamente a partir do array */}
-                  {postsStory.map((option) => (
-                    <option key={option._id} value={option._id}>
-                      {option.title}
-                    </option>
-                  ))}
-                </select>
-              </>
-            ) : (<></>)}
-                <br />
-            {postStoryChecked && postsStory==0 ? (<><span>Marcar a opção cria o post story caso não exista</span></>): (<></>) }
+              {postStoryChecked
+                ? (
+                  <>
+                    <select
+                      id="select"
+                      value={selectedPostsStoryValue}
+                      onChange={handleSelectChange}
+                      style={{ marginLeft: "10px" }}
+                    >
+                      <option value="">Selecione...</option>
+                      {/* Gerando opções dinamicamente a partir do array */}
+                      {postsStory.map((option) => (
+                        <option key={option._id} value={option._id}>
+                          {option.title}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                ) : (<></>)}
+              <br />
+              {postStoryChecked && postsStory == 0 ? (<><span>Marcar a opção cria o post story caso não exista</span></>) : (<></>)}
             </div>
             <br />
             <button type="submit" className="btn btn-primary">Submit</button>

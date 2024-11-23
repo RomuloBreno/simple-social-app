@@ -49,7 +49,8 @@ const PostStory = ({postContent}) => {
         setYouLikedPost(youLiked.result)
     }
     const getQtdLikes = async () => {
-
+        if(!postContent?._id)
+            return
         let qtdLikes = await fetchApi(`v1/likes-qtd/${postContent?._id}`, null, 'GET', null, data?.token)
         if (!qtdLikes.status)
             return
