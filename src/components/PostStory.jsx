@@ -26,7 +26,6 @@ const PostStory = ({postContent}) => {
     const [isClickedLike, setIsClickedLike] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [loading, setLoading] = useState(null);
-    console.log(creationDate)
     // Função de toggle para alterar o estado
     const toggleDivShare = () => {
         setIsVisible((prevState) => !prevState); // Inverte o estado atual
@@ -76,7 +75,7 @@ const PostStory = ({postContent}) => {
     //     setComments(getFeedback.result)
     // }
      const fetchUser = async () => {
-        // debugger
+        // 
         if (!owner)
             return
         const ownerPost = await fetchApi(`v1/user/${owner}`, null, 'GET', null, data?.token)

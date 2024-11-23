@@ -55,7 +55,7 @@ const Header = (loged) => {
     // Lógica de pesquisa
     const handleSearch = (e) => {
         e.preventDefault();
-        console.log("Procurando por:", searchQuery);
+        // console.log("Procurando por:", searchQuery);
         // Adicione a lógica de pesquisa aqui, como redirecionar ou fazer uma requisição
     };
     // Atualiza o valor de `isMobile` quando a janela é redimensionada

@@ -96,7 +96,7 @@ const Post = () => {
     }
 
     const fetchUser = async () => {
-        // debugger
+        // 
         if (!owner)
             return
         const ownerPost = await fetchApi(`v1/user/${owner}`, null, 'GET', null, data?.token)

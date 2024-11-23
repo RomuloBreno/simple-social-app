@@ -99,7 +99,7 @@ const FeedbacksPost = ({ postId, qtdFeedbacks }) => {
     }
 
     useEffect(() => {
-        debugger
+        
         if(feedbacks == null)
             getFeedbacks();
 

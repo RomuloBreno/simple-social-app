@@ -72,7 +72,6 @@ const Post = ({ postContent }) => {
         setImages([]);
         getImagesUrls();
         fetchUser();
-        console.log(postStoryPattern)
     }, [data?.user])
 
     useEffect(() => {

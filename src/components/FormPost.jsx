@@ -31,7 +31,7 @@ const FormPost = () => {
   };
   const handleCheckPostStory = async (event) => {
     const checked = event.target.checked
-    debugger
+    
     let posts = await fetchApi(`v1/posts-story-owner/${data?.user?._id}`, null, 'GET', null, data?.token)
     if (!posts.status)
       return

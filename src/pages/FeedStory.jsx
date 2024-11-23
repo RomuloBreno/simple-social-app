@@ -41,7 +41,7 @@ const FeedStory = () => {
         return
     if(!postStoryPatternId)
         return
-    debugger
+    
     response = await fetchApi(`v1/posts-story/${postStoryPatternId}`, null, 'GET', null, data?.token)
     if(!response.status)
         return
