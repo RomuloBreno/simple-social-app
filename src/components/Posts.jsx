@@ -20,6 +20,13 @@ const Post = ({ postContent }) => {
     const [youLikedPost, setYouLikedPost] = useState();
     const [feedToInteligence] = useState({})
 
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Função de toggle para alterar o estado
+    const toggleDivShare = () => {
+        setIsVisible((prevState) => !prevState); // Inverte o estado atual
+    };
+
     const convertDate = (givenDate) => {
         return formatDate(givenDate)
     }
@@ -33,11 +40,11 @@ const Post = ({ postContent }) => {
     }
     const postToggleLike = async () => {
         setIsClickedLike(true)
+        setYouLikedPost(!youLikedPost)
         let toggleLike = await fetchApi(`v1/publish-like/${postContent._id}`, null, 'POST', { userId: data?.user?._id }, data?.token)
         if (!toggleLike.status)
             return
         setToggleLike(toggleLike.result)
-        setYouLikedPost(!youLikedPost)
     }
     const getYouLiked = async () => {
         let youLiked = await fetchApi(`v1/you-like-post/${postContent._id}/${data?.user?._id}`, null, 'GET', null, data?.token)
@@ -46,7 +53,7 @@ const Post = ({ postContent }) => {
         setYouLikedPost(youLiked.result)
     }
     const getQtdLikes = async () => {
-        
+
         let qtdLikes = await fetchApi(`v1/likes-qtd/${postContent._id}`, null, 'GET', null, data?.token)
         if (!qtdLikes.status)
             return
@@ -70,7 +77,7 @@ const Post = ({ postContent }) => {
     useEffect(() => {
         getYouLiked();
         getQtdLikes();
-    }, [data?.user, toggleLike])
+    }, [data?.user])
     return (
         <div className="container" style={{ display: 'flex', border: '0px solid #ddd', padding: '10px', margin: '10px 0', maxHeight: 'auto' }}>
             <div style={{ flex: 1 }}>
@@ -102,15 +109,21 @@ const Post = ({ postContent }) => {
                                     </div>
                                     <div>
                                         <div className="dropdown">
-                                            <button className="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button className="btn btn-link dropdown-toggle" onClick={toggleDivShare} type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i className="fa fa-ellipsis-h"></i>
                                             </button>
-                                            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
-                                                <div className="h6 dropdown-header">Configuration</div>
-                                                <a className="dropdown-item" href="/">Save</a>
-                                                <a className="dropdown-item" href="/">Hide</a>
-                                                <a className="dropdown-item" href="/">Report</a>
-                                            </div>
+
+                                            {isVisible && (
+                                                <div className="dropdown-menu dropdown-menu-right d-block" aria-labelledby="gedf-drop1">
+                                                    <div className="h6 dropdown-header">Configuration</div>
+                                                    <div className='d-flex' style={{ alignItems: 'center', padding:'0px', margin:'10px' }}>
+                                                        <button className={styles.buttonPost}>🔗 Share</button>
+                                                    </div>
+                                                    <a className="dropdown-item">Save</a>
+                                                    <a className="dropdown-item" href="/report">Report</a> {/* //TODO: Criar Formulário de report */}
+                                                </div>
+                                            )}
+
                                         </div>
                                     </div>
                                 </div>
@@ -140,21 +153,19 @@ const Post = ({ postContent }) => {
 
                     {showComments && (
                         <div style={styles.blueBox}>
-                            <Feedbacks postId={postContent._id} />
+                            <Feedbacks postId={postContent._id} qtdFeedbacks={comments.length} />
                         </div>
                     )}
                     <div style={{ display: '', textAlign: 'center', flexDirection: 'column', marginLeft: '10px' }}>
                         <div className='d-flex' style={{ alignItems: 'center' }}>
                             <button style={youLikedPost ? styles.buttonLiked : styles.buttonLike} onClick={!isClickedLike ? postToggleLike : null}>❤</button>
-                            <span>{qtdLikes || 0}</span>
                         </div>
-                        <div className='d-flex' style={{ alignItems: 'center' }}>
+                        <div className='text-center' style={{ alignItems: 'center' }}>
                             <button className={styles.buttonPost} onClick={toggleComments}>💬</button>
-                            <span>{comments.length > 0 ? comments.length - 1 : 0 }</span>
+                            <br />
+                            <span>{comments.length | ''}</span>
                         </div>
-                        <div className='d-flex' style={{ alignItems: 'center' }}>
-                            <button className={styles.buttonPost}>🔗</button>
-                        </div>
+
                     </div>
 
                 </div>

@@ -19,7 +19,7 @@ const App =  () => {
   useEffect(() => {
    
   }, [data?.user])
-  if (data?.token && data?.user && data) {
+  if (data?.user) {
     return (
  
       <Router>

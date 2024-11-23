@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchApi } from '../utils/fetch';
 import { formatDate } from '../utils/formatText';
 import { useAuth } from '../context/authContext';
-import Feedbacks from '../components/Feedbacks';
+import FeedbacksPost from '../components/FeedbacksPost';
 import { useParams } from 'react-router-dom';
 
 
@@ -17,18 +17,50 @@ const Post = () => {
     const [feedToInteligence] = useState({})
     const [post, setPost] = useState();
 
-
     const [title, setTile] = useState();
     const [owner, setOwner] = useState();
     const [creationDate, setCreationDate] = useState();
     const [description, setDescription] = useState();
+    const [comments, setComments] = useState();
     const [path, setPath] = useState();
 
+    const [qtdLikes, setQtdLikes] = useState();
+    const [qtdCommnets, setQtdCommnets] = useState();
+    const [toggleLike, setToggleLike] = useState();
+    const [youLikedPost, setYouLikedPost] = useState();
 
-
-
+    const [isClickedLike, setIsClickedLike] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
     const [loading, setLoading] = useState(null);
 
+    // Função de toggle para alterar o estado
+    const toggleDivShare = () => {
+        setIsVisible((prevState) => !prevState); // Inverte o estado atual
+    };
+
+    const postToggleLike = async () => {
+        setIsClickedLike(true)
+        setYouLikedPost(!youLikedPost)
+        let toggleLike = await fetchApi(`v1/publish-like/${postId}`, null, 'POST', { userId: data?.user?._id }, data?.token)
+        if (!toggleLike.status)
+            return
+        setToggleLike(toggleLike.result)
+        window.location.reload()
+    }
+
+    const getYouLiked = async () => {
+        let youLiked = await fetchApi(`v1/you-like-post/${postId}/${data?.user?._id}`, null, 'GET', null, data?.token)
+        if (!youLiked.status)
+            return
+        setYouLikedPost(youLiked.result)
+    }
+    const getQtdLikes = async () => {
+
+        let qtdLikes = await fetchApi(`v1/likes-qtd/${postId}`, null, 'GET', null, data?.token)
+        if (!qtdLikes.status)
+            return
+        setQtdLikes(qtdLikes.result)
+    }
 
     const convertDate = (givenDate) => {
         return formatDate(givenDate)
@@ -54,12 +86,13 @@ const Post = () => {
             setLoading(true)
 
         setPost(response.result)
-        const { title, description, owner, path, creationDate } = response.result
+        const { title, description, owner, path, creationDate, comments } = response.result
         setTile(title)
         setDescription(description)
         setOwner(owner)
         setPath(path)
         setCreationDate(creationDate)
+        setComments(comments)
     }
 
     const fetchUser = async () => {
@@ -90,6 +123,11 @@ const Post = () => {
     useEffect(() => {
         // 
     }, [showComments, path])
+    
+    useEffect(() => {
+        getYouLiked();
+        getQtdLikes();
+    }, [data?.user, toggleLike])
 
     return (
         <div className="container">
@@ -117,15 +155,19 @@ const Post = () => {
                                         </div>
                                         <div>
                                             <div className="dropdown">
-                                                <button className="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i className="fa fa-ellipsis-h"></i>
-                                                </button>
-                                                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                            <button className="btn btn-link dropdown-toggle" onClick={toggleDivShare} type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i className="fa fa-ellipsis-h"></i>
+                                            </button>
+                                                {isVisible && (
+                                                <div className="dropdown-menu dropdown-menu-right d-block" aria-labelledby="gedf-drop1">
                                                     <div className="h6 dropdown-header">Configuration</div>
-                                                    <a className="dropdown-item" href="/">Save</a>
-                                                    <a className="dropdown-item" href="/">Hide</a>
-                                                    <a className="dropdown-item" href="/">Report</a>
+                                                    <div className='d-flex' style={{ alignItems: 'center', padding:'0px', margin:'10px' }}>
+                                                        <button className={styles.buttonPost}>🔗 Share</button>
+                                                    </div>
+                                                    <a className="dropdown-item">Save</a>
+                                                    <a className="dropdown-item" href="/report">Report</a> {/* //TODO: Criar Formulário de report */}
                                                 </div>
+                                            )}
                                             </div>
                                         </div>
                                     </div>
@@ -152,14 +194,24 @@ const Post = () => {
                         </div>
                         <br />
                         <div style={{ display: '', flexDirection: 'column', marginLeft: '10px' }}>
-                            <button>❤</button>
-                            <button onClick={toggleComments}>💬</button>
-                            <button>🔗</button>
+                        <div className='d-flex text-center' style={{ alignItems: 'center' }}>
                         </div>
-                        <br />
+                        <div className='text-center d-flex' style={{ alignItems: 'center' }}>
+                            <div>
+                            <button style={youLikedPost ? styles.buttonLiked : styles.buttonLike} onClick={!isClickedLike ? postToggleLike : null}>❤</button>
+                            <br />
+                            <span>{qtdLikes | ''}</span>
+                            </div>
+                            <div>
+                            <button className={styles.buttonPost} onClick={toggleComments}>💬</button>
+                            <br />
+                            <span>{comments?.length | ''}</span>
+                            </div>
+                        </div>
+                        </div>
                         {showComments && (
                             <div style={styles.blueBox}>
-                                <Feedbacks postId={post?._id} />
+                                <FeedbacksPost postId={post?._id} />
                             </div>
                         )}
                     </div>
@@ -177,6 +229,17 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff', // Cor de fundo para facilitar a visualização
+    },
+    buttonPost: {
+        width: '100%',
+    },
+    buttonLiked: {
+        cursor: 'grab',
+        color: 'red',
+    },
+    buttonLike: {
+        cursor: 'grab',
+        color: 'white'
     },
     circle: {
         backgroundColor: 'black',

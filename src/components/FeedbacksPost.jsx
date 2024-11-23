@@ -5,7 +5,7 @@ import { fetchApi } from '../utils/fetch';
 import styled from 'styled-components';
 
 
-const Feedbacks = ({ postId, qtdFeedbacks }) => {
+const FeedbacksPost = ({ postId, qtdFeedbacks }) => {
     //mock
     // const [feedbacks, setFeedbacks] = useState([
     //     // { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
@@ -45,7 +45,7 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
         setLoading(true)
         if (!postId)
             return
-        let getFeedback = await fetchApi(`v1/feedbacks-feed/${postId}`, user, 'GET', null, data?.token)
+        let getFeedback = await fetchApi(`v1/feedbacks/${postId}`, user, 'GET', null, data?.token)
         if (!getFeedback.status)
             return
 
@@ -212,4 +212,4 @@ const UrlProfile = styled.div`
   }
 `;
 
-export default Feedbacks;
+export default FeedbacksPost;
