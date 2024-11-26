@@ -66,6 +66,7 @@ const Register = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            maxLength={70}
           />
         </div>
 
@@ -78,6 +79,7 @@ const Register = () => {
             value={nick}
             onChange={(e) => setNick(e.target.value)}
             required
+            maxLength={30}
           />
         </div>
 
@@ -91,6 +93,7 @@ const Register = () => {
             onChange={(e) => setJob(e.target.value)}
             required
             placeholder='Senior | VueJs | NodeJS'
+            maxLength={40}
           />
         </div>
 
@@ -103,6 +106,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            maxLength={70}
           />
         </div>
 
@@ -115,6 +119,7 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            maxLength={70}
           />
         </div>
 
@@ -127,6 +132,7 @@ const Register = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            maxLength={70}
           />
         </div>
 

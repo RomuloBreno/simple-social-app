@@ -183,6 +183,7 @@ const FormPost = () => {
                       placeholder="title"
                       value={title}
                       onChange={handleTitleChange}
+                      maxLength={100}
                     />
                     <textarea
                       className="form-control"
@@ -192,6 +193,7 @@ const FormPost = () => {
                       value={postContent}
                       onChange={handlePostChange}
                       required
+                      maxLength={500}
                     />
                   </div>
                 </div>

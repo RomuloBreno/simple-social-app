@@ -85,6 +85,7 @@ const Login = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          maxLength={70}
         />
       </div>
 
@@ -97,6 +98,7 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          maxLength={70}
         />
       </div>
 

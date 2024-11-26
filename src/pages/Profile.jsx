@@ -90,6 +90,8 @@ const Profile = () => {
 
         } else {
             setMyProfile(false)
+            if(!profileId)
+                return
             const userByProfileParam = await fetchApi(`v1/user/nick/${profileId}`, null, 'GET', null, data?.token)
             if (userByProfileParam?.status)
                 setAnotherUser(userByProfileParam.result)
@@ -230,11 +232,12 @@ const Profile = () => {
                                 value={formName}
                                 onChange={(e) => setFormName(e.target.value)}
                                 required
+                                maxLength={70}
                             />
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="name" className="form-label">Nick:</label>
+                            <label htmlFor="nick" className="form-label">Nick:</label>
                             <input
                                 type="text"
                                 id="nick"
@@ -242,6 +245,7 @@ const Profile = () => {
                                 value={formNick}
                                 onChange={(e) => setFormNick(e.target.value)}
                                 required
+                                maxLength={30}
                             />
                         </div>
 
@@ -254,6 +258,7 @@ const Profile = () => {
                                 value={formEmail}
                                 onChange={(e) => setFormEmail(e.target.value)}
                                 required
+                                maxLength={70}
                             />
                         </div>
                         <div className="mb-3">
@@ -266,6 +271,7 @@ const Profile = () => {
                                 onChange={(e) => setFormJob(e.target.value)}
                                 required
                                 placeholder='Senior | VueJs | NodeJS'
+                                maxLength={40}
                             />
                         </div>
                         <button className='btn btn-primary col-md-12 '>Save</button>

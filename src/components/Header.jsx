@@ -123,6 +123,7 @@ const Header = (loged) => {
                                 placeholder="Pesquisar..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
+                                maxLength={100}
                                 style={{
                                     padding: '5px',
                                     borderRadius: '4px',
