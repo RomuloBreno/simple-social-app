@@ -109,12 +109,12 @@ const Post = ({ postContent }) => {
 
                                     </div>
                                     <div>
-                                        <div className="dropdown">
-                                            
                                             {postStoryPattern ? (<><span title='quando o post tem essa marcação é possivel ver outros posts que fazem aprte de um mesmo historico'>Story</span></>) : (<></>)}
                                             <button className="btn btn-link dropdown-toggle" onClick={toggleDivShare} type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i className="fa fa-ellipsis-h"></i>
                                             </button>
+                                        <div className="dropdown">
+                                            
 
                                             {isVisible && (
                                                 <div className="dropdown-menu dropdown-menu-right d-block" aria-labelledby="gedf-drop1">

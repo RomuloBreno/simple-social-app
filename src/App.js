@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAuth } from './context/authContext'; // Importa o hook useAuth
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -23,7 +24,6 @@ const App = () => {
 
   useEffect(() => {
     setUser(data?.user);
-    console.log("Usuário atualizado:", user);
   }, [data?.user]);
 
   return (

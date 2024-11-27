@@ -45,7 +45,7 @@ const Feed = () => {
   useEffect(() => {
     // validar quais posts podem ser requisitados com base no usuario
     fetchPostsFollowing();
-    fetchPosts();
+    // fetchPosts();
   }, [data?.user])
 
 
