@@ -13,11 +13,12 @@ const ProfilePosts = ({profileId}) => {
   const profile = profileId
   const [postsByUser, setPostsByUser] = useState();  // Estado para armazenar os posts
   const [storiesByUser, setStoriesByUser] = useState();  // Estado para armazenar os posts
+
   const fetchPostsByUser= async () => {
     let response = ''
     if (!data?.token)
       return
-    response = await fetchApi(`v1/posts/user/${profile}`, null, 'GET', null, data?.token)
+    response = await fetchApi(`v1/posts/user/${profile}`, null, 'POST', {limit:50}, data?.token)
     if (response.status) {
       setPostsByUser(response.result.filter(x=>x.postStoryPattern == undefined || x.postStoryPattern == ''))
       setStoriesByUser(response.result.filter(x=>x.postStoryPattern))
@@ -26,7 +27,7 @@ const ProfilePosts = ({profileId}) => {
   useEffect(() => {
     fetchPostsByUser();
     console.log(postsByUser)
-  }, [data?.user])
+  }, [data?.user, profileId])
 
 
   return (

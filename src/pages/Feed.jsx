@@ -10,31 +10,35 @@ import { useAuth, useUser } from '../context/authContext';
 const Feed = () => {
   document.title="Feed"
 
-  const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
+  // const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
   const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
   const [postsFollowing, setPostsFollowing] = useState()
+  const [postsToShow, setPostsToShow] = useState(2); // Quantidade inicial de posts a exibir
   const [feedToInteligence] = useState({})
+  const [visiblePosts, setVisiblePosts] = useState([]); // Estado para armazenar os posts visíveis
+  const [limitLocal, setLimitLocal] = useState(5)
 
   // const navigate = useNavigate()
   const data = useAuth().data;
-  const fetchPosts = async () => {
-    let response =''
-    if(!data?.token)
-      setLoading(true)
+  //unused
+  // const fetchPosts = async () => {
+  //   let response =''
+  //   if(!data?.token)
+  //     setLoading(true)
 
-    response = await fetchApi('v1/posts', posts, 'GET', feedToInteligence, data?.token)
-    if(!response.status)
-      setLoading(true)
+  //   response = await fetchApi('v1/posts', null, 'GET', feedToInteligence, data?.token)
+  //   if(!response.status)
+  //     setLoading(true)
 
-    setPosts(response.result)
-    setLoading(false)
-  }
+  //   // setPosts(response.result)
+  //   setLoading(false)
+  // }
   const fetchPostsFollowing = async () => {
     let response =''
     if(!data?.token)
       setLoading(true)
 
-    response = await fetchApi(`v1/posts-feed-following/${data?.user?._id}`, posts, 'GET', feedToInteligence, data?.token)
+    response = await fetchApi(`v1/posts-feed-following/${data?.user?._id}`, null, 'POST', {limit:limitLocal}, data?.token)
     if(!response.status)
       setLoading(true)
 
@@ -45,14 +49,21 @@ const Feed = () => {
   useEffect(() => {
     // validar quais posts podem ser requisitados com base no usuario
     fetchPostsFollowing();
-    // fetchPosts();
-  }, [data?.user])
+    setVisiblePosts(postsFollowing?.slice(0, postsToShow));
+    
+  }, [data?.user, limitLocal])
 
 
+  
+  const handleLoadMore = () => {
+    setLimitLocal((prev) => prev + 5)
 
+    setTimeout(() => {
+      setPostsToShow((prev) => prev + 5); // Aumenta a quantidade de posts a mostrar em 5
+    }, 500); // Simula um atraso de carregamento
+  };
 
-
-  return (
+   return (
     <div className='container' style={{ padding: ' 0px' }}>
       <div style={{}}>
         <h2 style={{ marginRight: '70%' }} > 📃 Feed</h2><br />
@@ -62,10 +73,16 @@ const Feed = () => {
         {loading ? (
           <p>Carregando...</p>
         ) : (
-          // posts?.map((post) => (
-          postsFollowing?.map((post) => (
-            <Post key={post._id} postContent={post} />
-          ))
+          <div className='container'>
+          {visiblePosts?.map((post) => (
+            <Post key={post?._id} postContent={post} />
+          ))}
+          {postsToShow < postsFollowing?.length && (
+            <button onClick={handleLoadMore} disabled={loading} className="btn btn-primary">
+              {loading ? 'Carregando...' : postsFollowing.length ? 'Mostrar mais' : <></>}
+            </button>
+          )}
+        </div>
         )}
         <br />
         <br />

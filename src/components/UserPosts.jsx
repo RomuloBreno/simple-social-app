@@ -1,45 +1,47 @@
-
-import React, { useState, useEffect} from 'react';
-import Posts from '../components/Posts'
+import React, { useState, useEffect } from 'react';
+import Posts from '../components/Posts';
 import { useAuth } from '../context/authContext';
-// import { useNavigate } from 'react-router-dom';
 
+const UserPosts = ({ PostsArr }) => {
+  document.title = "Feed Post Story";
 
-const UserPosts = ({PostsArr}) => {
-  document.title="Feed Post Story"
-  
-  // const navigate = useNavigate()
   const data = useAuth().data;
-  const [posts, setPosts] = useState(PostsArr);  // Estado para armazenar os posts
-  const [loading, setLoading] = useState(); // Estado para gerenciar o carregamento 
-  useEffect(() => {
-  }, [data?.user])
+  const [posts, setPosts] = useState(PostsArr); // Estado para armazenar todos os posts
+  const [visiblePosts, setVisiblePosts] = useState([]); // Estado para armazenar os posts visíveis
+  const [loading, setLoading] = useState(false); // Estado para gerenciar o carregamento
+  const [postsToShow, setPostsToShow] = useState(5); // Quantidade inicial de posts a exibir
 
+  useEffect(() => {
+    // Atualiza os posts visíveis sempre que `posts` ou `postsToShow` mudar
+    setVisiblePosts(posts.slice(0, postsToShow));
+  }, [posts, postsToShow]);
+
+  const handleLoadMore = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setPostsToShow((prev) => prev + 5); // Aumenta a quantidade de posts a mostrar em 5
+      setLoading(false);
+    }, 500); // Simula um atraso de carregamento
+  };
 
   return (
-   <div>
     <div>
-        {loading ? (
-          <p>Carregando...</p>
-        ) : (
-          // posts?.map((post) => (
-          <>
-          <div className='container'>
-            <h3>My Posts</h3>
-         {posts?.map((post) => (
-            <Posts key={post?._id} postContent={post} />
-          ))}
-          </div>
-          </>
+      <div className='container'>
+        <h3>My Posts</h3>
+        {visiblePosts.map((post) => (
+          <Posts key={post?._id} postContent={post} />
+        ))}
+        {postsToShow < posts.length && (
+          <button onClick={handleLoadMore} disabled={loading} className="btn btn-primary">
+            {loading ? 'Carregando...' : posts.length >0 ? 'Mostrar mais' : <></>}
+          </button>
         )}
-        <br />
-        <br />
-        <br />
-
       </div>
+      <br />
+      <br />
+      <br />
     </div>
-
-  )
+  );
 };
 
 export default UserPosts;
