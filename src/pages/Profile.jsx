@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/authContext'; // Importa o hook useAuth
 import { fetchApi } from '../utils/fetch';
+import ProfilePosts from '../components/ProfilePosts';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
@@ -31,6 +32,7 @@ const Profile = () => {
 
     //profile validation
     const [myProfile, setMyProfile] = useState(false)
+
 
     const toggleEditMode = () => {
         if (data?.user.nick === profileId)
@@ -197,7 +199,7 @@ const Profile = () => {
                 <br />
                 <br />
                 <br />
-                <br />
+                <ProfilePosts/>
                 <br />
                 <br />
                 <br />

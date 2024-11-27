@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { fetchApi } from '../utils/fetch';
 
@@ -142,7 +143,7 @@ return (
                                 <div className="h7 text-muted px-2">
                                     <UrlProfile>
 
-                                        <a style={{ textDecoration: 'none', color: 'grey' }} href={'/profile/' + author}> Autor:{author}</a>
+                                        <Link style={{ textDecoration: 'none', color: 'grey' }} to={'/profile/' + author}> Autor:{author}</Link>
                                     </UrlProfile>
                                 </div>
                             </div>

@@ -1,5 +1,6 @@
 // src/Login.js
 import React, { useState } from 'react';
+import { Link} from "react-router-dom";
 import { useAuth } from '../context/authContext'; // Importa o hook useAuth
 import { fetchConnect } from '../utils/fetch';
 import { useNavigate } from 'react-router-dom';
@@ -112,7 +113,7 @@ const Login = () => {
       onChange={handleCaptchaChange}
     />
     <br />
-      <a href="/register" className="btn border w-20">Registrar</a>
+      <Link to="/register" className="btn border w-20">Registrar</Link>
       <br />
       <br />
       <br />

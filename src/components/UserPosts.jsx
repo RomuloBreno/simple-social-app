@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect} from 'react';
-import Post from '../components/Post';
+import Post from '../pages/Post'
 import {fetchApi} from '../utils/fetch';
 import { useAuth, useUser } from '../context/authContext';
 import { useParams } from 'react-router-dom';
@@ -59,7 +59,7 @@ const UserPosts = () => {
   return (
    <div>
     <div>
-        {loading ? (
+        {false ? (
           <p>Carregando...</p>
         ) : (
           // posts?.map((post) => (
