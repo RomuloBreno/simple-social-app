@@ -7,7 +7,7 @@ import { useAuth } from '../context/authContext';
 
 const UseStory = ({StoriesArr}) => {
   document.title = "Feed Post Story"
-
+  console.log(StoriesArr)
   // const navigate = useNavigate()
   const data = useAuth().data;
   const [stories, setStories] = useState(StoriesArr);  // Estado para armazenar os posts

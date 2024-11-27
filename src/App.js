@@ -37,7 +37,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="*" element={<Navigate to="/" />} />
+            {/* <Route path="*" element={<Navigate to="/" />} /> */}
           </>
         ) : (
           <>
@@ -48,10 +48,11 @@ const App = () => {
             {/* Rotas protegidas */}
             <Route path="/" element={<Navigate to="/feed" />} />
             <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
-            <Route path="/profile/:profileId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/profile/:profileNick" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            {/* <Route path="/profile/*" element={<ProtectedRoute><Profile /></ProtectedRoute>} /> */}
             <Route path="/post/:postId" element={<ProtectedRoute><Post /></ProtectedRoute>} />
             <Route path="/post-story/:postStoryPatternId" element={<ProtectedRoute><FeedStory /></ProtectedRoute>} />
-            <Route path="*" element={<Navigate to="/feed" />} />
+            {/* <Route path="*" element={<Navigate to="/feed" />} /> */}
           </>
         )}
       </Routes>

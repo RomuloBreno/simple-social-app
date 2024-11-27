@@ -6,18 +6,18 @@ import UserStory from './UserStory';
 import { useAuth, useUser } from '../context/authContext';
 
 // Definição do componente pai
-const ProfilePosts = () => {
+const ProfilePosts = ({profileId}) => {
   const data = useAuth().data;
   // Define qual aba está ativa (inicia na aba 1).
   const [activeTab, setActiveTab] = useState(0);
+  const profile = profileId
   const [postsByUser, setPostsByUser] = useState();  // Estado para armazenar os posts
   const [storiesByUser, setStoriesByUser] = useState();  // Estado para armazenar os posts
   const fetchPostsByUser= async () => {
-    let postsArr = []
     let response = ''
     if (!data?.token)
       return
-    response = await fetchApi(`v1/posts/user/${data?.user?._id}`, null, 'GET', null, data?.token)
+    response = await fetchApi(`v1/posts/user/${profile}`, null, 'GET', null, data?.token)
     if (response.status) {
       setPostsByUser(response.result.filter(x=>x.postStoryPattern == undefined || x.postStoryPattern == ''))
       setStoriesByUser(response.result.filter(x=>x.postStoryPattern))
@@ -25,7 +25,6 @@ const ProfilePosts = () => {
   }
   useEffect(() => {
     fetchPostsByUser();
-
     console.log(postsByUser)
   }, [data?.user])
 
