@@ -8,12 +8,13 @@ const UserPosts = ({ PostsArr }) => {
   const data = useAuth().data;
   const [posts, setPosts] = useState(PostsArr); // Estado para armazenar todos os posts
   const [visiblePosts, setVisiblePosts] = useState([]); // Estado para armazenar os posts visíveis
+  const [postsToShow, setPostsToShow] = useState(7); // Quantidade inicial de posts a exibir
   const [loading, setLoading] = useState(false); // Estado para gerenciar o carregamento
-  const [postsToShow, setPostsToShow] = useState(5); // Quantidade inicial de posts a exibir
 
   useEffect(() => {
     // Atualiza os posts visíveis sempre que `posts` ou `postsToShow` mudar
     setVisiblePosts(posts.slice(0, postsToShow));
+    // setVisiblePosts(posts);
   }, [posts, postsToShow]);
 
   const handleLoadMore = () => {
@@ -32,9 +33,11 @@ const UserPosts = ({ PostsArr }) => {
           <Posts key={post?._id} postContent={post} />
         ))}
         {postsToShow < posts.length && (
-          <button onClick={handleLoadMore} disabled={loading} className="btn btn-primary">
-            {loading ? 'Carregando...' : posts.length >0 ? 'Mostrar mais' : <></>}
+          <div className='container text-center'>
+          <button onClick={handleLoadMore} disabled={loading} className="">
+            {loading ? 'Carregando...' : posts.length > 0 ? 'Mostrar mais' : <></>}
           </button>
+          </div>
         )}
       </div>
       <br />
