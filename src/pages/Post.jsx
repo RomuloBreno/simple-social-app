@@ -1,6 +1,7 @@
 // src/components/Post.tsx
 import React, { useState, useEffect } from 'react';
 import { fetchApi } from '../utils/fetch';
+import { Link} from "react-router-dom";
 import { formatDate } from '../utils/formatText';
 import { useAuth } from '../context/authContext';
 import FeedbacksPost from '../components/FeedbacksPost';
@@ -164,8 +165,8 @@ const Post = () => {
                                                     <div className='d-flex' style={{ alignItems: 'center', padding:'0px', margin:'10px' }}>
                                                         <button className={styles.buttonPost}>🔗 Share</button>
                                                     </div>
-                                                    <a className="dropdown-item">Save</a>
-                                                    <a className="dropdown-item" href="/report">Report</a> {/* //TODO: Criar Formulário de report */}
+                                                    <Link className="dropdown-item">Save</Link>
+                                                    <Link className="dropdown-item" to="/report">Report</Link> {/* //TODO: Criar Formulário de report */}
                                                 </div>
                                             )}
                                             </div>

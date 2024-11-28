@@ -1,6 +1,7 @@
 // src/components/Post.tsx
 import React, { useState, useEffect } from 'react';
 import { fetchApi } from '../utils/fetch';
+import { Link} from "react-router-dom";
 import { formatDate } from '../utils/formatText';
 import { useAuth } from '../context/authContext';
 import Feedbacks from './Feedbacks';
@@ -90,7 +91,7 @@ const Post = ({ postContent }) => {
                                 <div className="d-flex justify-content-between align-items-center">
                                     <div className="d-flex justify-content-between align-items-center">
 
-                                        <a href={`/profile/${user?.nick}`} style={{ textDecoration: 'none' }}>
+                                        <Link to={`/profile/${user?.nick}`} style={{ textDecoration: 'none' }}>
                                             <div className="">
                                                 <div className="h7 d-flex">
                                                     <img className="rounded-circle" width={70} src="https://picsum.photos/50/50" alt="" />
@@ -102,18 +103,18 @@ const Post = ({ postContent }) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </Link>
 
 
 
                                     </div>
                                     <div>
-                                        <div className="dropdown">
-                                            
                                             {postStoryPattern ? (<><span title='quando o post tem essa marcação é possivel ver outros posts que fazem aprte de um mesmo historico'>Story</span></>) : (<></>)}
                                             <button className="btn btn-link dropdown-toggle" onClick={toggleDivShare} type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i className="fa fa-ellipsis-h"></i>
                                             </button>
+                                        <div className="dropdown">
+                                            
 
                                             {isVisible && (
                                                 <div className="dropdown-menu dropdown-menu-right d-block" aria-labelledby="gedf-drop1">
@@ -121,8 +122,8 @@ const Post = ({ postContent }) => {
                                                     <div className='d-flex' style={{ alignItems: 'center', padding:'0px', margin:'10px' }}>
                                                         <button className={styles.buttonPost}>🔗 Share</button>
                                                     </div>
-                                                    <a className="dropdown-item">Save</a>
-                                                    <a className="dropdown-item" href="/report">Report</a> {/* //TODO: Criar Formulário de report */}
+                                                   <Link className="dropdown-item">Save</Link>
+                                                   <Link className="dropdown-item" to="/report">Report</Link> {/* //TODO: Criar Formulário de report */}
                                                 </div>
                                             )}
 
@@ -132,7 +133,7 @@ const Post = ({ postContent }) => {
 
                             </div>
                             {/* CONTEUDO DO POST */}
-                            <a style={{ textDecoration: 'none', color: 'black' }} href={postStoryPattern != null && postStoryPattern != '' ? `/post-story/${postStoryPattern}` : `/post/${postContent._id}`}>
+                            <Link style={{ textDecoration: 'none', color: 'black' }} to={postStoryPattern != null && postStoryPattern != '' ? `/post-story/${postStoryPattern}` : `/post/${postContent._id}`}>
                                 <div className="card-body container">
                                     <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>publicado em: {convertDate(creationDate)}</div>
                                     <h4 className="card-title">{title}</h4>
@@ -148,7 +149,7 @@ const Post = ({ postContent }) => {
                                         />
                                     )) : <></>}
                                 </div>
-                            </a>
+                            </Link>
                         </div>
 
                     </div>

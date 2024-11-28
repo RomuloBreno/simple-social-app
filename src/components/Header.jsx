@@ -1,6 +1,6 @@
 // src/components/Header.tsx
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
 const Header = (loged) => {
@@ -72,21 +72,21 @@ const Header = (loged) => {
                             <nav style={{ alignSelf: 'center', marginLeft: '0%', marginRight: '0%' }}>
                                 {
                                     !IsLoged &&
-                                    <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</a>
+                                    <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</Link>
                                 }
                                 {
                                     IsLoged &&
-                                    <a href="/feed" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
-                                    <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
+                                    <Link to="/feed" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Feed</Link> &&
+                                    <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Feedbacks</Link>
                                 }
-                                <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
-                                <a href="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Suporte</a>
+                                <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Publishes</Link>
+                                <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Suporte</Link>
 
                                 {
                                     IsLoged &&
-                                    <a href={`/profile`}>
+                                    <Link to={`/profile/${data?.user?.nick}`}>
                                         <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
-                                    </a>
+                                    </Link>
                                 }
                                 {
                                     IsLoged &&
@@ -104,15 +104,14 @@ const Header = (loged) => {
                         <nav style={{ width:'36%', alignSelf: 'center',fontSize:'0.8em', marginLeft: '8%', marginRight: '8%' }}>
                             {
                                 !IsLoged &&
-                                <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Home</a>
+                                <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Home</Link>
                             }
                             {
                                 IsLoged &&
-                                <a href="/feed" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Feed</a> &&
-                                <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
+                                <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Feedbacks</Link>
                             }
-                            <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Publishes</a>
-                            <a href="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Suporte</a>
+                            <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Publishes</Link>
+                            <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Suporte</Link>
 
                         </nav>
                         {
@@ -123,6 +122,7 @@ const Header = (loged) => {
                                 placeholder="Pesquisar..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
+                                maxLength={100}
                                 style={{
                                     padding: '5px',
                                     borderRadius: '4px',
@@ -141,9 +141,9 @@ const Header = (loged) => {
                         <div className='d-flex align-items-center'>
                             {
                                 IsLoged &&
-                                <a href={`/profile`}>
+                                <Link to={`/profile/${data?.user?.nick}`}>
                                     <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
-                                </a>
+                                </Link>
                             }
                             {
                                 IsLoged &&

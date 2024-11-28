@@ -1,46 +1,47 @@
 
 // src/components/Footer.tsx
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
 const Footer = () => {
-  const [IsLoged, setIsLoged] = useState(false)
-  const data = useAuth()
- 
+  const [IsLoged, setIsLoged] = useState()
+  const data = useAuth().data
+
   useEffect(() => {
     if (!data?.user) {
-        setIsLoged(false); // Usuário não autenticado
-        return
+      setIsLoged(false); // Usuário não autenticado
+      return
     } else {
-        setIsLoged(true); // Usuário autenticado
+      setIsLoged(true); // Usuário autenticado
     }
 
 
 
-}, [data?.user]);
+  }, [data?.user]);
 
   return (
     <footer style={{ backgroundColor: '#333', color: '#fff', padding: '10px', textAlign: 'center' }}>
-      <br/>
-      <nav style={{ alignSelf: 'center', marginLeft: '8%', marginRight: '8%' }}>
+      <br />
+      <div className='container d-flex'>
+      <h2 className='' style={{ marginLeft: '10%', alignContent: 'center' }}>Fdback</h2>
+      <nav style={{ width: '36%', alignSelf: 'center', fontSize: '0.8em', marginLeft: '8%', marginRight: '8%' }}>
         {
           !IsLoged &&
-          <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Home</a>
+          <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'white' }}>Home</Link>
         }
         {
           IsLoged &&
-          <a href="/feed" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Feed</a> &&
-          <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Feedbacks</a>
+          <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'white' }}>Feedbacks</Link>
         }
-        <a href="/" style={{ margin: '0 30px', textDecoration: 'none', color: 'gray' }}>Publishes</a>
-        <a href="/" style={{ margin: '0 30px', textDecoration: 'none',color: 'gray' }}>Suporte</a>
-        {
-          !IsLoged &&
-          <a href="/login" style={{ margin: '0 30px', textDecoration: 'none', color: 'white' }}>Login</a>
-        }
+        <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Publishes</Link>
+        <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Suporte</Link>
+        <Link to="/login" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Login</Link>
+
       </nav>
-      <br/>
-      <br/>
+      </div>
+      <br />
+      <br />
       <p>&copy; Soulsfix</p>
     </footer>
   )

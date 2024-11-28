@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { fetchApi } from '../utils/fetch';
 
@@ -17,23 +18,20 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
     const data = useAuth().data
     const [loading, setLoading] = useState(false); // Estado para gerenciar o carregamento
     const [expandedIndex, setExpandedIndex] = useState(false);
-    const [newComment, setNewComment] = useState("");
+    const [newComment, setNewComment] = useState();
     const [user, setUser] = useState([]);  // Estado para armazenar os user
     const [feedbacks, setFeedbacks] = useState(null);
 
     const handleAddComment = async (e) => {
+        debugger
         setLoading(true)
-
-        const arrFeedbackForUser = []
         e.preventDefault();
-        if (newComment.trim()) {
+        if (newComment?.trim()) {
             const feedbackCreate = await fetchApi(`v1/publish-feedback/${postId}`, null, 'POST', { content: newComment, postId: postId, author: data?.user._id }, data?.token)
             if (!feedbackCreate.status)
                 return
-            arrFeedbackForUser.push({ author: data?.user.nick, content: newComment })
-            setFeedbacks(prevArr => [...prevArr, arrFeedbackForUser]);
+            setFeedbacks(prevArr => [...prevArr, { author: data?.user.nick, content: newComment }]);
             setNewComment("");
-            setLoading(false)
         }
         setLoading(false)
     };
@@ -103,7 +101,7 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
         if(feedbacks == null)
             getFeedbacks();
 
-    }, [])
+    }, [loading])
 
 return (
             <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
@@ -145,7 +143,7 @@ return (
                                 <div className="h7 text-muted px-2">
                                     <UrlProfile>
 
-                                        <a style={{ textDecoration: 'none', color: 'grey' }} href={'/profile/' + author}> Autor:{author}</a>
+                                        <Link style={{ textDecoration: 'none', color: 'grey' }} to={'/profile/' + author}> Autor:{author}</Link>
                                     </UrlProfile>
                                 </div>
                             </div>

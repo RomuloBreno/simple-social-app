@@ -14,7 +14,7 @@ const FeedStory = () => {
   const data = useAuth().data;
   const { postStoryPatternId } = useParams();
   const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
-  const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
+  const [loading, setLoading] = useState(); // Estado para gerenciar o carregamento
   const [feedToInteligence] = useState({})
   
   const [postsStory, setPostsStory] = useState()
@@ -33,6 +33,7 @@ const FeedStory = () => {
         setPosts(postsArr)
     })
     setPosts(response.result)
+    setLoading(false)
   }
 
   const fetchPostsStory = async () => {
@@ -59,7 +60,7 @@ const FeedStory = () => {
   return (
    <div>
     <div>
-        {false ? (
+        {loading ? (
           <p>Carregando...</p>
         ) : (
           // posts?.map((post) => (
