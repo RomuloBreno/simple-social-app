@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
+import Notify from './Notifys';
 const Header = (loged) => {
     const navigate = useNavigate()
     //mobile
@@ -14,6 +15,7 @@ const Header = (loged) => {
     const [searchQuery, setSearchQuery] = useState("");
     //user
     const data = useAuth().data;
+    const ws = useAuth().data?.ws
 
     const { logout, remove } = useAuth();
 

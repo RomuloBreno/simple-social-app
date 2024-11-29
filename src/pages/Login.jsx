@@ -54,7 +54,9 @@ const Login = () => {
       setCaptchaToken(null)
       setLoading(false)
     } catch (error) {
+      debugger
       setError(error.message);
+      setLoading(false)
     }
   };
 

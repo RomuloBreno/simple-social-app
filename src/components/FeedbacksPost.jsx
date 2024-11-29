@@ -18,22 +18,19 @@ const FeedbacksPost = ({ postId, qtdFeedbacks }) => {
     const data = useAuth().data
     const [loading, setLoading] = useState(false); // Estado para gerenciar o carregamento
     const [expandedIndex, setExpandedIndex] = useState(false);
-    const [newComment, setNewComment] = useState("");
+    const [newComment, setNewComment] = useState();
     const [user, setUser] = useState([]);  // Estado para armazenar os user
     const [feedbacks, setFeedbacks] = useState(null);
 
     const handleAddComment = async (e) => {
         setLoading(true)
-
-        const arrFeedbackForUser = []
         e.preventDefault();
         if (newComment.trim()) {
             const feedbackCreate = await fetchApi(`v1/publish-feedback/${postId}`, null, 'POST', { content: newComment, postId: postId, author: data?.user._id }, data?.token)
             if (!feedbackCreate.status)
                 return
-            arrFeedbackForUser.push({ author: data?.user.nick, content: newComment })
-            setFeedbacks(prevArr => [...prevArr, arrFeedbackForUser]);
-            setNewComment("");
+            setFeedbacks(prevArr => [...prevArr, { author: data?.user.nick, content: newComment }]);
+            setNewComment("")
             setLoading(false)
         }
         setLoading(false)

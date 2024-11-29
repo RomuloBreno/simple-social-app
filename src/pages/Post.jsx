@@ -123,7 +123,7 @@ const Post = () => {
 
     useEffect(() => {
         // 
-    }, [showComments, path])
+    }, [path])
     
     useEffect(() => {
         getYouLiked();

@@ -13,7 +13,7 @@ const Feed = () => {
   // const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
   const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
   const [postsFollowing, setPostsFollowing] = useState()
-  const [postsToShow, setPostsToShow] = useState(3); // Quantidade inicial de posts a exibir
+  const [postsToShow, setPostsToShow] = useState(5); // Quantidade inicial de posts a exibir
   const [feedToInteligence] = useState({})
   const [visiblePosts, setVisiblePosts] = useState([]); // Estado para armazenar os posts visíveis
   const [limitLocal, setLimitLocal] = useState(7)
@@ -51,17 +51,19 @@ const Feed = () => {
     fetchPostsFollowing();
     setVisiblePosts(postsFollowing);
     
-  }, [data?.user, postsFollowing, limitLocal])
+  }, [data?.user, limitLocal])
 
-
+  useEffect(() => {
+    setVisiblePosts(postsFollowing);
+    
+  }, [data?.user,limitLocal])
   
   const handleLoadMore = () => {
     setLoading(true);
     setLimitLocal((prev) => prev + 5)
-    
     setTimeout(() => {
       setPostsToShow((prev) => prev + 5); // Aumenta a quantidade de posts a mostrar em 5
-    }, 500); // Simula um atraso de carregamento
+    }, 100); // Simula um atraso de carregamento
     setLoading(false);
   };
 

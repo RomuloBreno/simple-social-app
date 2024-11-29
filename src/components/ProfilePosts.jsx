@@ -18,6 +18,8 @@ const ProfilePosts = ({profileId}) => {
     let response = ''
     if (!data?.token)
       return
+    if(!profile)
+      return
     response = await fetchApi(`v1/posts/user/${profile}`, null, 'POST', {limit:50}, data?.token)
     if (response.status) {
       setPostsByUser(response.result.filter(x=>x.postStoryPattern == undefined || x.postStoryPattern == ''))
@@ -26,7 +28,6 @@ const ProfilePosts = ({profileId}) => {
   }
   useEffect(() => {
     fetchPostsByUser();
-    console.log(postsByUser)
   }, [data?.user, profileId])
 
 
