@@ -11,7 +11,7 @@ import FeedStory from "./pages/FeedStory";
 import Index from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Notify from "./components/Notifys";
+import Notifys from "./components/notify/Notifys";
 
 const ProtectedRoute = ({ children }) => {
   const user = useAuth().data?.user;
@@ -34,7 +34,7 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <Notify login={user ? true : false} webSocket={webSocket} />
+      <Notifys login={user ? true : false} webSocket={webSocket} />
       <br />
       <Routes>
         {/* Rotas públicas para usuários não autenticados */}

@@ -48,7 +48,7 @@ export const UserProvider = ({ children }) => {
 
   const fetchData = async (tokenParam) => {
     const initCredencials = await initContext(token ? token : tokenParam);
-    let wsConnection = new WebSocket(`ws://${process.env.REACT_APP_URL_WS}?token=${tokenInit ? tokenInit : token}&userId=${initCredencials._id}`)
+    let wsConnection = new WebSocket(`ws://${process.env.REACT_APP_URL_WS}?token=${tokenInit ? tokenInit : token}&userId=${initCredencials?._id}`)
     console.log(wsConnection)
     setWsConnect(wsConnection)
     setData({ user: initCredencials ? initCredencials : null, token: tokenInit ? tokenInit : tokenParam, webSocket: wsConnection ? wsConnection : wsConnect}) // Atualiza o estado com os dados recebidos

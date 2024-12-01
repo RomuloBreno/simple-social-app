@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Etapa 6: Expor a porta que o servidor Node.js irá rodar (por padrão, 3000)
-EXPOSE 3000
+EXPOSE 6000
 
 # Etapa 7: Comando para rodar a aplicação Node.js
 CMD ["npm", "start"]

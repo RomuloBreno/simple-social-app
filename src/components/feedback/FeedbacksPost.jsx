@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/authContext';
-import { fetchApi } from '../utils/fetch';
+import { useAuth } from '../../context/authContext';
+import { Link} from "react-router-dom";
+import { fetchApi } from '../../utils/fetch';
 
 import styled from 'styled-components';
 
 
-const Feedbacks = ({ postId, qtdFeedbacks }) => {
+const FeedbacksPost = ({ postId, qtdFeedbacks }) => {
     //mock
     // const [feedbacks, setFeedbacks] = useState([
     //     // { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
@@ -23,15 +23,15 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
     const [feedbacks, setFeedbacks] = useState(null);
 
     const handleAddComment = async (e) => {
-        debugger
         setLoading(true)
         e.preventDefault();
-        if (newComment?.trim()) {
+        if (newComment.trim()) {
             const feedbackCreate = await fetchApi(`v1/publish-feedback/${postId}`, null, 'POST', { content: newComment, postId: postId, author: data?.user._id }, data?.token)
             if (!feedbackCreate.status)
                 return
             setFeedbacks(prevArr => [...prevArr, { author: data?.user.nick, content: newComment }]);
-            setNewComment("");
+            setNewComment("")
+            setLoading(false)
         }
         setLoading(false)
     };
@@ -43,7 +43,7 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
         setLoading(true)
         if (!postId)
             return
-        let getFeedback = await fetchApi(`v1/feedbacks-feed/${postId}`, user, 'GET', null, data?.token)
+        let getFeedback = await fetchApi(`v1/feedbacks/${postId}`, user, 'GET', null, data?.token)
         if (!getFeedback.status)
             return
 
@@ -101,14 +101,14 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
         if(feedbacks == null)
             getFeedbacks();
 
-    }, [loading])
+    }, [])
 
 return (
             <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
                  {loading && feedbacks?.length == 0 ? (
                     <>
                     <div style={{ padding: '10%' }}>
-                       { qtdFeedbacks != 0 && qtdFeedbacks != null
+                       {qtdFeedbacks != 0  && qtdFeedbacks != null
                        ? (<>
                         <div className="container spinner-border p-10" role="status" >
                             <span className="sr-only"></span>
@@ -189,7 +189,6 @@ return (
                         </button>
                     </div>
                 </form>
-                {feedbacks?.length < qtdFeedbacks ?(<><span style={{fontSize:'70%'}}>Esse post pode conter mais feedbacks, clique no post para visualizar mais...</span></>):(<></>)}
                 </>
                 )
                 }
@@ -210,4 +209,4 @@ const UrlProfile = styled.div`
   }
 `;
 
-export default Feedbacks;
+export default FeedbacksPost;

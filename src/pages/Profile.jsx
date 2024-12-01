@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/authContext';
 import { fetchApi } from '../utils/fetch';
-import ProfilePosts from '../components/ProfilePosts';
+import ProfilePosts from '../components/post/ProfilePosts';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 
 const Profile = () => {

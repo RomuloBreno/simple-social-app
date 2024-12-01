@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
-import Notify from './Notifys';
+import Notify from './notify/Notifys';
 const Header = (loged) => {
     const navigate = useNavigate()
     //mobile
@@ -32,7 +32,7 @@ const Header = (loged) => {
     }, [data?.user]);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 1568);
+        const handleResize = () => setIsMobile(window.innerWidth < 1368);
 
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);

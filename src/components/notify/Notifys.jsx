@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../../context/authContext';
+import Notify from '../notify/Notify';
 
-const Notify = ({ login, webSocket }) => {
+const Notifys = ({ login, webSocket }) => {
     const [messages, setMessages] = useState([]);
     const [notify, setNotify] = useState(false);
     useEffect(() => {
@@ -27,19 +28,19 @@ const Notify = ({ login, webSocket }) => {
                     </svg>
                 </div>
             ) : (<></>)}
-            {notify ? (
+            {true ? (
                 <div style={{  width: '400px', /* Largura do retângulo */
                     height: 'fit-content', /* Altura do retângulo */
                     backgroundColor: 'white', /* Cor de fundo branca */
                     border: '1px solid #ccc', /* Borda cinza clara para destacar */
                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' /* Sombra leve para efeito */}}>
                     {
-                        messages?.map((msg, index) => (
-                            <div key={index}>
-                                {msg.message}
-                            </div>
-                        ))
-                    }
+                      messages?.map((msg, index) => (
+                        <div key={index}>
+                            <Notify messageParam={msg.message} indexParam={index}/>
+                        </div>
+                    ))
+                }
                 </div>
                 
 
@@ -49,4 +50,4 @@ const Notify = ({ login, webSocket }) => {
     );
 };
 
-export default Notify;
+export default Notifys;

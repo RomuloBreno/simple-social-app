@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect} from 'react';
-import PostStory from '../components/PostStory';
+import PostStory from '../components/post/PostStory';
+import Posts from '../components/post/Posts';
 import {fetchApi} from '../utils/fetch';
 import { useAuth, useUser } from '../context/authContext';
 import { useParams } from 'react-router-dom';
@@ -15,9 +16,7 @@ const FeedStory = () => {
   const { postStoryPatternId } = useParams();
   const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
   const [loading, setLoading] = useState(); // Estado para gerenciar o carregamento
-  const [feedToInteligence] = useState({})
-  
-  const [postsStory, setPostsStory] = useState()
+
 //   UNUSED
   const fetchPosts = async (postsId) => {
     let postsArr = []
@@ -66,9 +65,9 @@ const FeedStory = () => {
           // posts?.map((post) => (
           <>
           <div className='container'>
-            <h3>Feed de posts</h3>
+            <h3>Feed Story</h3>
          {posts?.map((post) => (
-            <PostStory key={post._id} postContent={post} />
+            <Posts key={post._id} postContent={post} />
           ))}
           </div>
           </>

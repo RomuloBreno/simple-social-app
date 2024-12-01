@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import UserPosts from './UserPosts';
 
-import { fetchApi } from '../utils/fetch';
+import { fetchApi } from '../../utils/fetch';
 import UserStory from './UserStory';
-import { useAuth, useUser } from '../context/authContext';
+import { useAuth, useUser } from '../../context/authContext';
 
 // Definição do componente pai
 const ProfilePosts = ({profileId}) => {
