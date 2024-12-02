@@ -66,14 +66,14 @@ const Header = (loged) => {
     return (
         <div className='text-center'>
             <header style={{ display: 'flex', padding: '10px', backgroundColor: '#333', color: '#fff', fontSize: '1em' }}>
-                <h2 className='' style={{ marginLeft: '10%', alignContent: 'center' }}>Fdback</h2>
+                <span className='' style={{ marginLeft: '1%', alignContent: 'center', fontWeight:'400', fontSize:'1.6em' }}>Fdback</span>
                 {isMobile ? (
                     <>
-                        <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '10%', color: 'white', fontSize: '24px' }}>
+                        <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '0%', color: 'white', fontSize: '24px', position:'absolute', right:'10%' }}>
                             ☰
                         </button>
                         {menuOpen && (
-                            <nav style={{ alignSelf: 'center', marginLeft: '0%', marginRight: '0%' }}>
+                            <nav className ='' style={{ position:'absolute', width:'fit-content', height:'fit-content', top:'6.2%', zIndex:'19', backgroundColor:'rgb(51, 51, 51)', right:'0', borderRadius:'2%', border:'1px solid rgb(51, 51, 51)'}}>
                                 {
                                     !IsLoged &&
                                     <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</Link>
