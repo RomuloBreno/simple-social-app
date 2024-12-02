@@ -13,7 +13,7 @@ RUN npm install
 # Etapa 5: Copiar o restante dos arquivos do projeto para o contêiner
 COPY . .
 
-EXPOSE 6000
+EXPOSE 3000
 
 # Etapa 7: Comando para rodar a aplicação Node.js
 CMD ["npm", "start"]
