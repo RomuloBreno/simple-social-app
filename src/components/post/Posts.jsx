@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "../../utils/formatText";
 import { useAuth } from "../../context/authContext";
 import Feedbacks from "../feedback/Feedbacks";
+import PostActions from '../post/PostsActions';
 
 const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
   <div style={styles.header}>
@@ -11,7 +12,7 @@ const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
       <Link to={`/profile/${user?.nick}`} style={styles.profileLink}>
         <img
           style={styles.avatar}
-          src="https://picsum.photos/50/50"
+          src={`https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
           alt="User"
         />
         <div style={styles.userInfo}>
@@ -63,24 +64,24 @@ const PostBody = ({ title, description, images, creationDate, postStoryPattern, 
   </Link>
 );
 
-const PostActions = ({ youLikedPost, postToggleLike, toggleComments, commentsLength }) => (
-  <div className='text-center d-flex' style={styles.actions}>
-    <div>
-    <button
-      style={youLikedPost ? styles.actionButtonLiked : styles.actionButtonLike}
-      onClick={postToggleLike}
-    >
-      ❤
-    </button>
-    </div>
-    <div>
-    <button style={styles.actionButton} onClick={toggleComments}>
-      💬
-    </button>
-    <span>{commentsLength || ""}</span>
-    </div>
-  </div>
-);
+// const PostActions = ({ youLikedPost, postToggleLike, toggleComments, commentsLength }) => (
+//   <div className='text-center d-flex' style={styles.actions}>
+//     <div>
+//     <button
+//       style={youLikedPost ? styles.actionButtonLiked : styles.actionButtonLike}
+//       onClick={postToggleLike}
+//     >
+//       ❤
+//     </button>
+//     </div>
+//     <div>
+//     <button style={styles.actionButton} onClick={toggleComments}>
+//       💬
+//     </button>
+//     <span>{commentsLength || ""}</span>
+//     </div>
+//   </div>
+// );
 
 const Post = ({ postContent }) => {
   const { data } = useAuth();
@@ -119,6 +120,10 @@ const Post = ({ postContent }) => {
     getYouLiked()
   }, [data?.token]);
 
+  useEffect(() => {
+    setIsClickedLike(false);
+  }, [isClickedLike]);
+
   const getYouLiked = async () => {
             let youLiked = await fetchApi(`v1/you-like-post/${postContent._id}/${data?.user?._id}`, null, 'GET', null, data?.token)
             if (!youLiked.status)
@@ -128,9 +133,9 @@ const Post = ({ postContent }) => {
 
   const postToggleLike = async () => {
     if (isClickedLike) return;
-    setIsClickedLike(true);
     setYouLikedPost((prev) => !prev);
     await fetchApi(`v1/publish-like/${postContent._id}`, null, "POST", { userId: data?.user?._id }, data?.token);
+    setIsClickedLike(true);
   };
 
   const toggleComments = () => setShowComments((prev) => !prev);
@@ -160,6 +165,7 @@ const Post = ({ postContent }) => {
           postToggleLike={postToggleLike}
           toggleComments={toggleComments}
           commentsLength={comments?.length}
+          styles={styles}
           />
       </div>
       <div>

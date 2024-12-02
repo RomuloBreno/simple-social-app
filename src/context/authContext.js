@@ -18,6 +18,7 @@ export const UserProvider = ({ children }) => {
   const [data, setData] = useState(null);   // Armazena os dados
   const [token, setToken] = useState(tokenInit);   // Armazena os dados
   const [wsConnect, setWsConnect] = useState()
+  const [imageProfile, setImageProfile] = useState()
 
   if(wsConnect){
     wsConnect.onopen = () => {
@@ -48,10 +49,12 @@ export const UserProvider = ({ children }) => {
 
   const fetchData = async (tokenParam) => {
     const initCredencials = await initContext(token ? token : tokenParam);
+    let getImageProfile = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${initCredencials?._id}/${initCredencials?._id}-${initCredencials?.pathImage}`
     let wsConnection = new WebSocket(`ws://${process.env.REACT_APP_URL_WS}?token=${tokenInit ? tokenInit : token}&userId=${initCredencials?._id}`)
     console.log(wsConnection)
     setWsConnect(wsConnection)
-    setData({ user: initCredencials ? initCredencials : null, token: tokenInit ? tokenInit : tokenParam, webSocket: wsConnection ? wsConnection : wsConnect}) // Atualiza o estado com os dados recebidos
+    setImageProfile(getImageProfile)
+    setData({ user: initCredencials ? initCredencials : null, imageProfile: imageProfile ? imageProfile : getImageProfile, token: tokenInit ? tokenInit : tokenParam, webSocket: wsConnection ? wsConnection : wsConnect}) // Atualiza o estado com os dados recebidos
   };
 
 

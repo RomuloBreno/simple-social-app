@@ -6,6 +6,7 @@ import { formatDate } from '../utils/formatText';
 import { useAuth } from '../context/authContext';
 import { useParams } from 'react-router-dom';
 import FeedbacksPost from "../components/feedback/FeedbacksPost";
+import PostActions from '../components/post/PostsActions';
 
 const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
   <div style={styles.header}>
@@ -13,7 +14,7 @@ const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
       <Link to={`/profile/${user?.nick}`} style={styles.profileLink}>
         <img
           style={styles.avatar}
-          src="https://picsum.photos/50/50"
+          src={`https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
           alt="User"
         />
         <div style={styles.userInfo}>
@@ -62,27 +63,28 @@ const PostBody = ({ title, description, images, creationDate, postStoryPattern, 
     </>
 );
 
-const PostActions = ({ youLikedPost, postToggleLike, toggleComments, commentsLength }) => (
-  <div className='text-center d-flex' style={styles.actions}>
-    <div>
-    <button
-      style={youLikedPost ? styles.actionButtonLiked : styles.actionButtonLike}
-      onClick={postToggleLike}
-    >
-      ❤
-    </button>
-    </div>
-    <div>
-    <button style={styles.actionButton} onClick={toggleComments}>
-      💬
-    </button>
-    <span>{commentsLength || ""}</span>
-    </div>
-  </div>
-);
+// const PostActions = ({ youLikedPost, postToggleLike, toggleComments, commentsLength }) => (
+//   <div className='text-center d-flex' style={styles.actions}>
+//     <div>
+//     <button
+//       style={youLikedPost ? styles.actionButtonLiked : styles.actionButtonLike}
+//       onClick={postToggleLike}
+//     >
+//       ❤
+//     </button>
+//     </div>
+//     <div>
+//     <button style={styles.actionButton} onClick={toggleComments}>
+//       💬
+//     </button>
+//     <span>{commentsLength || ""}</span>
+//     </div>
+//   </div>
+// );
 
 const Post = () => {
     const { data } = useAuth();
+    const { imageProfile } = useAuth();
     const { postId } = useParams();
     const [post, setPost] = useState();
     
@@ -178,6 +180,7 @@ const Post = () => {
                         postToggleLike={postToggleLike}
                         toggleComments={toggleComments}
                         commentsLength={comments?.length}
+                        styles={styles}
                     />
                     {showComments && <FeedbacksPost postId={post?._id} qtdFeedbacks={comments?.length} />}
                 </div>

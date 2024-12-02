@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect} from 'react';
 import PostStory from '../components/post/PostStory';
-import Posts from '../components/post/Posts';
 import {fetchApi} from '../utils/fetch';
 import { useAuth, useUser } from '../context/authContext';
 import { useParams } from 'react-router-dom';
@@ -67,7 +66,7 @@ const FeedStory = () => {
           <div className='container'>
             <h3>Feed Story</h3>
          {posts?.map((post) => (
-            <Posts key={post._id} postContent={post} />
+            <PostStory key={post._id} postStoryPatternData={post} />
           ))}
           </div>
           </>

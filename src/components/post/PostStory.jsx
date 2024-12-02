@@ -1,201 +1,190 @@
-// src/components/Post.tsx
 import React, { useState, useEffect } from 'react';
 import { fetchApi } from '../../utils/fetch';
+import { Link } from "react-router-dom";
 import { formatDate } from '../../utils/formatText';
 import { useAuth } from '../../context/authContext';
-import { Link} from "react-router-dom";
-import FeedbacksPost from '../../components/feedback/FeedbacksPost';
 import { useParams } from 'react-router-dom';
+import FeedbacksPost from "../../components/feedback/FeedbacksPost";
+import PostActions from './PostsActions';
 
+const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
+  <div style={styles.header}>
+    <div style={styles.headerLeft}>
+      <Link to={`/profile/${user?.nick}`} style={styles.profileLink}>
+        <img
+          style={styles.avatar}
+          src={`https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
+          alt="User"
+        />
+        <div style={styles.userInfo}>
+          <span style={styles.userNick}>{user?.nick}</span><br />
+          <span style={styles.userJob}>{user?.job}</span>
+        </div>
+      </Link>
+    </div>
+    <div style={styles.headerRight}>
+      {postStoryPattern && <span style={styles.storyBadge}>Story</span>}
+      <button style={styles.dropdownToggle} onClick={toggleDivShare}>
+      <i className="">...</i>
+      </button>
+      {isVisible && (
+        <div className='' style={styles.dropdownMenu}>
+          <button className="" style={styles.dropdownItem}>🔗 Share</button>
+          <br/>
+          <Link style={styles.dropdownItem}> 💾 Save</Link>
+          <br/>
+          <Link style={styles.dropdownItem} to="/report">
+          🚩 Report
+          </Link>
+        </div>
+      )}
+    </div>
+  </div>
+);
 
-const PostStory = ({postContent}) => {
-    const data = useAuth().data
-    const [user, setUser] = useState(null);  // Estado para armazenar os user
-    // const [comments, setComments] = useState()
-    const [images, setImages] = useState([null])
-    const [showComments, setShowComments] = useState(true);
-    const [feedToInteligence] = useState({})
-    const [post, setPost] = useState();
+const PostBody = ({ title, description, images, creationDate, postStoryPattern, postId }) => (
+<>
+    <div style={styles.meta}>
+        <br />
+      <i className="fa fa-clock-o"></i> Publicado em: {formatDate(creationDate)}
+        <br />
+        <br />
+    </div>
+    <h4 style={styles.title}>{title}</h4>
+    <p style={styles.description}>{description}</p>
+    {images.length > 0 && (
+      <div style={styles.imagesContainer}>
+        {images.map((image, index) => (
+          <img key={index} src={image} alt={`Imagem ${index + 1}`} style={styles.image} />
+        ))}
+      </div>
+    )}
+    </>
+);
+
+// const PostActions = ({ youLikedPost, postToggleLike, toggleComments, commentsLength }) => (
+//   <div className='text-center d-flex' style={styles.actions}>
+//     <div>
+//     <button
+//       style={youLikedPost ? styles.actionButtonLiked : styles.actionButtonLike}
+//       onClick={postToggleLike}
+//     >
+//       ❤
+//     </button>
+//     </div>
+//     <div>
+//     <button style={styles.actionButton} onClick={toggleComments}>
+//       💬
+//     </button>
+//     <span>{commentsLength || ""}</span>
+//     </div>
+//   </div>
+// );
+
+const PostStory = ({postStoryPatternData}) => {
+    const { data } = useAuth();
+    const  postId  = postStoryPatternData?._id
+    const [post, setPost] = useState(postStoryPatternData);
     
-    const {title, owner,creationDate,description,comments,path} = postContent
 
-    const [qtdLikes, setQtdLikes] = useState();
-    const [qtdCommnets, setQtdCommnets] = useState();
-    const [toggleLike, setToggleLike] = useState();
-    const [youLikedPost, setYouLikedPost] = useState();
-
+    // const [title, setTile] = useState();
+    // const [owner, setOwner] = useState();
+    // const [creationDate, setCreationDate] = useState();
+    // const [description, setDescription] = useState();
+    // const [path, setPath] = useState();
+    // const [user, setUser] = useState(null);  // Estado para armazenar os user
+    // const [comments, setComments] = useState();
+    
+    const { title, description, owner, path, creationDate, comments, postStoryPattern } = post ? post : {}
+    const [user, setUser] = useState(null);
+    const [images, setImages] = useState([]);
+    const [showComments, setShowComments] = useState(false);
     const [isClickedLike, setIsClickedLike] = useState(false);
+    const [youLikedPost, setYouLikedPost] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
-    const [loading, setLoading] = useState(null);
-    // Função de toggle para alterar o estado
-    const toggleDivShare = () => {
-        setIsVisible((prevState) => !prevState); // Inverte o estado atual
-    };
 
-    const postToggleLike = async () => {
-        setIsClickedLike(true)
-        setYouLikedPost(!youLikedPost)
-        let toggleLike = await fetchApi(`v1/publish-like/${postContent?._id}`, null, 'POST', { userId: data?.user?._id }, data?.token)
-        if (!toggleLike.status)
+    
+    useEffect(() => {
+        const fetchPost = async () => {
+            let response = await fetchApi(`v1/post/${postId}`, null, 'GET', null, data?.token)
+            if (response.status) setPost(response.result);
+        }
+        setPost(postStoryPatternData)
+        const fetchUser = async () => {
+            if(!post)
+                return
+            const response = await fetchApi(`v1/user/${owner}`, null, "GET", null, data?.token);
+            if (response.status) setUser(response.result);
+        };
+        
+        const fetchImages = () => {
+            if (path?.length) {
+                setImages(
+                    path.map(
+                        (fileName) =>
+                            `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/${post?._id}/${owner}-${fileName}`
+                    )
+                );
+            }
+        };
+        // fetchPost();
+        fetchUser();
+        fetchImages();
+    }, [postStoryPatternData, data?.token]);
+    
+    useEffect(() => {
+        if(!post)
             return
-        setToggleLike(toggleLike.result)
-        window.location.reload()
-    }
-
+        getYouLiked()
+    }, [data?.token, post]);
+    
     const getYouLiked = async () => {
-        let youLiked = await fetchApi(`v1/you-like-post/${postContent?._id}/${data?.user?._id}`, null, 'GET', null, data?.token)
+        let youLiked = await fetchApi(`v1/you-like-post/${post?._id}/${data?.user?._id}`, null, 'GET', null, data?.token)
         if (!youLiked.status)
             return
         setYouLikedPost(youLiked.result)
     }
-    const getQtdLikes = async () => {
-        if(!postContent?._id)
-            return
-        let qtdLikes = await fetchApi(`v1/likes-qtd/${postContent?._id}`, null, 'GET', null, data?.token)
-        if (!qtdLikes.status)
-            return
-        setQtdLikes(qtdLikes.result)
-    }
 
-    const convertDate = (givenDate) => {
-        return formatDate(givenDate)
-    }
+    const postToggleLike = async () => {
+        if (isClickedLike) return;
+        setIsClickedLike(true);
+        setYouLikedPost((prev) => !prev);
+        await fetchApi(`v1/publish-like/${post?._id}`, null, "POST", { userId: data?.user?._id }, data?.token);
+    };
 
-    const getImagesUrls = async () => {
-        if (path?.length !== 0) {
-            path?.map((fileName) => {
-                const imagesGet = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/${postContent?._id}/${owner}-${fileName}`;
-                setImages(prevImages => [...prevImages, imagesGet]);
-            })
-        }
-    }
-    // const getCommentsUrls = async () => {
-    //     let getFeedback = await fetchApi(`v1/feedbacks/${post?._id}`, null, 'GET', null, data?.token)
-    //     if (!getFeedback.status)
-    //         return
-    //     setComments(getFeedback.result)
-    // }
-     const fetchUser = async () => {
-        // 
-        if (!owner)
-            return
-        const ownerPost = await fetchApi(`v1/user/${owner}`, null, 'GET', null, data?.token)
-        if (!ownerPost.status)
-            return
-        setUser(ownerPost.result)
-    }
-    // const toggleComments = () => setShowComments(!showComments);
-    const toggleComments = () => {
-        setShowComments(!showComments);
-        // setShowComments(true);
-    }
-
-
-    useEffect(() => {
-        setImages([]);
-        getImagesUrls();
-        toggleComments();
-        fetchUser();
-        // 
-    }, [feedToInteligence, data.user])
-
-    useEffect(() => {
-        // 
-    }, [showComments, path])
-    
-    useEffect(() => {
-        getYouLiked();
-        getQtdLikes();
-    }, [data?.user, toggleLike])
+    const toggleComments = () => setShowComments((prev) => !prev);
+    const toggleDivShare = () => setIsVisible((prev) => !prev);
 
     return (
-        <div className="container">
-            <div className="container" style={{ display: '', border: '0px solid #ddd', padding: '10px', margin: '10px 0', maxHeight: 'auto' }}>
-                <div>
-
-
-                    <div style={styles.container}>
-                        <div style={styles.blackBox}>
-                            <div className="card gedf-card">
-                                <div className="card-header">
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <div className="d-flex justify-content-between align-items-center">
-
-                                            <div className="d-flex">
-                                                <img className="rounded-circle" width="65" src="https://picsum.photos/50/50" alt="" />
-                                                <div className="h7 text-muted px-2">
-                                                    {user?.name}
-                                                    <p>{user?.email}</p>
-                                                </div>
-                                            </div>
-
-
-
-                                        </div>
-                                        <div>
-                                            <div className="dropdown">
-                                            <button className="btn btn-link dropdown-toggle" onClick={toggleDivShare} type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i className="fa fa-ellipsis-h"></i>
-                                            </button>
-                                                {isVisible && (
-                                                <div className="dropdown-menu dropdown-menu-right d-block" aria-labelledby="gedf-drop1">
-                                                    <div className="h6 dropdown-header">Configuration</div>
-                                                    <div className='d-flex' style={{ alignItems: 'center', padding:'0px', margin:'10px' }}>
-                                                        <button className={styles.buttonPost}>🔗 Share</button>
-                                                    </div>
-                                                    <Link className="dropdown-item">Save</Link>
-                                                    <Link className="dropdown-item" to="/report">Report</Link> {/* //TODO: Criar Formulário de report */}
-                                                </div>
-                                            )}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                {/* CONTEUDO DO POST */}
-                                <div className="card-body container">
-                                    <div className="text-muted h7 mb-2"> <i className="fa fa-clock-o"></i>publicado em: {convertDate(creationDate)}</div>
-                                    <h4 className="card-title">{title}</h4>
-                                    <p className="card-text">
-                                        {description}
-                                    </p>
-                                    {images.length !== 0 ? images.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image}
-                                            alt={`Preview ${index + 1}`}
-                                            style={{ width: 'auto', height: 'auto', maxHeight: '100%', maxWidth: '100%' }}
-                                        />
-                                    )) : <></>}
-                                </div>
-                            </div>
-
-                        </div>
-                        <br />
-                        <div style={{ display: '', flexDirection: 'column', marginLeft: '10px' }}>
-                        <div className='d-flex text-center' style={{ alignItems: 'center' }}>
-                        </div>
-                        <div className='text-center d-flex' style={{ alignItems: 'center' }}>
-                            <div>
-                            <button style={youLikedPost ? styles.buttonLiked : styles.buttonLike} onClick={!isClickedLike ? postToggleLike : null}>❤</button>
-                            <br />
-                            <span>{qtdLikes | ''}</span>
-                            </div>
-                            <div>
-                            <button className={styles.buttonPost} onClick={toggleComments}>💬</button>
-                            <br />
-                            <span>{comments?.length | ''}</span>
-                            </div>
-                        </div>
-                        </div>
-                        {showComments && (
-                            <div style={styles.blueBox}>
-                                <FeedbacksPost postId={postContent?._id} />
-                            </div>
-                        )}
-                    </div>
+        <div className="p-4" >
+            <div style={styles.container}>
+                <div style={styles.post}>
+                    <PostHeader
+                        user={user}
+                        postStoryPattern={postStoryPattern}
+                        toggleDivShare={toggleDivShare}
+                        isVisible={isVisible}
+                    />
+                    <PostBody
+                        title={title}
+                        description={description}
+                        images={images}
+                        creationDate={creationDate}
+                        postStoryPattern={postStoryPattern}
+                        postId={post?._id}
+                    />
+                    <hr />
+                    <PostActions
+                        youLikedPost={youLikedPost}
+                        postToggleLike={postToggleLike}
+                        toggleComments={toggleComments}
+                        commentsLength={comments?.length}
+                        styles={styles}
+                    />
+                    {showComments && <FeedbacksPost postId={post?._id} qtdFeedbacks={comments?.length} />}
                 </div>
-
+                <div>
+                </div>
             </div>
         </div>
     );
@@ -203,55 +192,128 @@ const PostStory = ({postContent}) => {
 
 const styles = {
     container: {
-        position: 'relative',
-        display: '',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff', // Cor de fundo para facilitar a visualização
+        display: "flex",
+        border: "1px solid #ddd",
+        padding: "10px",
+        margin: "10px 0",
+        backgroundColor: "#fff",
+        borderRadius: "10px",
+        width: '100%'
     },
-    buttonPost: {
+    post: {
+        width: "100%",
+    },
+    header: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    headerLeft: {
+        display: "flex",
+        alignItems: "center",
+    },
+    profileLink: {
+        display: "flex",
+        textDecoration: "none",
+        color: "inherit",
+    },
+    avatar: {
+        borderRadius: "50%",
+        width: "50px",
+        height: "50px",
+    },
+    userInfo: {
+        marginLeft: "10px",
+    },
+    userNick: {
+        fontWeight: "bold",
+    },
+    userJob: {
+        fontSize: "12px",
+        color: "gray",
+    },
+    storyBadge: {
+        backgroundColor: "#f0f0f0",
+        padding: "5px",
+        borderRadius: "5px",
+        fontSize: "12px",
+    },
+    dropdownToggle: {
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+    },
+    dropdownMenu: {
+        position: "absolute",
+        backgroundColor: "#fff",
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        borderRadius: "5px",
+        padding: "10px",
+    },
+    dropdownHeader: {
+        fontWeight: "bold",
+    },
+    dropdownItem: {
+        cursor: "pointer",
+        padding: "5px 10px",
+        textDecoration: "none",
+        color: "#000",
+        background: "none",
+        border: "none",
+    },
+    body: {
+        margin: "15px 0",
+        textDecoration: "none",
+        color: "inherit",
+    },
+    meta: {
+        fontSize: "12px",
+        color: "gray",
+        marginBottom: "10px",
+    },
+    title: {
+        fontSize: "18px",
+        fontWeight: "bold",
+    },
+    description: {
+        margin: "10px 0",
+    },
+    imagesContainer: {
+        display: "flex",
+        flexWrap: "wrap",
+    },
+    image: {
+        maxWidth: "100%",
+        margin: "5px 0",
+    },
+    actions: {
+        // justifyContent: "space-between",
+        // alignItems: "center",
+        // height:' 100%',
+        // alignContent: 'center'
+    },
+    actionButton: {
         width: '100%',
+        background: "none",
+        border: "none",
+        cursor: "pointer",
     },
-    buttonLiked: {
-        cursor: 'grab',
-        color: 'red',
-    },
-    buttonLike: {
-        cursor: 'grab',
-        color: 'white'
-    },
-    circle: {
-        backgroundColor: 'black',
-        borderRadius: '50%',
-        top: '20px',
-        left: '20px',
-    },
-    horizontalBar: {
-        textAlign: 'left',
-        padding: '10px',
+    actionButtonLiked: {
+        color: "red",
         width: '100%',
-        height: 'fit-content',
-        borderRadius: '10px',
+        background: "none",
+        border: "none",
+        cursor: "pointer",
     },
-    blackBox: {
+    actionButtonLike: {
+        color: "gray",
         width: '100%',
-        height: 'auto',//deve ser auto
-        maxHeight: 'auto',
-        backgroundColor: 'white',
-        borderRadius: '10px',
-        zIndex: 1,
-        transition: 'height 0.5s ease, opacity 0.5s ease', // Animação suave
-    },
-    blueBox: {
-        padding: '30px',
-        marginLeft: '0px', // Animação no marginLeft
-        opacity: '1',
-        overflow: 'auto',
-        transition: 'margin-left 0.5s ease, opacity 0.5s ease', // Animação suave
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        zIndex: 0,
+        background: "none",
+        border: "none",
+        cursor: "pointer",
     },
 };
 
 export default PostStory;
+
+

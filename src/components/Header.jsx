@@ -15,6 +15,7 @@ const Header = (loged) => {
     const [searchQuery, setSearchQuery] = useState("");
     //user
     const data = useAuth().data;
+    const imageProfile =data?.imageProfile;
     const ws = useAuth().data?.ws
 
     const { logout, remove } = useAuth();
@@ -24,12 +25,13 @@ const Header = (loged) => {
             setIsLoged(false); // Usuário não autenticado
             return
         } else {
+            console.log(data.imageProfile)
             setIsLoged(true); // Usuário autenticado
         }
 
 
 
-    }, [data?.user]);
+    }, [data?.user, data?.imageProfile]);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 1368);
@@ -87,7 +89,7 @@ const Header = (loged) => {
                                 {
                                     IsLoged &&
                                     <Link to={`/profile/${data?.user?.nick}`}>
-                                        <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                        <img className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" />
                                     </Link>
                                 }
                                 {
@@ -144,7 +146,7 @@ const Header = (loged) => {
                             {
                                 IsLoged &&
                                 <Link to={`/profile/${data?.user?.nick}`}>
-                                    <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                    <img className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" />
                                 </Link>
                             }
                             {

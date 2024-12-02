@@ -139,7 +139,7 @@ return (
                             <br />
                             {displayText}
                             <div className="d-flex">
-                                <img className="rounded-circle" width="25" src="https://picsum.photos/50/50" alt="" />
+                                <img className="rounded-circle" width="25"src={`https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`} alt="" />
                                 <div className="h7 text-muted px-2">
                                     <UrlProfile>
 
