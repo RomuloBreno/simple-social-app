@@ -76,7 +76,7 @@ const Feed = () => {
           {visiblePosts?.map((post) => (
             <Post key={(post?._id + Math.floor(Math.random() * 100).toString())} postContent={post} />
           ))}
-          {false && postsFollowing?.length && (
+          {true && postsFollowing?.length && (
             <div className='container text-center'>
               <br />  
             <button style={style.btn} onClick={handleLoadMore} disabled={loading} className="">
