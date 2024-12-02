@@ -53,7 +53,7 @@ export const UserProvider = ({ children }) => {
     let wsConnection
     try {
       if(initCredencials)
-        wsConnection = new WebSocket(`ws://${process.env.REACT_APP_URL_WS}?token=${tokenInit ? tokenInit : token}&userId=${initCredencials?._id}`)
+        wsConnection = new WebSocket(`wss://${process.env.REACT_APP_URL_WS}?token=${tokenInit ? tokenInit : token}&userId=${initCredencials?._id}`)
       
     } catch (error) {
       console.log("Erro in connection")
