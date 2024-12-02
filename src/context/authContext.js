@@ -52,7 +52,8 @@ export const UserProvider = ({ children }) => {
     let getImageProfile = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${initCredencials?._id}/${initCredencials?._id}-${initCredencials?.pathImage}`
     let wsConnection
     try {
-      wsConnection = new WebSocket(`ws://${process.env.REACT_APP_URL_WS}?token=${tokenInit ? tokenInit : token}&userId=${initCredencials?._id}`)
+      if(initCredencials)
+        wsConnection = new WebSocket(`ws://${process.env.REACT_APP_URL_WS}?token=${tokenInit ? tokenInit : token}&userId=${initCredencials?._id}`)
       
     } catch (error) {
       console.log("Erro in connection")
