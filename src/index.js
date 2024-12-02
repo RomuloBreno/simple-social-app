@@ -11,7 +11,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 // const connectApi = await api()
 const connectApi = true
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
          
           <UserProvider>
             
@@ -21,7 +21,7 @@ root.render(
             }
           </UserProvider>
    
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 reportWebVitals();

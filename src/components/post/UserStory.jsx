@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import Posts from '../components/Posts'
-import { useAuth } from '../context/authContext';
+import Posts from '../../components/post/Posts'
+import { useAuth } from '../../context/authContext';
 // import { useNavigate } from 'react-router-dom';
 
 

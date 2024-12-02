@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../../context/authContext';
 import { Link} from "react-router-dom";
-import { fetchApi } from '../utils/fetch';
+import { fetchApi } from '../../utils/fetch';
 
 import styled from 'styled-components';
 
@@ -18,22 +18,19 @@ const FeedbacksPost = ({ postId, qtdFeedbacks }) => {
     const data = useAuth().data
     const [loading, setLoading] = useState(false); // Estado para gerenciar o carregamento
     const [expandedIndex, setExpandedIndex] = useState(false);
-    const [newComment, setNewComment] = useState("");
+    const [newComment, setNewComment] = useState();
     const [user, setUser] = useState([]);  // Estado para armazenar os user
     const [feedbacks, setFeedbacks] = useState(null);
 
     const handleAddComment = async (e) => {
         setLoading(true)
-
-        const arrFeedbackForUser = []
         e.preventDefault();
         if (newComment.trim()) {
             const feedbackCreate = await fetchApi(`v1/publish-feedback/${postId}`, null, 'POST', { content: newComment, postId: postId, author: data?.user._id }, data?.token)
             if (!feedbackCreate.status)
                 return
-            arrFeedbackForUser.push({ author: data?.user.nick, content: newComment })
-            setFeedbacks(prevArr => [...prevArr, arrFeedbackForUser]);
-            setNewComment("");
+            setFeedbacks(prevArr => [...prevArr, { author: data?.user.nick, content: newComment }]);
+            setNewComment("")
             setLoading(false)
         }
         setLoading(false)
@@ -142,7 +139,7 @@ return (
                             <br />
                             {displayText}
                             <div className="d-flex">
-                                <img className="rounded-circle" width="25" src="https://picsum.photos/50/50" alt="" />
+                                <img className="rounded-circle" width="25" src={`https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`} alt="" />
                                 <div className="h7 text-muted px-2">
                                     <UrlProfile>
 
@@ -192,7 +189,6 @@ return (
                         </button>
                     </div>
                 </form>
-                {feedbacks?.length < qtdFeedbacks ?(<><span style={{fontSize:'70%'}}>Esse post pode conter mais feedbacks, clique no post para visualizar mais...</span></>):(<></>)}
                 </>
                 )
                 }

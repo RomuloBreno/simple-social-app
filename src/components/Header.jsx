@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
+import Notify from './notify/Notifys';
 const Header = (loged) => {
     const navigate = useNavigate()
     //mobile
@@ -14,6 +15,8 @@ const Header = (loged) => {
     const [searchQuery, setSearchQuery] = useState("");
     //user
     const data = useAuth().data;
+    const imageProfile =data?.imageProfile;
+    const ws = useAuth().data?.ws
 
     const { logout, remove } = useAuth();
 
@@ -22,15 +25,16 @@ const Header = (loged) => {
             setIsLoged(false); // Usuário não autenticado
             return
         } else {
+            console.log(data.imageProfile)
             setIsLoged(true); // Usuário autenticado
         }
 
 
 
-    }, [data?.user]);
+    }, [data?.user, data?.imageProfile]);
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 1568);
+        const handleResize = () => setIsMobile(window.innerWidth < 1368);
 
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -85,7 +89,7 @@ const Header = (loged) => {
                                 {
                                     IsLoged &&
                                     <Link to={`/profile/${data?.user?.nick}`}>
-                                        <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                        <img className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" />
                                     </Link>
                                 }
                                 {
@@ -142,7 +146,7 @@ const Header = (loged) => {
                             {
                                 IsLoged &&
                                 <Link to={`/profile/${data?.user?.nick}`}>
-                                    <img className="rounded-circle" width="65" style={{ padding: '10px' }} src="https://picsum.photos/50/50" alt="profile" />
+                                    <img className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" />
                                 </Link>
                             }
                             {

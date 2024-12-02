@@ -1,7 +1,7 @@
 // src/pages/Feed.tsx
 import React, { useState, useEffect } from 'react';
-import Post from '../components/Posts';
-import FormPost from '../components/FormPost';
+import Post from '../components/post/Posts';
+import FormPost from '../components/forms/FormPost';
 import {fetchApi} from '../utils/fetch';
 import { useAuth, useUser } from '../context/authContext';
 // import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ const Feed = () => {
   // const [posts, setPosts] = useState(null);  // Estado para armazenar os posts
   const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
   const [postsFollowing, setPostsFollowing] = useState()
-  const [postsToShow, setPostsToShow] = useState(3); // Quantidade inicial de posts a exibir
+  const [postsToShow, setPostsToShow] = useState(5); // Quantidade inicial de posts a exibir
   const [feedToInteligence] = useState({})
   const [visiblePosts, setVisiblePosts] = useState([]); // Estado para armazenar os posts visíveis
   const [limitLocal, setLimitLocal] = useState(7)
@@ -49,19 +49,18 @@ const Feed = () => {
   useEffect(() => {
     // validar quais posts podem ser requisitados com base no usuario
     fetchPostsFollowing();
+  }, [data?.user, limitLocal])
+
+  useEffect(() => {
     setVisiblePosts(postsFollowing);
-    
-  }, [data?.user, postsFollowing, limitLocal])
-
-
+  }, [data?.user,limitLocal,fetchPostsFollowing])
   
   const handleLoadMore = () => {
     setLoading(true);
     setLimitLocal((prev) => prev + 5)
-    
     setTimeout(() => {
       setPostsToShow((prev) => prev + 5); // Aumenta a quantidade de posts a mostrar em 5
-    }, 500); // Simula um atraso de carregamento
+    }, 100); // Simula um atraso de carregamento
     setLoading(false);
   };
 
@@ -69,7 +68,7 @@ const Feed = () => {
     <div className='container' style={{ padding: ' 0px' }}>
       <div style={{}}>
         <h2 style={{ marginRight: '70%' }} > 📃 Feed</h2><br />
-        <div className="card container gedf-card" style={{ width: '79%', marginRight: '6%', marginLeft: '2%', justifySelf: 'center' }}>
+        <div className="card container" style={{ width: '100%', marginRight: '0%', marginLeft: '0%', }}>
       <FormPost/>
     </div>
         {loading ? (
@@ -77,11 +76,12 @@ const Feed = () => {
         ) : (
           <div className='container'>
           {visiblePosts?.map((post) => (
-            <Post key={post?._id} postContent={post} />
+            <Post key={(post?._id + Math.floor(Math.random() * 100))} postContent={post} />
           ))}
           {postsToShow < postsFollowing?.length && (
             <div className='container text-center'>
-            <button onClick={handleLoadMore} disabled={loading} className="">
+              <br />  
+            <button style={style.btn} onClick={handleLoadMore} disabled={loading} className="">
               {loading ? 'Carregando...' : postsFollowing.length > 0 ? 'Mostrar mais' : <></>}
             </button>
             </div>
@@ -98,4 +98,13 @@ const Feed = () => {
   )
 };
 
+const style = {
+  btn: {
+    color: "grey",
+    width: '100%',
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+},
+}
 export default Feed;

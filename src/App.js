@@ -1,6 +1,6 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAuth } from './context/authContext'; // Importa o hook useAuth
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -11,6 +11,7 @@ import FeedStory from "./pages/FeedStory";
 import Index from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Notifys from "./components/notify/Notifys";
 
 const ProtectedRoute = ({ children }) => {
   const user = useAuth().data?.user;
@@ -19,16 +20,21 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
   document.title = "FdBack";
-  const data = useAuth().data;
-  const [user, setUser] = useState(data?.user);
+  const authData = useAuth().data;
+
+  const { data, webSocket, user } = authData?.user ? authData : {};
+  // const data = useAuth().data;
+  // const [user, setUser] = useState(data?.user);
+  // const [WS, setWS] = useState();
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    setUser(data?.user);
-  }, [data?.user]);
+  }, [messages]);
 
   return (
     <Router>
       <Header />
+      <Notifys login={user ? true : false} webSocket={webSocket} />
       <br />
       <Routes>
         {/* Rotas públicas para usuários não autenticados */}

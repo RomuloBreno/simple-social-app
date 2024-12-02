@@ -1,12 +1,11 @@
-// src/components/Post.tsx
 import React, { useState, useEffect } from 'react';
-import { fetchApi } from '../utils/fetch';
+import { fetchApi } from '../../utils/fetch';
 import { Link } from "react-router-dom";
-import { formatDate } from '../utils/formatText';
-import { useAuth } from '../context/authContext';
+import { formatDate } from '../../utils/formatText';
+import { useAuth } from '../../context/authContext';
 import { useParams } from 'react-router-dom';
-import FeedbacksPost from "../components/feedback/FeedbacksPost";
-import PostActions from '../components/post/PostsActions';
+import FeedbacksPost from "../../components/feedback/FeedbacksPost";
+import PostActions from './PostsActions';
 
 const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
   <div style={styles.header}>
@@ -82,11 +81,10 @@ const PostBody = ({ title, description, images, creationDate, postStoryPattern, 
 //   </div>
 // );
 
-const Post = () => {
+const PostStory = ({postStoryPatternData}) => {
     const { data } = useAuth();
-    const { imageProfile } = useAuth();
-    const { postId } = useParams();
-    const [post, setPost] = useState();
+    const  postId  = postStoryPatternData?._id
+    const [post, setPost] = useState(postStoryPatternData);
     
 
     // const [title, setTile] = useState();
@@ -111,6 +109,7 @@ const Post = () => {
             let response = await fetchApi(`v1/post/${postId}`, null, 'GET', null, data?.token)
             if (response.status) setPost(response.result);
         }
+        setPost(postStoryPatternData)
         const fetchUser = async () => {
             if(!post)
                 return
@@ -128,17 +127,17 @@ const Post = () => {
                 );
             }
         };
-        fetchPost();
+        // fetchPost();
         fetchUser();
         fetchImages();
-    }, [post?._id, data?.token]);
+    }, [postStoryPatternData, data?.token]);
     
     useEffect(() => {
         if(!post)
             return
         getYouLiked()
     }, [data?.token, post]);
-
+    
     const getYouLiked = async () => {
         let youLiked = await fetchApi(`v1/you-like-post/${post?._id}/${data?.user?._id}`, null, 'GET', null, data?.token)
         if (!youLiked.status)
@@ -315,6 +314,6 @@ const styles = {
     },
 };
 
-export default Post;
+export default PostStory;
 
 
