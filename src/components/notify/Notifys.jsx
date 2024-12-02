@@ -84,7 +84,7 @@ const Notifys = ({ login, webSocket }) => {
                 }}>
                     {
                         messages?.map((msg, index) => (
-                            <div key={index}>
+                            <div key={index + Math.floor(Math.random() * 100).toString()}>
                                 <Notify messageParam={msg} indexParam={index} dataToken={data?.token} />
                             </div>
                         ))

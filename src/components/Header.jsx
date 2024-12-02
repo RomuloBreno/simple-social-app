@@ -25,7 +25,6 @@ const Header = (loged) => {
             setIsLoged(false); // Usuário não autenticado
             return
         } else {
-            console.log(data.imageProfile)
             setIsLoged(true); // Usuário autenticado
         }
 

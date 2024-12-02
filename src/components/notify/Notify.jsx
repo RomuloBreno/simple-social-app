@@ -17,11 +17,11 @@ const Notify = ({indexParam,messageParam, dataToken}) => {
           fetchUser()
     }, [messageParam]);
     useEffect(() => {
-    }, [message, user]);
+    }, [message, user?.nick]);
    
       return (
         <div style={{cursor: 'pointer' }}>
-        {message &&
+        {message && user &&
             <div style={style.notificationStyles}>
               <div style={style.iconStyles}>
                 <i className="fas fa-bell"></i>
