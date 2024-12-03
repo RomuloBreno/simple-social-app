@@ -75,7 +75,7 @@ const FormPost = () => {
     try {
       const pathsName = getNameFiles();
       let dataPost={}
-      if(postStoryChecked){
+      if(postStoryChecked && !(selectedPostsStoryValue.valueOf() == 'default' || selectedPostsStoryValue.valueOf() == '')){
         dataPost = {
           title,
           description: postContent,
@@ -131,10 +131,12 @@ const FormPost = () => {
   };
 
   useEffect(() => {
-    if (postStoryChecked && postsStory.length === 0) {
-      setError('Post story does not exist. Please create one.');
+    if (postStoryChecked && (selectedPostsStoryValue.valueOf() == 'default' || selectedPostsStoryValue.valueOf() == '')) {
+      setError('Não selecionar uma opção de story faz uma criação automatica de um novo story');
+    }else{
+      setError('');
     }
-  }, [postStoryChecked, postsStory.length]);
+  }, [postStoryChecked, selectedPostsStoryValue]);
 
   
   return (
@@ -212,13 +214,13 @@ const FormPost = () => {
               </div>
             )}
           </div>
-
+            <br />
           <div>
             <input type="checkbox" className="btn btn-primary" onClick={handleCheckPostStory} />
             <span> Post story</span>
-            {postStoryChecked && postsStory.length === 0 && (
-              <span> Marking the option creates a post story if it doesn't exist.</span>
-            )}
+            {/* {postStoryChecked && selectedPostsStoryValue && (
+              <span> Marking the option creates a post story if it doesn't selected.</span>
+            )} */}
 
             {postStoryChecked && postsStory.length > 0 && (
               <select
@@ -237,8 +239,8 @@ const FormPost = () => {
           </div>
 
           <br />
-          <button type="submit" className="btn btn-primary">Submit</button>
-          {error && <p className="text-danger mt-3">{error}</p>}
+          <button type="submit" className="btn btn-primary">Publicar</button>
+          {error && <p className="text-info mt-3">{error}</p>}
         </form>
       </div>
     </>
