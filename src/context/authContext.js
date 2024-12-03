@@ -53,7 +53,7 @@ export const UserProvider = ({ children }) => {
 
     if (!initCredentials) throw new Error("Failed to initialize credentials.");
 
-    const getImageProfile = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${initCredentials._id}/${initCredentials._id}-${initCredentials.pathImage}`;
+    const getImageProfile = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${initCredentials?._id}/${initCredentials?._id}-${initCredentials?.pathImage}`;
     setImageProfile(getImageProfile);
 
     const wsUrl = `ws://${process.env.REACT_APP_URL_WS}?token=${tokenToUse}&userId=${initCredentials._id}`;
@@ -68,9 +68,7 @@ export const UserProvider = ({ children }) => {
       wsConnection.onopen = () => {
         setWsConnect(wsConnection);
       };
-      wsConnection.onclose = () => {
-        setWsConnect();
-      };
+  
     } catch {
       console.warn("WebSocket connection failed.");
     }

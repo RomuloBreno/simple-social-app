@@ -3,6 +3,7 @@ import { useAuth } from '../context/authContext';
 import { fetchApi } from '../utils/fetch';
 import ProfilePosts from '../components/post/ProfilePosts';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import CircleImage from '../components/images/CircleImage';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -50,8 +51,7 @@ const Profile = () => {
     }, [profileNick, user, data, userPageId]);
 
     useEffect(() => {
-        if (anotherUser) fetchFollowStatus(anotherUser._id);
-    }, [anotherUser, myProfile]);
+    }, [imageProfile]);
 
     useEffect(() => {
         const fetchImages = () => {
@@ -191,12 +191,16 @@ const Profile = () => {
             <div className='container d-grid' style={{ justifyContent: 'center' }}>
                 <div style={styles.container}>
                     <div className="align-items-center" style={{ display: 'flex' }}>
-                        <img style={{ margin: '2%' }}
+                        <CircleImage 
+                        src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
+                        alt='Profile'
+                        />
+                        {/* <img style={{ margin: '2%' }}
                             className="rounded-circle"
                             width="65"
-                            src={imageProfile}
+                            src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
                             alt="profile"
-                        />
+                        /> */}
                         {!myProfile ? (<>
                             <div style={{ maxHeight: 'fit-content', padding: '10px' }}>
                                 <button onClick={() => handleFollowToggle(profile?._id)}>
@@ -248,7 +252,7 @@ const Profile = () => {
             <div className="d-flex mt-3" style={{ maxWidth: '50%' }}>
                 <div style={{ zIndex: 9 }}>
                     <img
-                        src={URL.createObjectURL(file[0])}
+                        src={URL.createObjectURL(file[0] || null)}
                         alt={`Preview ${file[0].name}`}
                         style={{ width: '100%', maxWidth: '150px', height: 'auto' }}
                     />

@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
 import Notify from './notify/Notifys';
+import CircleImage from './images/CircleImage';
 const Header = (loged) => {
     const navigate = useNavigate()
     //mobile
@@ -88,7 +89,11 @@ const Header = (loged) => {
                                 {
                                     IsLoged &&
                                     <Link to={`/profile/${data?.user?.nick}`}>
-                                        <img className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" />
+                                        <CircleImage 
+                                        src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`} 
+                                        alt='Proile header'
+                                        />
+                                        {/* <'img' className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" /> */}
                                     </Link>
                                 }
                                 {
@@ -97,7 +102,7 @@ const Header = (loged) => {
                                 }
                                 {
                                     !IsLoged &&
-                                    <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
+                                    <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%'}}>Login</button>
                                 }
                             </nav>
                         )}
@@ -145,7 +150,10 @@ const Header = (loged) => {
                             {
                                 IsLoged &&
                                 <Link to={`/profile/${data?.user?.nick}`}>
-                                    <img className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" />
+                                   <CircleImage 
+                                        src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`} 
+                                        alt='Proile header'
+                                        />
                                 </Link>
                             }
                             {
