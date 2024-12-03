@@ -155,183 +155,183 @@ const Profile = () => {
             throw new Error(`Error uploading file ${selectedFile[0].name}: ${storageResponseJson.message}`);
         }
 
-    if (result.status) {
-        window.location.href = `/profile/${user.nick}`;
-    } else {
-        setError(result.message);
-    }
-};
+        if (result.status) {
+            window.location.href = `/profile/${user.nick}`;
+        } else {
+            setError(result.message);
+        }
+    };
 
-//components
-const Follows = (users) => {
-    if (loading) {
-        return <div className="container" style={styles.container}>Carregando...</div>;
-    }
+    //components
+    const Follows = (users) => {
+        if (loading) {
+            return <div className="container" style={styles.container}>Carregando...</div>;
+        }
 
-    return (
-        <div className="container" style={styles.scrollContainer}>
-            {users?.length > 0 ? (
-                users.map((user) => (
-                    <div key={user.nick} style={styles.userContainer}>
-                        <Link to={`/profile/${user.nick}`} style={styles.link}>
-                            <div>
-                                <strong>{user.name}</strong> ({user.nick})
-                            </div>
-                        </Link>
-                    </div>
-                ))
-            ) : (
-                <p>Nenhum usuário encontrado.</p>
-            )}
-        </div>
-    );
-};
-const renderProfileDetails = (profile) => (
-    <>
-        <div className='container d-flex' style={{ justifyContent: 'center' }}>
-            <div style={styles.container}>
-                <div className="align-items-center" style={{ display: 'flex' }}>
-                    <img style={{ margin: '2%' }}
-                        className="rounded-circle"
-                        width="65"
-                        src={imageProfile}
-                        alt="profile"
-                    />
-                    {!myProfile ? (<>
-                        <div style={{ maxHeight: 'fit-content', padding: '10px' }}>
-                            <button onClick={() => handleFollowToggle(profile?._id)}>
-                                {youFollowMe ? 'Deixar' : 'Seguir'}
-                            </button>
+        return (
+            <div className="container" style={styles.scrollContainer}>
+                {users?.length > 0 ? (
+                    users.map((user) => (
+                        <div key={user.nick} style={styles.userContainer}>
+                            <Link to={`/profile/${user.nick}`} style={styles.link}>
+                                <div>
+                                    <strong>{user.name}</strong> ({user.nick})
+                                </div>
+                            </Link>
                         </div>
-
-                    </>) : (<></>)}
-                    <div className="p-2">
-                        <span>{followStats.followers | 0}</span>
-                        <br />
-                        <button value='followers' onClick={toggleFollowers}>followers</button>
-                    </div>
-                    <div className="p-2">
-                        <span >{followStats.following | 0}</span>
-                        <br />
-                        <button value='following' onClick={toggleFollowings}>following</button>
-                    </div>
-                    {myProfile && (
-                        <button style={{ margin: '10%' }} onClick={() => setEditMode(!editMode)}>🖍</button>
-                    )}
-                </div>
-                <br />
-                <h4>{profile.name}</h4>
-                <h5>({profile.nick})</h5>
-                <p>
-                    <strong>Email:</strong> {profile.email}
-                </p>
-                <p>
-                    <strong>Profissão:</strong> {profile.job}
-                </p>
+                    ))
+                ) : (
+                    <p>Nenhum usuário encontrado.</p>
+                )}
             </div>
-            <div>
-                <div>
-                    {(viewFollowers || viewFollowing) && viewFollowerOrFollowing ? (<>{Follows(viewFollowerOrFollowing)}</>) : (<></>)}
-                </div>
-                <br />
-                <br />
-                <br />
-                <br />
-            </div>
-        </div>
-        <br />
-        <ProfilePosts profileId={profile?._id} />
-    </>
-);
-const FilePreview = ({ file, onDelete }) => {
-    return (
-        <div className="d-flex mt-3" style={{ maxWidth: '50%' }}>
-            <div style={{ zIndex: 9 }}>
-                <img
-                    src={URL.createObjectURL(file[0])}
-                    alt={`Preview ${file[0].name}`}
-                    style={{ width: '100%', maxWidth: '150px', height: 'auto' }}
-                />
-            </div>
-            <div style={{ zIndex: 10, position: 'absolute', marginRight: '100%' }}>
-                <button onClick={() => onDelete(file[0])} className="btn btn-danger">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    );
-};
-const handleFileChange = (e) => {
-    setSelectedFile(e.target.files);
-    setFormData({ ...formData, pathImage: e.target.files[0].name })
-}
-//page logic
-
-if (!myProfile) {
-    return (
-        <div>
-            {renderProfileDetails(anotherUser || {})}
-        </div>
-    );
-}
-
-if (editMode) {
-    return (
-        <div className='container d-flex' style={{ justifyContent: 'center' }}>
-            <div className='container' style={styles.container}>
-                <form onSubmit={handleSubmit}>
-                    <div>
+        );
+    };
+    const renderProfileDetails = (profile) => (
+        <>
+            <div className='container d-grid' style={{ justifyContent: 'center' }}>
+                <div style={styles.container}>
+                    <div className="align-items-center" style={{ display: 'flex' }}>
                         <img style={{ margin: '2%' }}
                             className="rounded-circle"
                             width="65"
                             src={imageProfile}
                             alt="profile"
                         />
-                        <div className="form-group">
-                            <input
-                                type="file"
-                                className="custom-file-input"
-                                accept="image/*"
-                                onChange={handleFileChange}
-                            />
-                            {
-                                selectedFile &&
-                                <FilePreview key={selectedFile.name} file={selectedFile} />
-                            }
+                        {!myProfile ? (<>
+                            <div style={{ maxHeight: 'fit-content', padding: '10px' }}>
+                                <button onClick={() => handleFollowToggle(profile?._id)}>
+                                    {youFollowMe ? 'Deixar' : 'Seguir'}
+                                </button>
+                            </div>
 
+                        </>) : (<></>)}
+                        <div className="p-2">
+                            <span>{followStats.followers | 0}</span>
+                            <br />
+                            <button value='followers' onClick={toggleFollowers}>followers</button>
                         </div>
+                        <div className="p-2">
+                            <span >{followStats.following | 0}</span>
+                            <br />
+                            <button value='following' onClick={toggleFollowings}>following</button>
+                        </div>
+                        {myProfile && (
+                            <button style={{}} onClick={() => setEditMode(!editMode)}>🖍</button>
+                        )}
                     </div>
-
-                    {['name', 'nick', 'email', 'job'].map((field) => (
-                        <div key={field} className="mb-3">
-                            <label htmlFor={field} className="form-label">
-                                {field.charAt(0).toUpperCase() + field.slice(1)}:
-                            </label>
-                            <input
-                                id={field}
-                                type="text"
-                                value={formData[field]}
-                                className="form-control"
-                                onChange={(e) =>
-                                    setFormData({ ...formData, [field]: e.target.value })
-                                }
-                            />
-                        </div>
-                    ))}
-                    <button type="submit" className="btn btn-primary">
-                        Save
-                    </button>
-                    {error && <p className="text-danger">{error}</p>}
-                </form>
+                    <br />
+                    <h4>{profile.name}</h4>
+                    <h5>({profile.nick})</h5>
+                    <p>
+                        <strong>Email:</strong> {profile.email}
+                    </p>
+                    <p>
+                        <strong>Profissão:</strong> {profile.job}
+                    </p>
+                </div>
+                <div>
+                    <div>
+                        {(viewFollowers || viewFollowing) && viewFollowerOrFollowing ? (<>{Follows(viewFollowerOrFollowing)}</>) : (<></>)}
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                </div>
             </div>
-        </div>
+            <br />
+            <ProfilePosts profileId={profile?._id} />
+        </>
     );
-}
+    const FilePreview = ({ file, onDelete }) => {
+        return (
+            <div className="d-flex mt-3" style={{ maxWidth: '50%' }}>
+                <div style={{ zIndex: 9 }}>
+                    <img
+                        src={URL.createObjectURL(file[0])}
+                        alt={`Preview ${file[0].name}`}
+                        style={{ width: '100%', maxWidth: '150px', height: 'auto' }}
+                    />
+                </div>
+                <div style={{ zIndex: 10, position: 'absolute', marginRight: '100%' }}>
+                    <button onClick={() => onDelete(file[0])} className="btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        );
+    };
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files);
+        setFormData({ ...formData, pathImage: e.target.files[0].name })
+    }
+    //page logic
 
-return <>{renderProfileDetails(user)}</>;
+    if (!myProfile) {
+        return (
+            <div>
+                {renderProfileDetails(anotherUser || {})}
+            </div>
+        );
+    }
+
+    if (editMode) {
+        return (
+            <div className='container d-flex' style={{ justifyContent: 'center' }}>
+                <div className='container' style={styles.container}>
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <img style={{ margin: '2%' }}
+                                className="rounded-circle"
+                                width="65"
+                                src={imageProfile}
+                                alt="profile"
+                            />
+                            <div className="form-group">
+                                <input
+                                    type="file"
+                                    className="custom-file-input"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                />
+                                {
+                                    selectedFile &&
+                                    <FilePreview key={selectedFile.name} file={selectedFile} />
+                                }
+
+                            </div>
+                        </div>
+
+                        {['name', 'nick', 'email', 'job'].map((field) => (
+                            <div key={field} className="mb-3">
+                                <label htmlFor={field} className="form-label">
+                                    {field.charAt(0).toUpperCase() + field.slice(1)}:
+                                </label>
+                                <input
+                                    id={field}
+                                    type="text"
+                                    value={formData[field]}
+                                    className="form-control"
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, [field]: e.target.value })
+                                    }
+                                />
+                            </div>
+                        ))}
+                        <button type="submit" className="btn btn-primary">
+                            Save
+                        </button>
+                        {error && <p className="text-danger">{error}</p>}
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
+    return <>{renderProfileDetails(user)}</>;
 };
 
 const styles = {

@@ -48,21 +48,42 @@ export const UserProvider = ({ children }) => {
   };
 
   const fetchData = async (tokenParam) => {
-    const initCredencials = await initContext(token ? token : tokenParam);
-    let getImageProfile = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${initCredencials?._id}/${initCredencials?._id}-${initCredencials?.pathImage}`
-    let wsConnection
+  try {
+    const tokenToUse = token || tokenParam;
+    const initCredentials = await initContext(tokenToUse);
+
+    if (!initCredentials) throw new Error("Failed to initialize credentials.");
+
+    const getImageProfile = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${initCredentials._id}/${initCredentials._id}-${initCredentials.pathImage}`;
+    setImageProfile(getImageProfile);
+
+    const wsUrl = `ws://${process.env.REACT_APP_URL_WS}?token=${tokenToUse}&userId=${initCredentials._id}`;
+    let wsConnection;
+
     try {
-      if(initCredencials)
-        wsConnection = new WebSocket(`wss://${process.env.REACT_APP_URL_WS}?token=${tokenInit ? tokenInit : token}&userId=${initCredencials?._id}`)
+      wsConnection = new WebSocket(wsUrl);
       
-    } catch (error) {
-      console.log("Erro in connection")
+      // Suppress WebSocket errors from showing in the console
+      wsConnection.onerror = () => {}; 
+
+      wsConnection.onopen = () => {
+        setWsConnect(wsConnection);
+      };
+    } catch {
+      console.warn("WebSocket connection failed.");
     }
-    console.log(wsConnection)
-    setWsConnect(wsConnection)
-    setImageProfile(getImageProfile)
-    setData({ user: initCredencials ? initCredencials : null, imageProfile: imageProfile ? imageProfile : getImageProfile, token: tokenInit ? tokenInit : tokenParam, webSocket: wsConnection ? wsConnection : wsConnect}) // Atualiza o estado com os dados recebidos
-  };
+
+    setData({
+      user: initCredentials,
+      imageProfile: getImageProfile,
+      token: tokenToUse,
+      webSocket: wsConnection || wsConnect,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+  }
+};
+
 
 
   // 4. Use useEffect para disparar a função assíncrona no início
