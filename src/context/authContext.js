@@ -33,7 +33,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const remove = () => {
-    wsConnect.close();
     setData(null); // Remove
   };
 
@@ -68,6 +67,9 @@ export const UserProvider = ({ children }) => {
 
       wsConnection.onopen = () => {
         setWsConnect(wsConnection);
+      };
+      wsConnection.onclose = () => {
+        setWsConnect();
       };
     } catch {
       console.warn("WebSocket connection failed.");
