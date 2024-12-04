@@ -56,7 +56,7 @@ export const UserProvider = ({ children }) => {
     const getImageProfile = `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${initCredentials?._id}/${initCredentials?._id}-${initCredentials?.pathImage}`;
     setImageProfile(getImageProfile);
 
-    const wsUrl = `ws://${process.env.REACT_APP_URL_WS}?token=${tokenToUse}&userId=${initCredentials._id}`;
+    const wsUrl = `wss://${process.env.REACT_APP_URL_WS}?token=${tokenToUse}&userId=${initCredentials._id}`;
     let wsConnection;
 
     try {
