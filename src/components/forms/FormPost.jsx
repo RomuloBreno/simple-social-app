@@ -75,7 +75,7 @@ const FormPost = () => {
     try {
       const pathsName = getNameFiles();
       let dataPost={}
-      if(postStoryChecked && !(selectedPostsStoryValue.valueOf() == 'default' || selectedPostsStoryValue.valueOf() == '')){
+      if(postStoryChecked && !(selectedPostsStoryValue.valueOf() == 'default')){
         dataPost = {
           title,
           description: postContent,
