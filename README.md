@@ -1,70 +1,61 @@
-# Getting Started with Create React App
+# 🧪 Projeto de Feedback de Projetos com Linha do Tempo e Interações Sociais
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Há algum tempo venho me dedicando ao estudo e desenvolvimento de um projeto que considero muito relevante para a minha trajetória como programador.
 
-## Available Scripts
+## 💡 Objetivo
 
-In the project directory, you can run:
+O principal objetivo deste projeto é apresentar uma nova abordagem para **feedback de projetos**. A proposta é oferecer um espaço onde desenvolvedores possam publicar seus projetos em **formato de linha do tempo**, post após post, ilustrando a evolução de suas ideias com respectivos feedbacks.
 
-### `npm start`
+Cada postagem poderá receber avaliações de profissionais da área, permitindo uma troca de conhecimento mais segmentada e eficaz.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Funcionalidades
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Criação de **coleções de posts** que compõem a linha do tempo de um projeto.
+- Sistema de **feedbacks personalizados**, com base em:
+  - Profissão do usuário
+  - Tecnologias utilizadas no projeto
+  - Interesses cadastrados no perfil
+- Filtros dinâmicos para exibição de conteúdo relevante
+- Integração entre frontend (ReactJS) e backend (Node.js com TypeScript nativo)
+- Sessão de usuário com foco em segurança
+- Deploy em VPS utilizando [Dokploy](https://dokploy.io)
 
-### `npm test`
+## 🧠 Inspiração
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A ideia surgiu após assistir a um vídeo do [Erick Wendel](https://www.erickwendel.com.br/), onde ele discutia o uso nativo do **TypeScript no Node.js** (recurso ainda experimental). Isso me motivou a unir:
+- O estudo da nova funcionalidade do Node.js
+- O interesse em construir uma aplicação segura com autenticação de usuários
 
-### `npm run build`
+## 🎨 Design e Interface
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Como não sou um especialista em front-end, contei com o suporte da designer **Emanuele Soares**, que desenvolveu os layouts iniciais com foco em **interações sociais**. A partir disso, comecei a desenvolver a aplicação em **ReactJS**, utilizando inclusive **componentes gerados por IA** para acelerar a produção.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠️ Tecnologias Utilizadas
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Node.js (TypeScript nativo)
+- ReactJS
+- API RESTful
+- PostgreSQL (ou outro banco relacional)
+- Deploy via Dokploy (VPS)
 
-### `npm run eject`
+## 🌐 Projeto online
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+O projeto já está publicado para testes em ambiente online:  
+🔗 [Acesse o repositório](https://lnkd.in/daxgczjf)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> ⚠️ O deploy online exige muito mais trabalho do que o ambiente local. Por isso, optei por uma VPS paga para garantir estabilidade e controle total sobre a infraestrutura.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🧪 Teste Beta: Participe!
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Nas próximas semanas abrirei para a **primeira leva de usuários beta**.  
+Se você quiser se voluntariar para testar a plataforma, **entre em contato comigo** — será um prazer contar com seu feedback!
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📫 Contato
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Sinta-se à vontade para me chamar via LinkedIn, e-mail ou outra rede social para trocar ideias, sugerir melhorias ou participar dos testes.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Feito com 💻, café ☕ e muitas horas de estudo.**
