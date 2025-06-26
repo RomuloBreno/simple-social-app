@@ -20,7 +20,8 @@ export async function fetchConnect(route, methodRequest, dataToSend) {
     method: methodRequest, // Especifica o método da requisição (GET, POST, etc.)
     headers: {
       'Content-Type': 'application/json', // Informa que o corpo da requisição está em JSON
-    }
+    },
+    credentials: 'include'
   };
   // Inclui o corpo apenas se o método for POST
   if (methodRequest === 'POST') {
