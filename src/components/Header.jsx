@@ -5,6 +5,7 @@ import { useAuth } from '../context/authContext';
 import { factoryUser } from '../utils/fetch';
 import Notify from './notify/Notifys';
 import CircleImage from './images/CircleImage';
+import logo from '../images/logo192.png'
 const Header = (loged) => {
     const navigate = useNavigate()
     //mobile
@@ -66,7 +67,8 @@ const Header = (loged) => {
     return (
         <div className='text-center'>
             <header style={{ display: 'flex', padding: '10px', backgroundColor: '#333', color: '#fff', fontSize: '1em' }}>
-                <span className='' style={{ marginLeft: '1%', alignContent: 'center', fontWeight:'400', fontSize:'1.6em' }}>Fdback</span>
+                {/* <span className='' style={{ marginLeft: '1%', alignContent: 'center', fontWeight:'400', fontSize:'1.6em' }}>Fdback</span> */}
+                <img src={logo} style={{width:"4%", height:'auto', position:'absolute', left:'12%'}}/>
                 {isMobile ? (
                     <>
                         <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '0%', color: 'white', fontSize: '24px', position:'absolute', right:'10%' }}>
@@ -78,12 +80,12 @@ const Header = (loged) => {
                                     !IsLoged &&
                                     <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</Link>
                                 }
-                                {
+                                {/* {
                                     IsLoged &&
                                     <Link to="/feed" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Feed</Link> &&
                                     <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Feedbacks</Link>
-                                }
-                                <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Publishes</Link>
+                                } */}
+                                <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'White' }}>Publishes</Link>
                                 <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Suporte</Link>
 
                                 {
@@ -109,20 +111,20 @@ const Header = (loged) => {
                     </>
                 ) : (
                     <>
-                        <nav style={{ width:'36%', alignSelf: 'center',fontSize:'0.8em', marginLeft: '8%', marginRight: '8%' }}>
+                        <nav style={{ width:'36%', alignSelf: 'center',fontSize:'0.8em', marginLeft: '8%', marginRight: '8%', position:'relative' }}>
                             {
                                 !IsLoged &&
                                 <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Home</Link>
                             }
-                            {
+                            {/* {
                                 IsLoged &&
                                 <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Feedbacks</Link>
-                            }
-                            <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Publishes</Link>
+                            } */}
+                            <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Publishes</Link>
                             <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Suporte</Link>
 
                         </nav>
-                        {
+                        {/* {
                                 IsLoged &&
                                 <form onSubmit={handleSearch} style={{ marginLeft:'10%', display: 'flex', alignItems: 'center', marginRight: '6%' }}>
                             <input
@@ -144,9 +146,9 @@ const Header = (loged) => {
                                 🔍
                             </button>
                         </form>
-                            }
+                            } */}
                        
-                        <div className='d-flex align-items-center'>
+                        <div className='d-flex align-items-center' style={{gap:'30%', position:'relative', right:'0px', left:'20%'}}>
                             {
                                 IsLoged &&
                                 <Link to={`/profile/${data?.user?.nick}`}>
