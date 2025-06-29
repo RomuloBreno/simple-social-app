@@ -56,7 +56,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchImages = () => {
             if (pathImage) {
-                setImageProfile2(`https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${pathImage}`);
+                setImageProfile2(`${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${pathImage}`);
             }
         };
         // fetchImages();
@@ -192,13 +192,13 @@ const Profile = () => {
                 <div style={styles.container}>
                     <div className="align-items-center" style={{ display: 'flex' }}>
                         <CircleImage 
-                        src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
+                        src={imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
                         alt='Profile'
                         />
                         {/* <img style={{ margin: '2%' }}
                             className="rounded-circle"
                             width="65"
-                            src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
+                            src={imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
                             alt="profile"
                         /> */}
                         {!myProfile ? (<>

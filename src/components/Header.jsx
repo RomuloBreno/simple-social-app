@@ -23,6 +23,8 @@ const Header = (loged) => {
     const { logout, remove } = useAuth();
 
     useEffect(() => {
+        console.log(process.env.REACT_APP_URL_S3);
+         console.log(process.env.REACT_APP_URL_WS);
         if (!data?.user) {
             setIsLoged(false); // Usuário não autenticado
             return
@@ -101,7 +103,7 @@ const Header = (loged) => {
                                     IsLoged &&
                                     <Link to={`/profile/${data?.user?.nick}`}>
                                         <CircleImage
-                                            src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`}
+                                            src={imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`}
                                             alt='Proile header'
                                         />
                                         {/* <'img' className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" /> */}
@@ -162,7 +164,7 @@ const Header = (loged) => {
                                 IsLoged &&
                                 <Link to={`/profile/${data?.user?.nick}`}>
                                     <CircleImage
-                                        src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`}
+                                        src={imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`}
                                         alt='Proile header'
                                     />
                                 </Link>

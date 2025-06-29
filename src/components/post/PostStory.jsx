@@ -13,7 +13,7 @@ const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
       <Link to={`/profile/${user?.nick}`} style={styles.profileLink}>
         <img
           style={styles.avatar}
-          src={`https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
+          src={`${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
           alt="User"
         />
         <div style={styles.userInfo}>
@@ -122,7 +122,7 @@ const PostStory = ({postStoryPatternData}) => {
                 setImages(
                     path.map(
                         (fileName) =>
-                            `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/${post?._id}/${owner}-${fileName}`
+                            `${process.env.REACT_APP_URL_S3}/temp/${post?._id}/${owner}-${fileName}`
                     )
                 );
             }

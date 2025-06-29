@@ -57,5 +57,55 @@ Se você quiser se voluntariar para testar a plataforma, **entre em contato comi
 Sinta-se à vontade para me chamar via LinkedIn, e-mail ou outra rede social para trocar ideias, sugerir melhorias ou participar dos testes.
 
 ---
+# 🌐 Simple Social App
 
-**Feito com 💻, café ☕ e muitas horas de estudo.**
+Aplicação social simples para interações entre usuários. Inclui funcionalidades de cadastro, login, feed, curtidas, comentários e upload de imagens. Ideal como base para redes sociais, fóruns ou comunidades online.
+
+---
+
+## 📦 Tecnologias
+
+### Frontend (React)
+- React + Vite (ou CRA)
+- TypeScript
+- Axios
+- Tailwind CSS / Bootstrap
+- React Router
+- Zustand / Redux (se usado)
+- Componentes customizados
+
+### Backend (opcional)
+- Node.js com Express (ou outro)
+- TypeScript
+- MongoDB ou PostgreSQL
+- JWT para autenticação
+- Multer ou S3 para upload de arquivos
+
+---
+
+## ⚙️ Pré-requisitos
+
+- Node.js 18+
+- npm ou yarn
+- Banco de dados (MongoDB local/Atlas ou outro)
+- (Opcional) Bucket S3 para uploads
+
+---
+
+## 🚀 Instalação e Execução
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/RomuloBreno/simple-social-app.git
+cd simple-social-app
+
+
+### 2. Variaveis de ambiente
+
+PORT=
+REACT_APP_URL_API=
+REACT_APP_URL_WS=
+REACT_APP_RECAPTCHA_KEY=
+BCRYPT_SALT_ROUNDS=
+
