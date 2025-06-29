@@ -16,7 +16,7 @@ const Login = () => {
   document.title = "Login"
   const navigate = useNavigate()
   const [captchaToken, setCaptchaToken] = useState(null);
-  const { login, add, remove } = useAuth(); // Usa o contexto de autenticação
+  const { login } = useAuth(); // Usa o contexto de autenticação
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -47,8 +47,7 @@ const Login = () => {
           setLoading(false)
           throw new Error(result.result);
         }
-        login(`Bearer ${result.result}`) 
-        add(`Bearer ${result.result}`)// Envia as credenciais
+        login(`Bearer ${result.result}`)// Envia as credenciais
       window.location.href = "/feed"
       // Aqui você pode redirecionar para outra página ou fazer outra ação
       setCaptchaToken(null)

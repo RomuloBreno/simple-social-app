@@ -35,7 +35,6 @@ export const UserProvider = ({ children }) => {
         user,
         imageProfile,
         token: tokenToUse,
-        webSocket: wsConnection
       });
 
       return user;
@@ -71,7 +70,7 @@ export const UserProvider = ({ children }) => {
   }, [token]);
 
   return (
-    <UserContext.Provider value={{ data, login, logout }}>
+    <UserContext.Provider value={{wsConnection, data, login, logout }}>
       {children}
     </UserContext.Provider>
   );

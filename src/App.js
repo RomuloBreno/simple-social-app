@@ -20,12 +20,9 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
   document.title = "FdBack";
-  const authData = useAuth().data;
-
-  const { data, webSocket, user } = authData?.user ? authData : {};
-  // const data = useAuth().data;
-  // const [user, setUser] = useState(data?.user);
-  // const [WS, setWS] = useState();
+  const {data, wsConnection}= useAuth();
+  const user = data?.user;
+  debugger
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -34,7 +31,7 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <Notifys login={user ? true : false} webSocket={webSocket} />
+      <Notifys login={user ? true : false} webSocket={wsConnection} />
       <br />
       <Routes>
         {/* Rotas públicas para usuários não autenticados */}

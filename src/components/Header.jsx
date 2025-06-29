@@ -18,8 +18,8 @@ const Header = (loged) => {
     //user
     const data = useAuth().data;
     const imageProfile = data?.imageProfile;
-
-    const { logout, remove } = useAuth();
+    debugger
+    const { logout } = useAuth();
 
     useEffect(() => {
         if (!data?.user) {
@@ -46,8 +46,7 @@ const Header = (loged) => {
 
     const handlelogout = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
-        logout() // Envia as credenciais
-        remove() // Envia as credenciais
+        logout()
         navigate('/')
     };
     const handlelogin = async (e) => {
