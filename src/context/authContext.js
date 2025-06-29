@@ -1,89 +1,80 @@
 // src/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { factoryUser } from '../utils/fetch';
-import { s } from '../utils/fetch';
-// Criação do contexto de autenticação
-
-async function initContext(tokenParam) {
-  return tokenParam ? await factoryUser(tokenParam) : null;
-}
 
 const UserContext = createContext();
 
-const tokenInit = localStorage.getItem('authToken');
-
 export const UserProvider = ({ children }) => {
-  const [data, setData] = useState(null);   // Armazena os dados
-  const [token, setToken] = useState(tokenInit);   // Armazena os dados
-  const [wsConnection, setWsConnection] = useState(null)
-  const [imageProfile, setImageProfile] = useState()
+  const [token, setToken] = useState(localStorage.getItem('authToken'));
+  const [data, setData] = useState(null);
+  const [wsConnection, setWsConnection] = useState(null);
 
-  if (wsConnection) {
-    wsConnection.onerror = () => { console.log("WebSocket connection error."); };
-    wsConnection.onopen = () => { console.log("WebSocket connection success."); };
-  }
-
-  const add = (token) => {
-    fetchData(token) // Armazena
-  };
-
-  const remove = () => {
-    setData(null); // Remove
-  };
-
-  const login = (token) => {
-    setToken({ token })
-    localStorage.setItem('authToken', token); // Armazena o token no localStorage
+  const login = (newToken) => {
+    localStorage.setItem('authToken', newToken);
+    setToken(newToken); // Corrigido: apenas a string
   };
 
   const logout = () => {
+    localStorage.removeItem('authToken');
     setToken(null);
-    localStorage.removeItem('authToken'); // Remove o token do localStorage
+    setData(null);
+    if (wsConnection) {
+      wsConnection.close();
+      setWsConnection(null);
+    }
   };
 
-  const fetchData = async (tokenParam) => {
-    const tokenToUse = token || tokenParam;
-    const initCredentials = await getCredentials(tokenToUse)
+  const fetchData = async (tokenToUse) => {
+    if (!tokenToUse) return;
 
-    const getImageProfile = `${process.env.REACT_APP_URL_S3}/temp/profile/${initCredentials?._id}/${initCredentials?._id}-${initCredentials?.pathImage}`;
-    setImageProfile(getImageProfile);
+    try {
+      const user = await factoryUser(tokenToUse);
+      const imageProfile = `${process.env.REACT_APP_URL_S3}/temp/profile/${user._id}/${user._id}-${user.pathImage}`;
 
-    setData({
-      user: initCredentials,
-      imageProfile: getImageProfile,
-      token: tokenToUse,
-      webSocket: wsConnection
-    });
+      setData({
+        user,
+        imageProfile,
+        token: tokenToUse,
+        webSocket: wsConnection
+      });
+
+      return user;
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+      logout(); // Token inválido ou erro de API → desloga
+    }
   };
 
-  const getCredentials = async (tokenToUse) => {
-    const initCredentials = await initContext(tokenToUse);
-    if (!initCredentials) throw new Error("Failed to initialize credentials.");
-    return initCredentials
-  }
+  const connectWs = (tokenToUse, userId) => {
+    if (!tokenToUse || !userId) return;
 
-  const connectWs = async ()=>{
-    const initCredentials = await getCredentials(token)
-    const wsUrl = `${process.env.REACT_APP_URL_WS}?token=${token}&userId=${initCredentials?._id}`;
-    setWsConnection(new WebSocket(wsUrl));
-  }
+    const wsUrl = `${process.env.REACT_APP_URL_WS}?token=${tokenToUse}&userId=${userId}`;
+    const ws = new WebSocket(wsUrl);
 
-  // 4. Use useEffect para disparar a função assíncrona no início
+    ws.onerror = () => console.log("WebSocket connection error.");
+    ws.onopen = () => console.log("WebSocket connection success.");
+
+    setWsConnection(ws);
+  };
+
   useEffect(() => {
-    fetchData();
-  }, [tokenInit]);
+    if (!token) return;
 
-   useEffect(() => {
-    connectWs();
+    const init = async () => {
+      const user = await fetchData(token);
+      if (user) {
+        connectWs(token, user._id);
+      }
+    };
+
+    init();
   }, [token]);
+
   return (
-    <UserContext.Provider value={{ data, refetch: fetchData, add, remove, login, logout }}>
+    <UserContext.Provider value={{ data, login, logout }}>
       {children}
     </UserContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  return useContext(UserContext)
-};
-
+export const useAuth = () => useContext(UserContext);
