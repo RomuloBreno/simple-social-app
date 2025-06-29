@@ -18,7 +18,7 @@ const Header = (loged) => {
     //user
     const data = useAuth().data;
     const imageProfile = data?.imageProfile;
-    debugger
+    
     const { logout } = useAuth();
 
     useEffect(() => {
