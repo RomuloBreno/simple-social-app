@@ -113,7 +113,7 @@ const Profile = () => {
 
     //handlers
     const handleFollowToggle = async (id) => {
-        debugger
+        
         const url = youFollowMe ? `v1/unfollow-user/${id}` : `v1/follow-user/${id}`;
         const method = 'POST';
         const result = await fetchApi(url, null, method, { follower: user?._id }, data?.token);
@@ -125,7 +125,7 @@ const Profile = () => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        debugger
+        
         const result = await fetchApi(
             `v1/update/user/${user._id}`,
             null,
@@ -133,7 +133,7 @@ const Profile = () => {
             formData,
             data?.token
         );
-        debugger
+        
 
         //send image to storage
         const keyPath = `profile/${data?.user._id}/${data?.user._id}-${selectedFile[0]?.name}`;

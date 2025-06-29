@@ -23,7 +23,7 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
     const [feedbacks, setFeedbacks] = useState(null);
 
     const handleAddComment = async (e) => {
-        debugger
+        
         setLoading(true)
         e.preventDefault();
         if (newComment?.trim()) {

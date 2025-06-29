@@ -68,7 +68,7 @@ const FormPost = () => {
   const getNameFiles = useCallback(() => selectedFiles.map((file) => file.name), [selectedFiles]);
 
   const handleSubmit = async (e) => {
-    debugger
+    
     e.preventDefault();
     setLoading(true);
 
