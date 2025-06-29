@@ -18,13 +18,10 @@ const Header = (loged) => {
     //user
     const data = useAuth().data;
     const imageProfile = data?.imageProfile;
-    const ws = useAuth().data?.ws
 
     const { logout, remove } = useAuth();
 
     useEffect(() => {
-        console.log(process.env.REACT_APP_URL_S3);
-         console.log(process.env.REACT_APP_URL_WS);
         if (!data?.user) {
             setIsLoged(false); // Usuário não autenticado
             return
