@@ -24,7 +24,6 @@ const Footer = () => {
     <footer style={{ backgroundColor: '#333', color: '#fff', padding: '10px', textAlign: 'center' }}>
       <br />
       <div className='container'>
-      <h2 className='' style={{ marginLeft: '10%', alignContent: 'center' }}>Fdback</h2>
       <nav style={{ width: '36%', alignSelf: 'center', fontSize: '0.8em', marginLeft: '8%', marginRight: '8%' }}>
         {
           !IsLoged &&

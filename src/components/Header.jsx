@@ -17,7 +17,7 @@ const Header = (loged) => {
     const [searchQuery, setSearchQuery] = useState("");
     //user
     const data = useAuth().data;
-    const imageProfile =data?.imageProfile;
+    const imageProfile = data?.imageProfile;
     const ws = useAuth().data?.ws
 
     const { logout, remove } = useAuth();
@@ -67,15 +67,24 @@ const Header = (loged) => {
     return (
         <div className='text-center'>
             <header style={{ display: 'flex', padding: '10px', backgroundColor: '#333', color: '#fff', fontSize: '1em' }}>
-                {/* <span className='' style={{ marginLeft: '1%', alignContent: 'center', fontWeight:'400', fontSize:'1.6em' }}>Fdback</span> */}
-                <img src={logo} style={{width:"4%", height:'auto', position:'absolute', left:'12%'}}/>
+                <div style={{width:'10%', position:'relative', left:'10%'}} >
+                <a href='/' style={{ textDecoration: 'none' }} >
+                    <div>
+                        <img src={logo} style={{ width: "40%"}} />
+                    </div>
+                    <div>
+                        <span className='' style={{color:'white'}}>Fdback</span>
+
+                    </div>
+                </a>
+                </div>
                 {isMobile ? (
                     <>
-                        <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '0%', color: 'white', fontSize: '24px', position:'absolute', right:'10%' }}>
+                        <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '0%', color: 'white', fontSize: '24px', position: 'absolute', right: '10%' }}>
                             ☰
                         </button>
                         {menuOpen && (
-                            <nav className ='' style={{ position:'absolute', width:'fit-content', height:'fit-content', top:'6.2%', zIndex:'19', backgroundColor:'rgb(51, 51, 51)', right:'0', borderRadius:'2%', border:'1px solid rgb(51, 51, 51)'}}>
+                            <nav className='' style={{ position: 'absolute', width: 'fit-content', height: 'fit-content', top: '6.2%', zIndex: '19', backgroundColor: 'rgb(51, 51, 51)', right: '0', borderRadius: '2%', border: '1px solid rgb(51, 51, 51)' }}>
                                 {
                                     !IsLoged &&
                                     <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</Link>
@@ -91,9 +100,9 @@ const Header = (loged) => {
                                 {
                                     IsLoged &&
                                     <Link to={`/profile/${data?.user?.nick}`}>
-                                        <CircleImage 
-                                        src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`} 
-                                        alt='Proile header'
+                                        <CircleImage
+                                            src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`}
+                                            alt='Proile header'
                                         />
                                         {/* <'img' className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" /> */}
                                     </Link>
@@ -104,24 +113,24 @@ const Header = (loged) => {
                                 }
                                 {
                                     !IsLoged &&
-                                    <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%'}}>Login</button>
+                                    <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
                                 }
                             </nav>
                         )}
                     </>
                 ) : (
                     <>
-                        <nav style={{ width:'36%', alignSelf: 'center',fontSize:'0.8em', marginLeft: '8%', marginRight: '8%', position:'relative' }}>
+                        <nav style={{ width: '36%', alignSelf: 'center', fontSize: '0.8em', marginLeft: '8%', marginRight: '8%', position: 'relative' }}>
                             {
                                 !IsLoged &&
-                                <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Home</Link>
+                                <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'white' }}>Home</Link>
                             }
                             {/* {
                                 IsLoged &&
                                 <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Feedbacks</Link>
                             } */}
-                            <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Publishes</Link>
-                            <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'gray' }}>Suporte</Link>
+                            <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'white' }}>Publishes</Link>
+                            <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Suporte</Link>
 
                         </nav>
                         {/* {
@@ -147,15 +156,15 @@ const Header = (loged) => {
                             </button>
                         </form>
                             } */}
-                       
-                        <div className='d-flex align-items-center' style={{gap:'30%', position:'relative', right:'0px', left:'20%'}}>
+
+                        <div className='d-flex align-items-center' style={{ gap: '30%', position: 'relative', right: '0px', left: '10%' }}>
                             {
                                 IsLoged &&
                                 <Link to={`/profile/${data?.user?.nick}`}>
-                                   <CircleImage 
-                                        src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`} 
+                                    <CircleImage
+                                        src={imageProfile || `https://storage-fdback.s3.us-east-2.amazonaws.com/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`}
                                         alt='Proile header'
-                                        />
+                                    />
                                 </Link>
                             }
                             {
