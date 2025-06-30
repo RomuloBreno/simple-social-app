@@ -1,13 +1,13 @@
 // src/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { factoryUser } from '../utils/fetch';
+import { factoryUser, fetchApi } from '../utils/fetch';
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [data, setData] = useState(null);
-  const [userLogged, setUserLogged] = useState(Boolean);
+  const [userLogged, setUserLogged] = useState();
   const [wsConnection, setWsConnection] = useState(null);
   
 
@@ -27,14 +27,15 @@ export const UserProvider = ({ children }) => {
       setWsConnection(null);
     }
   };
+  
+  const validToken = async (token) => {
+      let resultWithid = await fetchApi(`auth/t-fdback`, null, 'GET', null, token)
+      return resultWithid
+   };
 
-  const fetchData = async (tokenToUse) => {
-    if (!tokenToUse) return;
-
+  const factoryData = async (tokenToUse, user) => {
     try {
-      const user = await factoryUser(tokenToUse);
       const imageProfile = `${process.env.REACT_APP_URL_S3}/temp/profile/${user._id}/${user._id}-${user.pathImage}`;
-
       setData({
         user,
         imageProfile,
@@ -47,7 +48,7 @@ export const UserProvider = ({ children }) => {
       logout(); // Token inválido ou erro de API → desloga
     }
   };
-
+    
   const connectWs = (tokenToUse, userId) => {
     if (!tokenToUse || !userId) return;
 
@@ -64,8 +65,10 @@ export const UserProvider = ({ children }) => {
     if (!token) return;
 
     const init = async () => {
-      const user = await fetchData(token);
-      if (user && userLogged) {
+      const validTokenGetId = await validToken(token)
+      const user =  await factoryUser(token, validTokenGetId);
+      await factoryData(token, user)
+      if (user) {
         connectWs(token, user._id);
       }
     };
