@@ -6,6 +6,7 @@ import { factoryUser } from '../utils/fetch';
 import Notify from './notify/Notifys';
 import CircleImage from './images/CircleImage';
 import logo from '../images/logo192.png'
+import userImgNotFind from '../images/user.png'
 const Header = (loged) => {
     const navigate = useNavigate()
     //mobile
@@ -18,7 +19,6 @@ const Header = (loged) => {
     //user
     const data = useAuth().data;
     const imageProfile = data?.imageProfile;
-    
     const { logout } = useAuth();
 
     useEffect(() => {
@@ -99,7 +99,7 @@ const Header = (loged) => {
                                     IsLoged &&
                                     <Link to={`/profile/${data?.user?.nick}`}>
                                         <CircleImage
-                                            src={imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`}
+                                            src={data?.user?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}` : userImgNotFind}
                                             alt='Proile header'
                                         />
                                         {/* <'img' className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" /> */}
@@ -159,10 +159,13 @@ const Header = (loged) => {
                             {
                                 IsLoged &&
                                 <Link to={`/profile/${data?.user?.nick}`}>
-                                    <CircleImage
-                                        src={imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}`}
+                                { 
+                                     <CircleImage
+                                        src={data?.user?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}` : userImgNotFind}
                                         alt='Proile header'
                                     />
+                                } 
+                                    
                                 </Link>
                             }
                             {

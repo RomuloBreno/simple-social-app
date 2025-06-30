@@ -22,7 +22,6 @@ const App = () => {
   document.title = "FdBack";
   const {data, wsConnection}= useAuth();
   const user = data?.user;
-  
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {

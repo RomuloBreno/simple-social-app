@@ -4,6 +4,7 @@ import { fetchApi } from '../utils/fetch';
 import ProfilePosts from '../components/post/ProfilePosts';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import CircleImage from '../components/images/CircleImage';
+import userImgNotFind from '../images/user.png'
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -192,7 +193,7 @@ const Profile = () => {
                 <div style={styles.container}>
                     <div className="align-items-center" style={{ display: 'flex' }}>
                         <CircleImage 
-                        src={imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
+                        src={data?.user?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}` : userImgNotFind}
                         alt='Profile'
                         />
                         {/* <img style={{ margin: '2%' }}
