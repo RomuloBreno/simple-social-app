@@ -7,10 +7,13 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [data, setData] = useState(null);
+  const [userLogged, setUserLogged] = useState(Boolean);
   const [wsConnection, setWsConnection] = useState(null);
+  
 
   const login = (newToken) => {
     localStorage.setItem('authToken', newToken);
+    setUserLogged(true)
     setToken(newToken); // Corrigido: apenas a string
   };
 
@@ -18,6 +21,7 @@ export const UserProvider = ({ children }) => {
     localStorage.removeItem('authToken');
     setToken(null);
     setData(null);
+    setUserLogged(false)
     if (wsConnection) {
       wsConnection.close();
       setWsConnection(null);
@@ -61,7 +65,7 @@ export const UserProvider = ({ children }) => {
 
     const init = async () => {
       const user = await fetchData(token);
-      if (user) {
+      if (user && userLogged) {
         connectWs(token, user._id);
       }
     };
