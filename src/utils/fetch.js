@@ -38,7 +38,7 @@ async function validResponseReturn(response) {
 }
 
 export async function factoryUser(token, resultWithid) {
-  if(!resultWithid.status)
+  if(!resultWithid?.status)
     return false
     let user = await fetchApi(`v1/user/${resultWithid?.result.userId}`, null, 'GET', null, token)
   if (!user.status)
