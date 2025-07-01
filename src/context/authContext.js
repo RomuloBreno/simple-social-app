@@ -51,16 +51,16 @@ export const UserProvider = ({ children }) => {
     }
   };
     
-  const connectWs = (tokenToUse, userId) => {
-    if (!tokenToUse || !userId) return;
+  const connectWs = (validTokenGetId,tokenToUse, userId) => {
+    if (!tokenToUse || !userId || !validTokenGetId) return;
 
     const wsUrl = `${process.env.REACT_APP_URL_WS}?token=${tokenToUse}&userId=${userId}`;
     const ws = new WebSocket(wsUrl);
 
     ws.onerror = () => console.log("WebSocket connection error.");
-    ws.onopen = () => console.log("WebSocket connection success.");
+    ws.onopen = () =>  setWsConnection(ws);
 
-    setWsConnection(ws);
+   
   };
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export const UserProvider = ({ children }) => {
       const user =  await factoryUser(token, validTokenGetId);
       await factoryData(token, user)
       if (user) {
-        connectWs(token, user._id);
+        connectWs(validTokenGetId,token, user._id);
       }
     };
 
