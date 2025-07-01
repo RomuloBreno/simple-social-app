@@ -60,13 +60,13 @@ export const UserProvider = ({ children }) => {
   };
 
   const connectionWebSocket = async (user) => {
-    if (user && validSavedToken.status || false) {
+    if (user && validSavedToken.status) {
       connectWs(validSavedToken, token, user._id);
     }
   };
 
   const validTokenToLogout = () => {
-    if (validSavedToken?.status == false) {
+    if (validSavedToken?.status === false) {
       logout()
     }
   };
@@ -84,7 +84,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const RoleToAcess = () => {
-    if (validSavedToken?.status == true) {
+    if (validSavedToken?.status === true) {
       setFactoryUser()
     } else {
       validTokenToLogout()
