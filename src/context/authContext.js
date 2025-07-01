@@ -34,6 +34,8 @@ export const UserProvider = ({ children }) => {
    };
 
   const factoryData = async (tokenToUse, user) => {
+    if(!user)
+      return
     try {
       const imageProfile = `${process.env.REACT_APP_URL_S3}/temp/profile/${user._id}/${user._id}-${user.pathImage}`;
       setData({

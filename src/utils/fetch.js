@@ -38,6 +38,8 @@ async function validResponseReturn(response) {
 }
 
 export async function factoryUser(token, resultWithid) {
+  if(!resultWithid)
+    return false
     let user = await fetchApi(`v1/user/${resultWithid?.result.userId}`, null, 'GET', null, token)
   if (!user.status)
     return false
