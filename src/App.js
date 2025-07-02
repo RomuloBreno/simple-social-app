@@ -22,6 +22,7 @@ const App = () => {
   document.title = "FdBack";
   const {data, wsConnection}= useAuth();
   const user = data?.user;
+  const tokenIsValid = data?.validToken;
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -34,13 +35,13 @@ const App = () => {
       <br />
       <Routes>
         {/* Rotas públicas para usuários não autenticados */}
-        {!user ? (
+        {!tokenIsValid ? (
           <>
             {/* <Route path="/" element={<Login />} /> */}
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/feed" element={<Navigate to={user ? "/feed" : "/login"} />} />
+            <Route path="/feed" element={<Navigate to="/" />} />
             {/* <Route path="/*" element={<Navigate to="/" />} /> */}
           </>
         ) : (
