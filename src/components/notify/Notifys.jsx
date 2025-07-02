@@ -24,6 +24,7 @@ const Notifys = ({ login, webSocket }) => {
         webSocket.onmessage = (event) => {
             const dataMsg = JSON.parse(event.data);
             setNewMessages((prevMessages) => [...prevMessages, dataMsg]);
+            setMessages((prevMessages) => [...prevMessages, prevMessages.some((msg) => msg === dataMsg) ? dataMsg : 'null']);
         };
     }, [webSocket]);
     useEffect(() => {

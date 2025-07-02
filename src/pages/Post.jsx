@@ -121,7 +121,9 @@ const Post = () => {
         const fetchImages = () => {
             if (path?.length) {
                 setImages(
-                    path.map(
+                    path
+                    .filter(fileName => fileName !== (null || undefined))
+                    .map(
                         (fileName) =>
                             `${process.env.REACT_APP_URL_S3}/temp/${post?._id}/${owner}-${fileName}`
                     )
