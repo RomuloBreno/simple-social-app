@@ -4,7 +4,7 @@ import { factoryUser, fetchApi } from '../utils/fetch';
 
 const UserContext = createContext();
 
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({ children, connectApi }) => {
   const [token, setToken] = useState(localStorage.getItem('authToken'));
   const [data, setData] = useState(null);
   const [wsConnection, setWsConnection] = useState(null);
@@ -99,6 +99,8 @@ export const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if(!connectApi)
+      return
     IstokenValid();
   }, [token]);
 

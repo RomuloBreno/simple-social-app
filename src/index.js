@@ -8,14 +8,12 @@ import {UserProvider } from './context/authContext.js';
 import {api} from './utils/api.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-// const connectApi = await api()
-const connectApi = true
+const getHealth = await api()
 root.render(
   // <React.StrictMode>
          
-          <UserProvider>
-            
-            {connectApi
+          <UserProvider connectApi={getHealth}>
+            {getHealth
             ?<App/>
             : <AppError />
             }
