@@ -35,7 +35,7 @@ const App = () => {
       <br />
       <Routes>
         {/* Rotas públicas para usuários não autenticados */}
-        {!tokenIsValid ? (
+        {!user ? (
           <>
             {/* <Route path="/" element={<Login />} /> */}
             <Route path="/" element={<Index />} />
