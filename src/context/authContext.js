@@ -40,6 +40,7 @@ export const UserProvider = ({ children, connectApi }) => {
         user,
         imageProfile,
         token: tokenToUse,
+        validToken: validSavedToken
       });
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
