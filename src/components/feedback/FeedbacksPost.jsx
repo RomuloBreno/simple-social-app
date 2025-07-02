@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/authContext';
 import { Link} from "react-router-dom";
 import { fetchApi } from '../../utils/fetch';
-
+import userImgNotFind from '../../images/user.png'
 import styled from 'styled-components';
 
 
@@ -139,7 +139,7 @@ return (
                             <br />
                             {displayText}
                             <div className="d-flex">
-                                <img className="rounded-circle" width="25" src={`${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`} alt="" />
+                                <img className="rounded-circle" width="25" src={user?.pathImage ? `${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}` : userImgNotFind} alt="" />
                                 <div className="h7 text-muted px-2">
                                     <UrlProfile>
 

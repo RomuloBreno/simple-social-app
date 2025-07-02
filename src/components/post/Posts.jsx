@@ -5,6 +5,7 @@ import { formatDate } from "../../utils/formatText";
 import { useAuth } from "../../context/authContext";
 import Feedbacks from "../feedback/Feedbacks";
 import PostActions from '../post/PostsActions';
+import userImgNotFind from '../../images/user.png'
 
 const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
   <div style={styles.header}>
@@ -12,7 +13,7 @@ const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
       <Link to={`/profile/${user?.nick}`} style={styles.profileLink}>
         <img
           style={styles.avatar}
-          src={`${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}`}
+          src={user?.pathImage ? `${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}` : userImgNotFind}
           alt="User"
         />
         <div style={styles.userInfo}>

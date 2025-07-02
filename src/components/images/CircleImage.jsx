@@ -3,8 +3,8 @@ import React from 'react';
 const CircleImage = ({ src, alt = "Image" }) => {
   const containerStyle = {
     margin:'8px',
-    width: '70px', // Defina o tamanho desejado do círculo
-    height: '70px',
+    width: '40%', // Defina o tamanho desejado do círculo
+    height: '40%',
     borderRadius: '50%', // Faz a div ser circular
     overflow: 'hidden', // Garante que a imagem fique dentro do círculo
     display: 'flex',

@@ -193,7 +193,7 @@ const Profile = () => {
                 <div style={styles.container}>
                     <div className="align-items-center" style={{ display: 'flex' }}>
                         <CircleImage 
-                        src={data?.user?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}` : userImgNotFind}
+                        src={anotherUser?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${anotherUser?._id}/${anotherUser?._id}-${anotherUser?.pathImage}` : userImgNotFind}
                         alt='Profile'
                         />
                         {/* <img style={{ margin: '2%' }}
