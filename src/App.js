@@ -18,6 +18,10 @@ const ProtectedRoute = ({ children }) => {
   return user?._id ? children : <Navigate to="/login" />;
 };
 
+const UserLogged = () => {
+  return useAuth()?.data
+};
+
 const App = () => {
   document.title = "FdBack";
   const {data, wsConnection}= useAuth();
@@ -28,44 +32,52 @@ const App = () => {
   useEffect(() => {
   }, [messages]);
 
-  return (
-    <Router>
-      <Header />
-      <Notifys login={user ? true : false} webSocket={wsConnection} />
-      <br />
-      <Routes>
-        {/* Rotas públicas para usuários não autenticados */}
-        {!user ? (
-          <>
-            {/* <Route path="/" element={<Login />} /> */}
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            {/* <Route path="/feed" element={<Navigate to="/" />} /> */}
-            {/* <Route path="/*" element={<Navigate to="/" />} /> */}
-          </>
-        ) : (
-          <>
-            {/* Redireciona usuários autenticados que tentarem acessar rotas públicas */}
-            <Route path="/login" element={<Navigate to="/feed" />} />
-            <Route path="/register" element={<Navigate to="/feed" />} />
-            
-            {/* Rotas protegidas */}
-            <Route path="/" element={<Navigate to="/feed" />} />
-            <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
-            <Route path="/profile/:profileNick" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            {/* <Route path="/profile/*" element={<ProtectedRoute><Profile /></ProtectedRoute>} /> */}
-            <Route path="/post/:postId" element={<ProtectedRoute><Post /></ProtectedRoute>} />
-            <Route path="/post-story/:postStoryPatternId" element={<ProtectedRoute><FeedStory /></ProtectedRoute>} />
-            <Route path="/home" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
-            {/* <Route path="*" element={<Navigate to="/feed" />} /> */}
-          </>
-        )}
-      </Routes>
-      <br />
-      <Footer />
-    </Router>
-  );
+  if(UserLogged()?.validToken){
+    return (
+      <Router>
+        <Header dataUser={data} />
+        <Notifys login={user ? true : false} webSocket={wsConnection} />
+        <br />
+        <Routes>
+             {/* Redireciona usuários autenticados que tentarem acessar rotas públicas */}
+              <Route path="/login" element={<Navigate to="/feed" />} />
+              <Route path="/register" element={<Navigate to="/feed" />} />
+              
+              {/* Rotas protegidas */}
+              <Route path="/" element={<Navigate to="/feed" />} />
+              <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
+              <Route path="/profile/:profileNick" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              {/* <Route path="/profile/*" element={<ProtectedRoute><Profile /></ProtectedRoute>} /> */}
+              <Route path="/post/:postId" element={<ProtectedRoute><Post /></ProtectedRoute>} />
+              <Route path="/post-story/:postStoryPatternId" element={<ProtectedRoute><FeedStory /></ProtectedRoute>} />
+              <Route path="/home" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
+              {/* <Route path="*" element={<Navigate to="/feed" />} /> */}
+        </Routes>
+        <br />
+        <Footer />
+      </Router>
+    );
+  }else{
+return (
+      <Router>
+        <Header />
+        <Notifys login={user ? true : false} webSocket={wsConnection} />
+        <br />
+        <Routes>
+          {/* Rotas públicas para usuários não autenticados */}
+
+              {/* <Route path="/" element={<Login />} /> */}
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              {/* <Route path="/feed" element={<Navigate to="/" />} /> */}
+              {/* <Route path="/*" element={<Navigate to="/" />} /> */}
+        </Routes>
+        <br />
+        <Footer />
+      </Router>
+    );
+  }
 };
 
 export default App;

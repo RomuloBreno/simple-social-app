@@ -7,17 +7,18 @@ import Notify from './notify/Notifys';
 import CircleImage from './images/CircleImage';
 import logo from '../images/logo192.png'
 import userImgNotFind from '../images/user.png'
-const Header = (loged) => {
+
+const Header = (dataUser) => {
     const navigate = useNavigate()
     //mobile
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     //valid login
-    const [IsLoged, setIsLoged] = useState(loged)
+    const [IsLoged, setIsLoged] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false);
     //seach form
     const [searchQuery, setSearchQuery] = useState("");
     //user
-    const data = useAuth().data;
+    let data  = dataUser.dataUser;
     const imageProfile = data?.imageProfile;
     const { logout } = useAuth();
 
@@ -31,7 +32,7 @@ const Header = (loged) => {
 
 
 
-    }, [data?.user, data?.imageProfile]);
+    }, [dataUser, data?.imageProfile]);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 1368);
