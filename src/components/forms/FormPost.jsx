@@ -50,7 +50,7 @@ const FormPost = () => {
         setPostsStory(posts.result);
       }
     } catch (err) {
-      setError('Failed to fetch posts stories');
+      setError('Falha na busca por Posts Stories');
     }
   }, [data?.user?._id, data?.token]);
 
@@ -106,7 +106,7 @@ const FormPost = () => {
           const signedUrl = await fetchApi('auth/s3-post-img-url', null, 'POST', { key: keyPath, fileName: file.name }, data?.token);
 
           if (!signedUrl.status) {
-            throw new Error(`Error getting signed URL for file ${file.name}`);
+            throw new Error(`Erro no upload do arquivo ${file.name}`);
           }
 
           const storageStatus = await fetch(signedUrl.result, {
@@ -117,7 +117,7 @@ const FormPost = () => {
 
           if (!storageStatus.ok) {
             const storageResponseJson = await storageStatus.json();
-            throw new Error(`Error uploading file ${file.name}: ${storageResponseJson.message}`);
+            throw new Error(`Erro no upload do arquivo ${file.name}: ${storageResponseJson.message}`);
           }
         })
       );
@@ -132,7 +132,7 @@ const FormPost = () => {
 
   useEffect(() => {
     if (postStoryChecked && (selectedPostsStoryValue.valueOf() == 'default' || selectedPostsStoryValue.valueOf() == '')) {
-      setError('Não selecionar uma opção de story faz uma criação automatica de um novo story');
+      setError('Não selecionar uma opção de Post Story torna esse Post atual um Post Story');
     }else{
       setError('');
     }
@@ -155,7 +155,7 @@ const FormPost = () => {
               className={`nav-link ${activeTab === 'posts' ? 'active' : ''}`}
               onClick={() => handleTabChange('posts')}
             >
-              Make a publication
+              Criar Post
             </button>
           </li>
           <li className="nav-item">
@@ -163,7 +163,7 @@ const FormPost = () => {
               className={`nav-link ${activeTab === 'images' ? 'active' : ''}`}
               onClick={() => handleTabChange('images')}
             >
-              Upload Images
+              Carregar Imagem
             </button>
           </li>
         </ul>
@@ -177,14 +177,14 @@ const FormPost = () => {
                 <div className="form-group">
                   <input
                     className="form-control"
-                    placeholder="Title"
+                    placeholder="Titulo"
                     value={title}
                     onChange={handleTitleChange}
                     maxLength={100}
                   />
                   <textarea
                     className="form-control"
-                    placeholder="What are you thinking?"
+                    placeholder="Descrição"
                     value={postContent}
                     onChange={handlePostChange}
                     required
@@ -217,12 +217,14 @@ const FormPost = () => {
             <br />
           <div>
             <input type="checkbox" className="btn btn-primary" onClick={handleCheckPostStory} />
-            <span> Post story</span>
+            <span className='p-2'>Habilite esta opção para tornar este post filho de outro post.</span>
             {/* {postStoryChecked && selectedPostsStoryValue && (
               <span> Marking the option creates a post story if it doesn't selected.</span>
             )} */}
+             <br/>
+              <br/>
 
-            {postStoryChecked && postsStory.length > 0 && (
+           Post Story: {postStoryChecked > 0 && (
               <select
                 value={selectedPostsStoryValue}
                 onChange={handleSelectChange}
@@ -240,7 +242,7 @@ const FormPost = () => {
 
           <br />
           <button type="submit" className="btn btn-primary">Publicar</button>
-          {error && <p className="text-info mt-3">{error}</p>}
+        {error && <p className="text-danger mt-3">{error}</p>}
         </form>
       </div>
     </>
