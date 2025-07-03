@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
-import { factoryUser } from '../utils/fetch';
-import Notify from './notify/Notifys';
+// import Notify from './notify/Notifys';
 import CircleImage from './images/CircleImage';
 import logo from '../images/logo192.png'
 import userImgNotFind from '../images/user.png'
@@ -13,26 +12,14 @@ const Header = (dataUser) => {
     //mobile
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     //valid login
-    const [IsLoged, setIsLoged] = useState(false)
+    const [data, setData] = useState()
+    const [IsLoged, setIsLoged] = useState()
+    
     const [menuOpen, setMenuOpen] = useState(false);
-    //seach form
-    const [searchQuery, setSearchQuery] = useState("");
     //user
-    let data  = dataUser.dataUser;
     const imageProfile = data?.imageProfile;
     const { logout } = useAuth();
 
-    useEffect(() => {
-        if (!data?.user) {
-            setIsLoged(false); // Usuário não autenticado
-            return
-        } else {
-            setIsLoged(true); // Usuário autenticado
-        }
-
-
-
-    }, [dataUser, data?.imageProfile]);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 1368);
@@ -41,13 +28,17 @@ const Header = (dataUser) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-
+    useEffect(() => {
+        setData(dataUser.dataUser)
+        setIsLoged(dataUser.validToken)
+    }, [dataUser]);
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
     const handlelogout = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         logout()
+        setIsLoged(false)
         navigate('/')
     };
     const handlelogin = async (e) => {
@@ -56,12 +47,12 @@ const Header = (dataUser) => {
     };
 
 
-    // Lógica de pesquisa
-    const handleSearch = (e) => {
-        e.preventDefault();
-        // console.log("Procurando por:", searchQuery);
-        // Adicione a lógica de pesquisa aqui, como redirecionar ou fazer uma requisição
-    };
+    // // Lógica de pesquisa
+    // const handleSearch = (e) => {
+    //     e.preventDefault();
+    //     // console.log("Procurando por:", searchQuery);
+    //     // Adicione a lógica de pesquisa aqui, como redirecionar ou fazer uma requisição
+    // };
     // Atualiza o valor de `isMobile` quando a janela é redimensionada
     return (
         <div className='text-center'>
@@ -69,7 +60,7 @@ const Header = (dataUser) => {
                 <div style={{width:'10%', position:'relative', left:'10%'}} >
                 <a href='/' style={{ textDecoration: 'none' }} >
                     <div>
-                        <img src={logo} style={{ width: "40%"}} />
+                        <img src={logo} style={{ width: "40%"}} alt='LogoTipo' />
                     </div>
                     <div>
                         <span className='' style={{color:'white'}}>Fdback</span>

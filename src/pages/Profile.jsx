@@ -52,7 +52,7 @@ const Profile = () => {
     }, [profileNick, user, data, userPageId]);
 
     useEffect(() => {
-    }, [imageProfile]);
+    }, [imageProfile, myProfile]);
 
     useEffect(() => {
         const fetchImages = () => {
@@ -60,7 +60,7 @@ const Profile = () => {
                 setImageProfile2(`${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${pathImage}`);
             }
         };
-        // fetchImages();
+        //fetchImages();
     }, [data?.user, data?.token, data?.imageProfile]);
 
 
@@ -193,7 +193,7 @@ const Profile = () => {
                 <div style={styles.container}>
                     <div className="align-items-center" style={{ display: 'flex' }}>
                         <CircleImage 
-                        src={anotherUser?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${anotherUser?._id}/${anotherUser?._id}-${anotherUser?.pathImage}` : userImgNotFind}
+                        src={profile?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${profile?._id}/${profile?._id}-${profile?.pathImage}` : userImgNotFind}
                         alt='Profile'
                         />
                         {/* <img style={{ margin: '2%' }}
@@ -274,11 +274,10 @@ const Profile = () => {
         setFormData({ ...formData, pathImage: e.target.files[0].name })
     }
     //page logic
-
-    if (!myProfile) {
+    if (anotherUser) {
         return (
             <div>
-                {renderProfileDetails(anotherUser || {})}
+                {renderProfileDetails(anotherUser)}
             </div>
         );
     }

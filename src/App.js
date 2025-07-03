@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useAuth } from './context/authContext'; // Importa o hook useAuth
+import { useAuth } from './context/authContext';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Feed from "./pages/Feed";
@@ -18,60 +17,63 @@ const ProtectedRoute = ({ children }) => {
   return user?._id ? children : <Navigate to="/login" />;
 };
 
-const UserLogged = () => {
-  return useAuth()?.data
-};
-
 const App = () => {
   document.title = "FdBack";
-  const {data, wsConnection}= useAuth();
-  const user = data?.user;
-  const tokenIsValid = data?.validToken;
-  const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-  }, [messages]);
-
-  if(UserLogged()?.validToken){
+  // ✅ Hook no topo
+  const { data, wsConnection } = useAuth();
+  if(data){
+    const {user, validToken} = data
     return (
       <Router>
-        <Header dataUser={data} />
-        <Notifys login={user ? true : false} webSocket={wsConnection} />
+        <Header dataUser={data} validToken={validToken} />
+        <Notifys login={!!user} webSocket={wsConnection} />
         <br />
         <Routes>
-             {/* Redireciona usuários autenticados que tentarem acessar rotas públicas */}
+          {validToken ? (
+            <>
+              {/* Redireciona usuários autenticados que tentarem acessar rotas públicas */}
               <Route path="/login" element={<Navigate to="/feed" />} />
               <Route path="/register" element={<Navigate to="/feed" />} />
-              
+  
               {/* Rotas protegidas */}
               <Route path="/" element={<Navigate to="/feed" />} />
               <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
               <Route path="/profile/:profileNick" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-              {/* <Route path="/profile/*" element={<ProtectedRoute><Profile /></ProtectedRoute>} /> */}
               <Route path="/post/:postId" element={<ProtectedRoute><Post /></ProtectedRoute>} />
               <Route path="/post-story/:postStoryPatternId" element={<ProtectedRoute><FeedStory /></ProtectedRoute>} />
               <Route path="/home" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
               {/* <Route path="*" element={<Navigate to="/feed" />} /> */}
+            </>
+          ) : (
+            <>
+              {/* Rotas públicas */}
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              {/* <Route path="/feed" element={<Navigate to="/" />} /> */}
+              {/* <Route path="/*" element={<Navigate to="/" />} /> */}
+            </>
+          )}
         </Routes>
         <br />
         <Footer />
       </Router>
     );
   }else{
-return (
+    return (
       <Router>
-        <Header />
-        <Notifys login={user ? true : false} webSocket={wsConnection} />
+        <Header dataUser={{}} validToken={false} />
+        <Notifys login={false} webSocket={wsConnection} />
         <br />
         <Routes>
-          {/* Rotas públicas para usuários não autenticados */}
-
-              {/* <Route path="/" element={<Login />} /> */}
+              {/* Rotas públicas */}
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               {/* <Route path="/feed" element={<Navigate to="/" />} /> */}
               {/* <Route path="/*" element={<Navigate to="/" />} /> */}
+
         </Routes>
         <br />
         <Footer />
