@@ -29,20 +29,23 @@ const ProfilePosts = ({profileId}) => {
   useEffect(() => {
     fetchPostsByUser();
   }, [data?.user, profileId])
+  useEffect(() => {
+  }, [activeTab])
 
 
   return (
     <div>
       {/* Cabeçalho das abas */}
-      <div className="tabs container text-center">
-        <button style={{cursor:'pointer', backgroundColor:`${activeTab === 1 ? '#aeaeae' : '#fff'}`}}
-          className={`tab-button ${activeTab === 1 ? 'active' : ''}`}
+      <div className="tabs container w-25 btn-group btn-group-toggle btn-group-toggle text-center d-flex">
+        <button  style={{cursor:'pointer'}}
+          className={`tab-button btn btn-secondary ${activeTab === 1 ? 'active' : ''}`}
           onClick={() => setActiveTab(1)}
         >
           Posts
         </button>
-        <button style={{cursor:'pointer', backgroundColor:`${activeTab === 2 ? '#aeaeae' : '#fff'}`}}
-          className={`tab-button ${activeTab === 2 ? 'active' : ''}`}
+
+        <button style={{cursor:'pointer'}}
+          className={`tab-button btn btn-secondary ${activeTab === 2 ? 'active' : ''}`}
           onClick={() => setActiveTab(2)}
         >
          Stories

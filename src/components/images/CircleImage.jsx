@@ -4,7 +4,7 @@ const CircleImage = ({ src, alt = "Image" }) => {
   const containerStyle = {
     margin:'8px',
     width: '4em', // Defina o tamanho desejado do círculo
-    height: '40%',
+    height: '4em',
     borderRadius: '50%', // Faz a div ser circular
     overflow: 'hidden', // Garante que a imagem fique dentro do círculo
     display: 'flex',
