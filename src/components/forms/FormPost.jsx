@@ -224,13 +224,13 @@ const FormPost = () => {
              <br/>
               <br/>
 
-           Post Story: {postStoryChecked > 0 && (
+          {postStoryChecked > 0 && (
               <select
                 value={selectedPostsStoryValue}
                 onChange={handleSelectChange}
                 style={{ marginLeft: '10px' }}
               >
-                <option value="default">Select...</option>
+                 Post Story: <option value="default">Select...</option>
                 {postsStory.map((option) => (
                   <option key={option._id} value={option._id}>
                     {option.title}

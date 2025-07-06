@@ -27,7 +27,7 @@ export function formatDate (dateString) {
     }
   
     // Caso contrário, mostra a diferença em dias
-    const finalMessage = `${formattedDate} - ${differenceInDays} dia${differenceInDays !== 1 ? 's' : ''} atrás`;
+    const finalMessage = `${formattedDate} | ${differenceInDays} dia${differenceInDays !== 1 ? 's' : ''} atrás`;
     return finalMessage;
   };
 export function formatDateToNotify(dateString) {

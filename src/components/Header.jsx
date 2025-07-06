@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 // import Notify from './notify/Notifys';
 import CircleImage from './images/CircleImage';
+import CircleImageMobile from './images/CircleImageMobile';
 import logo from '../images/logo192.png'
 import userImgNotFind from '../images/user.png'
 
@@ -35,13 +36,17 @@ const Header = (dataUser) => {
 
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
-    const handlelogout = async (e) => {
+    const handleLogout = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         logout()
         setIsLoged(false)
         navigate('/')
     };
-    const handlelogin = async (e) => {
+    const handleLogin = async (e) => {
+        e.preventDefault(); // Impede o recarregamento da página
+        navigate('/login')
+    };
+    const handleRegister = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
         navigate('/login')
     };
@@ -70,11 +75,23 @@ const Header = (dataUser) => {
                 </div>
                 {isMobile ? (
                     <>
-                        <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '0%', color: 'white', fontSize: '24px', position: 'absolute', right: '10%' }}>
+                        <button onClick={toggleMenu} style={{ background: 'none', border: 'none', marginLeft: '0%', color: 'white', fontSize: '24px', position: 'absolute', right: '10%',zIndex:'20' }}>
                             ☰
-                        </button>
+                        </button><br/>
                         {menuOpen && (
-                            <nav className='' style={{ position: 'absolute', width: 'fit-content', height: 'fit-content', top: '6.2%', zIndex: '19', backgroundColor: 'rgb(51, 51, 51)', right: '0', borderRadius: '2%', border: '1px solid rgb(51, 51, 51)' }}>
+                            <nav className='' style={{gap: '1em', alignContent:' center', padding:'1em', position: 'absolute', width: '100%', height: '10em', zIndex: '19', backgroundColor: 'rgb(51, 51, 51)', right: '0', borderRadius: '2%', border: '1px solid rgb(51, 51, 51)' }}>
+                             <div style={{justifySelf: 'center'}}>
+                                {
+                                    IsLoged &&
+                                    <Link to={`/profile/${data?.user?.nick}`}>
+                                        <CircleImageMobile
+                                            src={data?.user?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}` : userImgNotFind}
+                                            alt='Proile header'
+                                        />
+                                        {/* <'img' className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" /> */}
+                                    </Link>
+                                }
+                                </div>   
                                 {
                                     !IsLoged &&
                                     <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Home</Link>
@@ -84,27 +101,26 @@ const Header = (dataUser) => {
                                     <Link to="/feed" style={{ margin: '0 10px', textDecoration: 'none', color: 'white' }}>Feed</Link> &&
                                     <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Feedbacks</Link>
                                 } */}
-                                <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'White' }}>Publishes</Link>
+                                 {
+                                    IsLoged &&
+                                    <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'White' }}>Publishes</Link>
+                                }
+                                
                                 <Link to="/" style={{ margin: '0 10px', textDecoration: 'none', color: 'gray' }}>Suporte</Link>
 
                                 {
                                     IsLoged &&
-                                    <Link to={`/profile/${data?.user?.nick}`}>
-                                        <CircleImage
-                                            src={data?.user?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${data?.user?._id}/${data?.user?._id}-${data?.user?.pathImage}` : userImgNotFind}
-                                            alt='Proile header'
-                                        />
-                                        {/* <'img' className="rounded-circle" width="65" style={{ padding: '10px' }} src={imageProfile} alt="profile" /> */}
-                                    </Link>
-                                }
-                                {
-                                    IsLoged &&
-                                    <button type="submit" className='btn btn-light' onClick={handlelogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
+                                    <button type="submit" className='btn btn-light' onClick={handleLogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
                                 }
                                 {
                                     !IsLoged &&
-                                    <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
+                                    <button type='submit' className='btn btn-light' onClick={handleLogin} style={{ marginLeft: 'auto', borderTopRightRadius:'0px',borderBottomRightRadius:'0px' }}>Login</button>
                                 }
+                                {
+                                    !IsLoged &&
+                                    <button type='submit' className='btn btn-light' onClick={handleRegister} style={{ marginLeft: 'auto', borderTopLeftRadius:'0px',borderBottomLeftRadius:'0px' }}>Registrar</button>
+                                }
+                                
                             </nav>
                         )}
                     </>
@@ -119,7 +135,10 @@ const Header = (dataUser) => {
                                 IsLoged &&
                                 <Link to="/" style={{ padding:'8%',textDecoration: 'none', color: 'white' }}>Feedbacks</Link>
                             } */}
+                            {
+                                IsLoged &&
                             <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'white' }}>Publishes</Link>
+                            }
                             <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Suporte</Link>
 
                         </nav>
@@ -147,7 +166,7 @@ const Header = (dataUser) => {
                         </form>
                             } */}
 
-                        <div className='d-flex align-items-center' style={{ gap: '30%', position: 'relative', right: '0px', left: '10%' }}>
+                        <div className='d-flex align-items-center' style={{ gap: '1em', position: 'relative', right: '0px', left: '10%' }}>
                             {
                                 IsLoged &&
                                 <Link to={`/profile/${data?.user?.nick}`}>
@@ -162,12 +181,17 @@ const Header = (dataUser) => {
                             }
                             {
                                 IsLoged &&
-                                <button type="submit" className='btn btn-light' onClick={handlelogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
+                                <button type="submit" className='btn btn-light' onClick={handleLogout} style={{ color: '', marginLeft: 'auto', marginRight: '0%', maxHeight: 'fit-content' }}>Logout</button>
                             }
                             {
                                 !IsLoged &&
-                                <button type='submit' className='btn btn-light' onClick={handlelogin} style={{ marginLeft: 'auto', marginRight: '10%' }}>Login</button>
+                                <button type='submit' className='btn btn-light' onClick={handleLogin} style={{ marginLeft: 'auto'}}>Login</button>
                             }
+
+                            {
+                                    !IsLoged &&
+                                    <button type='submit' className='btn btn-light' onClick={handleRegister} style={{ marginLeft: 'auto' }}>Registrar</button>
+                                }
 
                         </div>
                     </>

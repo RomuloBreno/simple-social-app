@@ -21,7 +21,7 @@ const Footer = () => {
   }, [data?.user]);
 
   return (
-    <footer style={{ backgroundColor: '#333', color: '#fff', padding: '10px', textAlign: 'center' }}>
+    <footer style={{bottom:'0px',position: 'relative', width:' 100%',backgroundColor: '#333', color: '#fff', padding: '10px', textAlign: 'center' }}>
       <br />
       <div className='container'>
       <nav style={{ width: '36%', alignSelf: 'center', fontSize: '0.8em', marginLeft: '8%', marginRight: '8%' }}>

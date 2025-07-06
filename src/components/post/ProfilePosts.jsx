@@ -36,7 +36,7 @@ const ProfilePosts = ({profileId}) => {
   return (
     <div>
       {/* Cabeçalho das abas */}
-      <div className="tabs container w-25 btn-group btn-group-toggle btn-group-toggle text-center d-flex">
+      <div className="tabs container w-50 btn-group btn-group-toggle btn-group-toggle text-center d-flex">
         <button  style={{cursor:'pointer'}}
           className={`tab-button btn btn-secondary ${activeTab === 1 ? 'active' : ''}`}
           onClick={() => setActiveTab(1)}

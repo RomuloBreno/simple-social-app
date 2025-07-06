@@ -145,7 +145,7 @@ const Profile = () => {
     const Follows = (users) => {
         if (loading) return <SkeletonProfile />; // 🆕
         return (
-            <div className="container" style={styles.scrollContainer}>
+            <div classNameName="container" style={styles.scrollContainer}>
                 {users?.length > 0 ? (
                     users.map((user) => (
                         <div key={user.nick} style={styles.userContainer}>
@@ -168,31 +168,31 @@ const Profile = () => {
 
         return (
             <>
-                <div className='container d-grid' style={{ justifyContent: 'center' }}>
+                <div classNameName='container d-grid' style={{ justifyContent: 'center' }}>
                     <div style={styles.container}>
-                        <div className="align-items-center" style={{ display: 'flex' }}>
+                        <div classNameName="align-items-center" style={{ display: 'flex' }}>
                             {!myProfile ? (
                                 <div style={{ maxHeight: 'fit-content', padding: '10px' }}>
-                                    <button class="btn btn-light w-10" onClick={() => handleFollowToggle(profile?._id)}>
+                                    <button className="btn btn-light w-10" onClick={() => handleFollowToggle(profile?._id)}>
                                         {youFollowMe ? 'Deixar' : 'Seguir'}
                                     </button>
                                 </div>
                             ) : null}
-                            <div className="p-2">
+                            <div classNameName="p-2">
                                 <br />
-                                <button class="btn btn-light w-10" value='followers' onClick={toggleFollowers}><span>{followStats.followers | 0}</span> <br/>followers</button>
+                                <button className="btn btn-light w-10" value='followers' onClick={toggleFollowers}><span>{followStats.followers | 0}</span> <br/>followers</button>
                             </div>
-                            <div className="p-2">
+                            <div classNameName="p-2">
                                
                                 <br />
-                                <button class="btn btn-light w-10" value='following' onClick={toggleFollowings}> <span>{followStats.following | 0}</span><br/>following</button>
+                                <button className="btn btn-light w-10" value='following' onClick={toggleFollowings}> <span>{followStats.following | 0}</span><br/>following</button>
                             </div>
                             <CircleImage
                                 src={profile?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${profile?._id}/${profile?._id}-${profile?.pathImage}` : userImgNotFind}
                                 alt='Profile'
                             /><br/>
                             {myProfile && (
-                                <button class="btn btn-light w-10" onClick={() => setEditMode(!editMode)}>🖍</button>
+                                <button className="btn btn-light w-10" onClick={() => setEditMode(!editMode)}>🖍</button>
                             )}
                         </div>
                         <br />
@@ -214,7 +214,7 @@ const Profile = () => {
     };
 
     const FilePreview = ({ file, onDelete }) => (
-        <div className="d-flex mt-3" style={{ maxWidth: '50%' }}>
+        <div classNameName="d-flex mt-3" style={{ maxWidth: '50%' }}>
             <div style={{ zIndex: 9 }}>
                 <img
                     src={URL.createObjectURL(file[0] || null)}
@@ -223,7 +223,7 @@ const Profile = () => {
                 />
             </div>
             <div style={{ zIndex: 10, position: 'absolute', marginRight: '100%' }}>
-                <button class="btn btn-light w-10" onClick={() => onDelete(file[0])} className="btn btn-danger">🗑️</button>
+                <button className="btn btn-light w-10" onClick={() => onDelete(file[0])} classNameName="btn btn-danger">🗑️</button>
             </div>
         </div>
     );
@@ -239,35 +239,35 @@ const Profile = () => {
 
     if (editMode) {
         return (
-            <div className='container d-flex' style={{ justifyContent: 'center' }}>
-                <div className='container' style={styles.container}>
+            <div classNameName='container d-flex' style={{ justifyContent: 'center' }}>
+                <div classNameName='container' style={styles.container}>
                     <form onSubmit={handleSubmit}>
-                        <img className="rounded-circle" width="65" src={imageProfile} alt="profile" />
-                        <div className="form-group">
+                        <img classNameName="rounded-circle" width="65" src={imageProfile} alt="profile" />
+                        <div classNameName="form-group">
                             <input
                                 type="file"
-                                className="custom-file-input"
+                                classNameName="custom-file-input"
                                 accept="image/*"
                                 onChange={handleFileChange}
                             />
                             {selectedFile && <FilePreview key={selectedFile.name} file={selectedFile} />}
                         </div>
                         {['name', 'nick', 'email', 'job'].map((field) => (
-                            <div key={field} className="mb-3">
+                            <div key={field} classNameName="mb-3">
                                 <label htmlFor={field}>{field.toUpperCase()}:</label>
                                 <input
                                     id={field}
                                     type="text"
                                     value={formData[field]}
-                                    className="form-control"
+                                    classNameName="form-control"
                                     onChange={(e) =>
                                         setFormData({ ...formData, [field]: e.target.value })
                                     }
                                 />
                             </div>
                         ))}
-                        <button class="btn btn-light w-10" type="submit" className="btn btn-primary">Salvar</button>
-                        {error && <p className="text-danger">{error}</p>}
+                        <button className="btn btn-light w-10" type="submit" classNameName="btn btn-primary">Salvar</button>
+                        {error && <p classNameName="text-danger">{error}</p>}
                     </form>
                 </div>
             </div>
@@ -280,29 +280,29 @@ const Profile = () => {
 // Componente Skeleton
 const SkeletonProfile = () => (
             <>
-                <div className='container d-grid' style={{ justifyContent: 'center' }}>
+                <div classNameName='container d-grid' style={{ justifyContent: 'center' }}>
                     <div style={styles.container}>
-                        <div className="align-items-center" style={{ display: 'flex' }}>
+                        <div classNameName="align-items-center" style={{ display: 'flex' }}>
                             <CircleImage
                                 src={''}
                                 alt='Profile'
                             />
                                 <div style={{ maxHeight: 'fit-content', padding: '10px' }}>
-                                    <button class="btn btn-light w-10" >
+                                    <button className="btn btn-light w-10" >
                                         {}
                                     </button>
                                 </div>
-                            <div className="p-2">
+                            <div classNameName="p-2">
                                 <span>{}</span>
                                 <br />
-                                <button class="btn btn-light w-10" value='followers' >followers</button>
+                                <button className="btn btn-light w-10" value='followers' >followers</button>
                             </div>
-                            <div className="p-2">
+                            <div classNameName="p-2">
                                 <span>{}</span>
                                 <br />
-                                <button class="btn btn-light w-10" value='following' >following</button>
+                                <button className="btn btn-light w-10" value='following' >following</button>
                             </div>
-                                <button class="btn btn-light w-10">🖍</button>
+                                <button className="btn btn-light w-10">🖍</button>
                         </div>
                         <br />
                         <h4></h4>
