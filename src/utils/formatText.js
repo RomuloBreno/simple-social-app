@@ -20,10 +20,10 @@ export function formatDate (dateString) {
   
     // Se a diferença for menor que 1 dia, mostra a diferença em horas
     if (differenceInHours === 0) {
-      return `${formattedDate} - ${differenceInMinutes}min`;
+      return `${formattedDate} | ${differenceInMinutes == -1 ? 0 : differenceInMinutes }min`;
     }
     if (differenceInDays === 0) {
-      return `${formattedDate} - ${differenceInHours}h`;
+      return `${formattedDate} | ${differenceInHours}h`;
     }
   
     // Caso contrário, mostra a diferença em dias
