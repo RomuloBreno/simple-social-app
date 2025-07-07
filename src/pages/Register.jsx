@@ -63,11 +63,11 @@ const validPassword = (pass) => {
         throw new Error('E-mail invalido, verifique e tente novamente');
       if (!captchaToken)
         throw new Error('Houve problemas no envio do recaptcha');
-      
-      validPassword(password)
-      
-      if (password !== confirmPassword && !validPassword(password)) {
+      if (password !== confirmPassword) {
         throw new Error('As senhas precisam ser iguais');
+      }
+      if(!validPassword(password)){
+         throw new Error('Senha muito fraca, tente outra');
       }
 
 
