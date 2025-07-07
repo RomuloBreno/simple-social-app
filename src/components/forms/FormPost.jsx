@@ -217,7 +217,7 @@ const FormPost = () => {
             <br />
           <div>
             <input type="checkbox" className="btn btn-primary" onClick={handleCheckPostStory} />
-            <span className='p-2'>Habilite esta opção para tornar este post filho de outro post.</span>
+            <span className='p-2'>Marque a opção caso queira criar um Novo Post Story, ou adicionar a um existente</span>
             {/* {postStoryChecked && selectedPostsStoryValue && (
               <span> Marking the option creates a post story if it doesn't selected.</span>
             )} */}
