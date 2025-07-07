@@ -79,7 +79,7 @@ const Login = () => {
       <h2 className="text-center mb-4">Login</h2>
 
       <div className="mb-3">
-        <label htmlFor="email" className="form-label">Usuário:</label>
+        <label htmlFor="email" className="form-label">Email:</label>
         <input
           type="text"
           id="email"

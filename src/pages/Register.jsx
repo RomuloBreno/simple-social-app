@@ -25,12 +25,37 @@ const Register = () => {
     setCaptchaToken(token); // Captura o token de verificação
   };
 
+
+const hasLetter = (pass) => {
+  return /[A-Za-z]/.test(pass);
+};
+
+
+const hasNumber = (pass) => {
+  return /\d/.test(pass);
+};
+
+
+const hasSpecialChar = (pass) => {
+  return /[@$!%*#?&]/.test(pass);
+};
+
+// Validação completa combinando todas
+const validPassword = (pass) => {
+  if(!pass.length >= 8)  throw new Error('Senha deve conter no minimo 8 carcteres');
+  if(!hasLetter(pass))  throw new Error('Senha deve conter no minimo 1 letra maiúscula'); 
+  if(!hasNumber(pass)) throw new Error('Senha deve conter no minimo 1 número');
+  if(!hasSpecialChar(pass))  throw new Error('Senha deve conter no minimo 1 caracter especial');;
+  return true
+};
+
   String.prototype.ValidEmail = function () {
     // A regex pattern for validating an email address
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(this); // true para um email válido
   }
   const handleSubmit = async (e) => {
+
     const passwordHash = hashPassword(name, nick, email, job, password)
     e.preventDefault(); // Impede o recarregamento da página
     try {
@@ -38,9 +63,16 @@ const Register = () => {
         throw new Error('E-mail invalido, verifique e tente novamente');
       if (!captchaToken)
         throw new Error('Houve problemas no envio do recaptcha');
-      if (password !== confirmPassword) {
+      
+      validPassword(password)
+      
+      if (password !== confirmPassword && !validPassword(password)) {
         throw new Error('As senhas precisam ser iguais');
       }
+
+
+
+
       let result = await fetchConnect('auth/register', 'POST', { result: passwordHash })
       if (!result.status)
         throw new Error(result.result);

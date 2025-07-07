@@ -48,7 +48,7 @@ const Header = (dataUser) => {
     };
     const handleRegister = async (e) => {
         e.preventDefault(); // Impede o recarregamento da página
-        navigate('/login')
+        navigate('/register')
     };
 
 
