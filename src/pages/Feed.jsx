@@ -50,7 +50,7 @@ const Feed = () => {
 
   const handleLoadMore = () => {
     setLimitShowLocal((prev) => prev + 5)
-      document.getElementById("LastPost").scrollIntoView({ behavior: 'smooth' });
+    document.getElementById("LastPost")?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const lastVisibleIndex = limitShowLocal - 1;
@@ -68,14 +68,13 @@ const Feed = () => {
           <div className='container'>
             {visiblePosts?.map((post, index) => {
               const isLastVisible = index === lastVisibleIndex;
-              console.log(isLastVisible)
-                return (
-                  <div id={isLastVisible ? 'LastPost' :'' }>
-                    <Post key={(post?._id).toString()} postContent={post} />
-                  </div>
-                )
-            }
-            )}
+              const key = post?._id?.toString?.() ?? `fallback-${index}`;
+              return (
+                <div key={key} id={isLastVisible ? 'LastPost' : ''}>
+                  <Post postContent={post} />
+                </div>
+              );
+            })}
             {true && visiblePosts?.length && (
               <div className='container text-center'>
                 <br />
