@@ -8,14 +8,6 @@ import styled from 'styled-components';
 
 
 const Feedbacks = ({ postId, qtdFeedbacks }) => {
-    //mock
-    // const [feedbacks, setFeedbacks] = useState([
-    //     // { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
-    //     // { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
-    //     // { feedback: "Esse é um exemplo de comentário longo para testar a funcionalidade.\nOutro comentário com mais informações.\n\nMais um comentário para expandir e ver o que acontece!", author: 'Romulo' },
-
-    // ]);
-    // const [index, setIndex] = useState(0);
     const data = useAuth().data
     const [loading, setLoading] = useState(false); // Estado para gerenciar o carregamento
     const [expandedIndex, setExpandedIndex] = useState(false);
@@ -104,99 +96,116 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
 
     }, [loading])
 
-return (
-            <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
-                 {loading && feedbacks?.length == 0 ? (
-                    <>
-                    <div style={{ padding: '10%' }}>
-                       { qtdFeedbacks != 0 && qtdFeedbacks != null
-                       ? (<>
-                        <div className="container spinner-border p-10" role="status" >
-                            <span className="sr-only"></span>
-                        </div>
-                       <h4>buscando feedbacks...</h4>
-                       </>)
-                       : (<>
-                       <h4>Nenhum feedback encontrado</h4>
-                       </>)}
-                    </div>
-                        {formComment()}
-                    </>
-
-                ) : (
-                <>
-                {feedbacks?.map((comment, index) => {
-                    ++index
-                    const { author, content } = comment
-                    // Exibe parte do texto ou o texto completo, dependendo se está expandido ou não
-                    const isExpanded = expandedIndex === index;
-                    const displayText = isExpanded ? content : content?.slice(0, Math.ceil(content?.length * 0.5)) + '...';
-                    return (
-                        <div className=''
-                            key={index}
-                            onClick={() => toggleComment(index)}
-                            style={{ cursor: 'pointer', margin: '5px 0', color: '#333', padding: '16px', backgroundColor: isExpanded ? '#efefef' : '#fff' }}
-                        >
-                            <br />
-                            {displayText}
-                            <div className="d-flex">
-                                <img className="rounded-circle" width="25"src={user?.pathImage ? `${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}` : userImgNotFind} alt="" />
-                                <div className="h7 text-muted px-2">
-                                    <UrlProfile>
-
-                                        <Link style={{ textDecoration: 'none', color: 'grey' }} to={'/profile/' + author}> Autor:{author}</Link>
-                                    </UrlProfile>
+    if(user){
+        return (
+                    <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
+                         {loading && feedbacks?.length == 0 ? (
+                            <>
+                            <div style={{ padding: '10%' }}>
+                               { qtdFeedbacks != 0 && qtdFeedbacks != null
+                               ? (<>
+                                <div className="container spinner-border p-10" role="status" >
+                                    <span className="sr-only"></span>
                                 </div>
+                               <h4>buscando feedbacks...</h4>
+                               </>)
+                               : (<>
+                               <h4>Nenhum feedback encontrado</h4>
+                               </>)}
                             </div>
-                        </div>
-                    );
+                                {formComment()}
+                            </>
+        
+                        ) : (
+                        <>
+                        {feedbacks?.map((comment, index) => {
+                            ++index
 
-                })}
-                <form onSubmit={handleAddComment} style={{ marginTop: '20px' }}>
-
-                    <div>
-
-                        <textarea
-                            className='border'
-                            type="text"
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                            placeholder="Escreva um comentário..."
-                            style={{
-                                width: '100%',
-                                maxHeight: '300px',
-                                minHeight: '100px',
-                                padding: '10px',
-                                borderRadius: '4px',
-                                border: '1px solid #ccc',
-                                marginBottom: '10px'
-                            }}
-                        />
-                        <button
-                            className='border'
-                            type="submit"
-                            style={{
-                                width: '100%',
-                                padding: '10px',
-                                borderRadius: '4px',
-                                border: 'none',
-                                backgroundColor: '#fff',
-                                color: 'black',
-                                fontWeight: 'bold',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Comentar
-                        </button>
+                              const userMap = user.map((item, index) => ({
+                                ...item,
+                                index: index
+                                }));
+                            const { author, content } = comment
+                            // Exibe parte do texto ou o texto completo, dependendo se está expandido ou não
+                            const isExpanded = expandedIndex === index;
+                            const displayText = isExpanded ? content : content?.slice(0, Math.ceil(content?.length * 0.5)) + '...';
+                            return (
+                                <div className=''
+                                    key={index}
+                                    onClick={() => toggleComment(index)}
+                                    style={{ cursor: 'pointer', margin: '5px 0', color: '#333', padding: '16px', backgroundColor: isExpanded ? '#efefef' : '#fff' }}
+                                >
+                                    <br />
+                                    {displayText}
+                                    <div className="d-flex">
+                                        <img className="rounded-circle" width="25"src={userMap ?  `${process.env.REACT_APP_URL_S3}/temp/profile/${userMap.filter(i=>i.nick == comment.author)[0]?._id}/${userMap.filter(i=>i.nick == comment.author)[0]?._id}-${userMap.filter(i=>i.nick == comment.author)[0]?.pathImage}` : userImgNotFind} alt="" />
+                                        <div className="h7 text-muted px-2">
+                                            <UrlProfile>
+        
+                                                <Link style={{ textDecoration: 'none', color: 'grey' }} to={'/profile/' + author}> Autor:{author}</Link>
+                                            </UrlProfile>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+        
+                        })}
+                        <form onSubmit={handleAddComment} style={{ marginTop: '20px' }}>
+        
+                            <div>
+        
+                                <textarea
+                                    className='border'
+                                    type="text"
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                    placeholder="Escreva um comentário..."
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '300px',
+                                        minHeight: '100px',
+                                        padding: '10px',
+                                        borderRadius: '4px',
+                                        border: '1px solid #ccc',
+                                        marginBottom: '10px'
+                                    }}
+                                />
+                                <button
+                                    className='border'
+                                    type="submit"
+                                    style={{
+                                        width: '100%',
+                                        padding: '10px',
+                                        borderRadius: '4px',
+                                        border: 'none',
+                                        backgroundColor: '#fff',
+                                        color: 'black',
+                                        fontWeight: 'bold',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    Comentar
+                                </button>
+                            </div>
+                        </form>
+                        {feedbacks?.length < qtdFeedbacks ?(<><span style={{fontSize:'70%'}}>Esse post pode conter mais feedbacks, clique no post para visualizar mais...</span></>):(<></>)}
+                        </>
+                        )
+                        }
+                        
                     </div>
-                </form>
-                {feedbacks?.length < qtdFeedbacks ?(<><span style={{fontSize:'70%'}}>Esse post pode conter mais feedbacks, clique no post para visualizar mais...</span></>):(<></>)}
-                </>
-                )
-                }
-                
+                );
+    }else{
+        <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
+                            <div style={{ padding: '10%' }}>
+                                <div className="container spinner-border p-10" role="status" >
+                                    <span className="sr-only"></span>
+                                </div>
+                               <h4>buscando feedbacks...</h4>
+                            </div>
+                                {formComment()}
             </div>
-        );
+    }
 };
 
 
