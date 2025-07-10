@@ -98,17 +98,17 @@ const FeedbacksPost = ({ postId, qtdFeedbacks }) => {
 
     useEffect(() => {
         
-        if(feedbacks == null)
+        if(feedbacks === null)
             getFeedbacks();
 
     }, [])
 
 return (
             <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
-                 {loading && feedbacks?.length == 0 ? (
+                 {loading && feedbacks?.length === 0 ? (
                     <>
                     <div style={{ padding: '10%' }}>
-                       {qtdFeedbacks != 0  && qtdFeedbacks != null
+                       {qtdFeedbacks !== 0  && qtdFeedbacks !== null
                        ? (<>
                         <div className="container spinner-border p-10" role="status" >
                             <span className="sr-only"></span>

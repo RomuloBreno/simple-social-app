@@ -91,7 +91,7 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
 
     useEffect(() => {
         
-        if(feedbacks == null)
+        if(feedbacks === null)
             getFeedbacks();
 
     }, [loading])
@@ -99,10 +99,10 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
     if(user){
         return (
                     <div style={{ backgroundColor: '', borderTopRightRadius: '10px', borderBottomRightRadius: '10px' }}>
-                         {loading && feedbacks?.length == 0 ? (
+                         {loading && feedbacks?.length === 0 ? (
                             <>
                             <div style={{ padding: '10%' }}>
-                               { qtdFeedbacks != 0 && qtdFeedbacks != null
+                               { qtdFeedbacks !== 0 && qtdFeedbacks !== null
                                ? (<>
                                 <div className="container spinner-border p-10" role="status" >
                                     <span className="sr-only"></span>
@@ -138,7 +138,7 @@ const Feedbacks = ({ postId, qtdFeedbacks }) => {
                                     <br />
                                     {displayText}
                                     <div className="d-flex">
-                                        <img className="rounded-circle" width="25"src={userMap ?  `${process.env.REACT_APP_URL_S3}/temp/profile/${userMap.filter(i=>i.nick == comment.author)[0]?._id}/${userMap.filter(i=>i.nick == comment.author)[0]?._id}-${userMap.filter(i=>i.nick == comment.author)[0]?.pathImage}` : userImgNotFind} alt="" />
+                                        <img className="rounded-circle" width="25"src={userMap ?  `${process.env.REACT_APP_URL_S3}/temp/profile/${userMap.filter(i=>i.nick === comment.author)[0]?._id}/${userMap.filter(i=>i.nick === comment.author)[0]?._id}-${userMap.filter(i=>i.nick === comment.author)[0]?.pathImage}` : userImgNotFind} alt="" />
                                         <div className="h7 text-muted px-2">
                                             <UrlProfile>
         

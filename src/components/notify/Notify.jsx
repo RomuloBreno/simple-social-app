@@ -36,13 +36,13 @@ const Notify = ({indexParam,messageParam, dataToken}) => {
                 ? (
                     <>
                 <Link to={`/post/${postId}`} style={{ textDecoration:'none', color:'grey'}}>
-                   {typeof message == "number" ? ENotify[message] : message}
+                   {typeof message === "number" ? ENotify[message] : message}
                 </Link>
                     </>
                 )
                 : (
                     <Link to={`/profile/${user?.nick}`} style={{ textDecoration:'none', color:'grey'}}>
-                    {typeof message == "number" ? ENotify[message] : message}
+                    {typeof message === "number" ? ENotify[message] : message}
                     </Link>
                 )
                 }

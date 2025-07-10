@@ -22,7 +22,7 @@ const ProfilePosts = ({profileId}) => {
       return
     response = await fetchApi(`v1/posts/user/${profile}`, null, 'POST', {limit:50}, data?.token)
     if (response.status) {
-      setPostsByUser(response.result.filter(x=>x.postStoryPattern == undefined || x.postStoryPattern == ''))
+      setPostsByUser(response.result.filter(x=>x.postStoryPattern === undefined || x.postStoryPattern === ''))
       setStoriesByUser(response.result.filter(x=>x.postStoryPattern))
     }
   }

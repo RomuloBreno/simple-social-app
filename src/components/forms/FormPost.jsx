@@ -75,7 +75,7 @@ const FormPost = () => {
     try {
       const pathsName = getNameFiles();
       let dataPost={}
-      if(postStoryChecked && !(selectedPostsStoryValue.valueOf() == 'default')){
+      if(postStoryChecked && !(selectedPostsStoryValue.valueOf() === 'default')){
         dataPost = {
           title,
           description: postContent,
@@ -131,7 +131,7 @@ const FormPost = () => {
   };
 
   useEffect(() => {
-    if (postStoryChecked && (selectedPostsStoryValue.valueOf() == 'default' || selectedPostsStoryValue.valueOf() == '')) {
+    if (postStoryChecked && (selectedPostsStoryValue.valueOf() === 'default' || selectedPostsStoryValue.valueOf() === '')) {
       setError('Não selecionar uma opção de Post Story torna esse Post atual um Post Story');
     }else{
       setError('');

@@ -28,7 +28,7 @@ const Profile = () => {
     const [viewFollowers, setViewFollowers] = useState(false);
     const [viewFollowing, setViewFollowing] = useState(false);
     const [loading, setLoading] = useState(true); // 🆕 inicia em true
-    const [imageProfile2, setImageProfile2] = useState();
+    // const [imageProfile2, setImageProfile2] = useState();
     const [selectedFile, setSelectedFile] = useState();
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const Profile = () => {
 
     useEffect(() => {
         if (pathImage) {
-            setImageProfile2(`${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${pathImage}`);
+            // setImageProfile2(`${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${pathImage}`);
         }
     }, [data?.user, data?.token, data?.imageProfile]);
 

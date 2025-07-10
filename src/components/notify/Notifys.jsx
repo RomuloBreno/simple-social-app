@@ -19,7 +19,7 @@ const Notifys = ({ login, webSocket }) => {
             setMessages(response.result)
     }
     useEffect(() => {
-        if (webSocket == null)
+        if (webSocket === null)
             return
         webSocket.onmessage = (event) => {
             const dataMsg = JSON.parse(event.data);
