@@ -46,7 +46,7 @@ const Notify = ({indexParam,messageParam, dataToken}) => {
                     </Link>
                 )
                 }
-                <span>{ "   " +formatDateToNotify(creationDate)}</span>
+                <span>{ "   " + formatDateToNotify(creationDate)}</span>
               </div>
               {/* <button
                 style={style.closeButtonStyles}

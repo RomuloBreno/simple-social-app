@@ -59,7 +59,7 @@ export function formatDateToNotify(dateString) {
     }
   
     // Caso contrário, mostra a diferença em dias
-    const finalMessage = `${differenceInDays !== 1 ? '0s' : ''} atrás`;
+    const finalMessage =  `${timeDifference < 1000 ? '0s' : formattedDate + " | " +(differenceInDays > 0 ? differenceInDays + " dias" : differenceInHours > 0 ? differenceInHours+" horas":differenceInMinutes > 0 ? differenceInMinutes+" minutos" :'') } atrás`;
     return finalMessage;
   };
   
