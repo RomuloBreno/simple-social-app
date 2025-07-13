@@ -196,7 +196,6 @@ const styles = {
     alignItems: "center",
     maxWidth:'1280px',
     maxHeight: '720px',
-    backgroundColor: '#4340403b',
     alignContent: 'center'
   },
   haderLeft: {
