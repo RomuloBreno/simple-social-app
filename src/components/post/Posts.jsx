@@ -194,13 +194,10 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    maxWidth:'1280px',
-    maxHeight: '720px',
-    alignContent: 'center'
   },
-  haderLeft: {
-  display: "flex",
-  alignItems: "center",
+  headerLeft: {
+    display: "flex",
+    alignItems: "center",
   },
   profileLink: {
     display: "flex",
@@ -272,6 +269,10 @@ const styles = {
   imagesContainer: {
     display: "flex",
     flexWrap: "wrap",
+      maxWidth:'1280px',
+    maxHeight: '720px',
+    backgroundColor: '#4340403b',
+    alignContent: 'center',
   },
   image: {
     maxWidth: "100%",
