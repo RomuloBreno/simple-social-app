@@ -273,6 +273,10 @@ const styles = {
   imagesContainer: {
     display: "flex",
     flexWrap: "wrap",
+    maxWidth:'1280px',
+    maxHeight: '720px',
+    backgroundColor: '#4340403b',
+    alignContent: 'center',
   },
   image: {
     maxWidth: "100%",
