@@ -6,6 +6,7 @@ import ProfilePosts from '../components/post/ProfilePosts';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import CircleImage from '../components/images/CircleImage';
 import userImgNotFind from '../images/user.png';
+import ErrorSpan from '../components/error/ErrorSpan';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -55,14 +56,14 @@ const Profile = () => {
         setLoading(true);
         setViewFollowing(false);
         setViewFollowers(!viewFollowers);
-        if (!viewFollowers) fetchFollowsSelect(e.target.value).finally(() => setLoading(false)); // 🆕
+        if (!viewFollowers) fetchFollowsSelect("followers").finally(() => setLoading(false)); // 🆕
         else setLoading(false); // 🆕
     };
     const toggleFollowings = (e) => {
         setLoading(true);
         setViewFollowers(false);
         setViewFollowing(!viewFollowing);
-        if (!viewFollowing) fetchFollowsSelect(e.target.value).finally(() => setLoading(false)); // 🆕
+        if (!viewFollowing) fetchFollowsSelect("following").finally(() => setLoading(false)); // 🆕
         else setLoading(false); // 🆕
     };
 
@@ -143,9 +144,8 @@ const Profile = () => {
     };
 
     const Follows = (users) => {
-        if (loading) return <SkeletonProfile />; // 🆕
         return (
-            <div classNameName="container" style={styles.scrollContainer}>
+            <div className="container" style={styles.scrollContainer}>
                 {users?.length > 0 ? (
                     users.map((user) => (
                         <div key={user.nick} style={styles.userContainer}>
@@ -168,9 +168,9 @@ const Profile = () => {
 
         return (
             <>
-                <div classNameName='container d-grid' style={{ justifyContent: 'center' }}>
+                <div className='container d-grid' style={{ justifyContent: 'center' }}>
                     <div style={styles.container}>
-                        <div classNameName="align-items-center" style={{ display: 'flex' }}>
+                        <div className="align-items-center" style={{ display: 'flex' }}>
                             {!myProfile ? (
                                 <div style={{ maxHeight: 'fit-content', padding: '10px' }}>
                                     <button className="btn btn-light w-10" onClick={() => handleFollowToggle(profile?._id)}>
@@ -178,22 +178,29 @@ const Profile = () => {
                                     </button>
                                 </div>
                             ) : null}
-                            <div classNameName="p-2">
-                                <br />
-                                <button className="btn btn-light w-10" value='followers' onClick={toggleFollowers}><span>{followStats.followers | 0}</span> <br/>followers</button>
-                            </div>
-                            <div classNameName="p-2">
-                               
-                                <br />
-                                <button className="btn btn-light w-10" value='following' onClick={toggleFollowings}> <span>{followStats.following | 0}</span><br/>following</button>
-                            </div>
+                            <div className="text-center">
+
                             <CircleImage
                                 src={profile?.pathImage ? imageProfile || `${process.env.REACT_APP_URL_S3}/temp/profile/${profile?._id}/${profile?._id}-${profile?.pathImage}` : userImgNotFind}
                                 alt='Profile'
-                            /><br/>
+                            />
                             {myProfile && (
+                                <>
                                 <button className="btn btn-light w-10" onClick={() => setEditMode(!editMode)}>🖍</button>
+                                </>
                             )}
+
+                            </div>
+                            <div className="p-2">
+                                <button type="button" className="btn btn-light" onClick={toggleFollowers}>
+                                    Seguidores <span className="badge badge-light" style={{color:'black'}}>{followStats.followers | 0}</span>
+                                </button>
+                            </div>
+                            <div className="p-2">
+                                <button type="button" className="btn btn-light" onClick={toggleFollowings}>
+                                    Seguindo <span className="badge badge-light" style={{color:'black'}}>{followStats.following | 0}</span>
+                                </button>
+                            </div>
                         </div>
                         <br />
                         <h4>{profile.name}</h4>
@@ -201,7 +208,7 @@ const Profile = () => {
                         <p><strong>Email:</strong> {profile.email}</p>
                         <p><strong>Profissão:</strong> {profile.job}</p>
                     </div>
-                    <div>
+                    <div id="viewFollows">
                         {(viewFollowers || viewFollowing) && viewFollowerOrFollowing && (
                             <>{Follows(viewFollowerOrFollowing)}</>
                         )}
@@ -214,7 +221,7 @@ const Profile = () => {
     };
 
     const FilePreview = ({ file, onDelete }) => (
-        <div classNameName="d-flex mt-3" style={{ maxWidth: '50%' }}>
+        <div className="d-flex mt-3" style={{ maxWidth: '50%' }}>
             <div style={{ zIndex: 9 }}>
                 <img
                     src={URL.createObjectURL(file[0] || null)}
@@ -223,7 +230,7 @@ const Profile = () => {
                 />
             </div>
             <div style={{ zIndex: 10, position: 'absolute', marginRight: '100%' }}>
-                <button className="btn btn-light w-10" onClick={() => onDelete(file[0])} classNameName="btn btn-danger">🗑️</button>
+                <button className="btn btn-danger w-10" onClick={() => onDelete(file[0])}>🗑️</button>
             </div>
         </div>
     );
@@ -239,35 +246,35 @@ const Profile = () => {
 
     if (editMode) {
         return (
-            <div classNameName='container d-flex' style={{ justifyContent: 'center' }}>
-                <div classNameName='container' style={styles.container}>
+            <div className='container d-flex' style={{ justifyContent: 'center' }}>
+                <div className='container' style={styles.container}>
                     <form onSubmit={handleSubmit}>
-                        <img classNameName="rounded-circle" width="65" src={imageProfile} alt="profile" />
-                        <div classNameName="form-group">
+                        <img className="rounded-circle" width="65" src={imageProfile} alt="profile" />
+                        <div className="form-group">
                             <input
                                 type="file"
-                                classNameName="custom-file-input"
+                                className="custom-file-input"
                                 accept="image/*"
                                 onChange={handleFileChange}
                             />
                             {selectedFile && <FilePreview key={selectedFile.name} file={selectedFile} />}
                         </div>
                         {['name', 'nick', 'email', 'job'].map((field) => (
-                            <div key={field} classNameName="mb-3">
+                            <div key={field} className="mb-3">
                                 <label htmlFor={field}>{field.toUpperCase()}:</label>
                                 <input
                                     id={field}
                                     type="text"
                                     value={formData[field]}
-                                    classNameName="form-control"
+                                    className="form-control"
                                     onChange={(e) =>
                                         setFormData({ ...formData, [field]: e.target.value })
                                     }
                                 />
                             </div>
                         ))}
-                        <button className="btn btn-light w-10" type="submit" classNameName="btn btn-primary">Salvar</button>
-                        {error && <p classNameName="text-danger">{error}</p>}
+                        <button className="btn btn-primary w-10" type="submit">Salvar</button>
+                        {error && <ErrorSpan message={error} />}
                     </form>
                 </div>
             </div>
@@ -279,41 +286,41 @@ const Profile = () => {
 
 // Componente Skeleton
 const SkeletonProfile = () => (
-            <>
-                <div classNameName='container d-grid' style={{ justifyContent: 'center' }}>
-                    <div style={styles.container}>
-                        <div classNameName="align-items-center" style={{ display: 'flex' }}>
-                            <CircleImage
-                                src={''}
-                                alt='Profile'
-                            />
-                                <div style={{ maxHeight: 'fit-content', padding: '10px' }}>
-                                    <button className="btn btn-light w-10" >
-                                        {}
-                                    </button>
-                                </div>
-                            <div classNameName="p-2">
-                                <span>{}</span>
-                                <br />
-                                <button className="btn btn-light w-10" value='followers' >followers</button>
-                            </div>
-                            <div classNameName="p-2">
-                                <span>{}</span>
-                                <br />
-                                <button className="btn btn-light w-10" value='following' >following</button>
-                            </div>
-                                <button className="btn btn-light w-10">🖍</button>
-                        </div>
-                        <br />
-                        <h4></h4>
-                        <h5></h5>
-                        <p><strong>Email:</strong> </p>
-                        <p><strong>Profissão:</strong></p>
+    <>
+        <div className='container d-grid' style={{ justifyContent: 'center' }}>
+            <div style={styles.container}>
+                <div className="align-items-center" style={{ display: 'flex' }}>
+                    <CircleImage
+                        src={''}
+                        alt='Profile'
+                    />
+                    <div style={{ maxHeight: 'fit-content', padding: '10px' }}>
+                        <button className="btn btn-light w-10" >
+                            { }
+                        </button>
                     </div>
-                  
+                    <div className="p-2">
+                        <span>{ }</span>
+                        <br />
+                        <button className="btn btn-light w-10" value='followers' >followers</button>
+                    </div>
+                    <div className="p-2">
+                        <span>{ }</span>
+                        <br />
+                        <button className="btn btn-light w-10" value='following' >following</button>
+                    </div>
+                    <button className="btn btn-light w-10">🖍</button>
                 </div>
                 <br />
-            </>
+                <h4></h4>
+                <h5></h5>
+                <p><strong>Email:</strong> </p>
+                <p><strong>Profissão:</strong></p>
+            </div>
+
+        </div>
+        <br />
+    </>
 );
 
 const styles = {
@@ -322,7 +329,7 @@ const styles = {
         border: '1px solid #ddd',
         borderRadius: '8px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        maxWidth: '600px',
+        maxWidth: 'fit-content',
         margin: '0 auto',
     },
     userContainer: {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { fetchApi } from '../../utils/fetch';
 import { useAuth } from '../../context/authContext';
+import ErrorSpan  from '../error/ErrorSpan';
 
 const FilePreview = ({ file, onDelete }) => {
   return (
@@ -242,7 +243,7 @@ const FormPost = () => {
 
           <br />
           <button type="submit" className="btn btn-primary">Publicar</button>
-        {error && <p className="text-danger mt-3">{error}</p>}
+        {error && <ErrorSpan message={error}/> }
         </form>
       </div>
     </>

@@ -1,8 +1,9 @@
 // src/Login.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link} from "react-router-dom";
 import { useAuth } from '../context/authContext'; // Importa o hook useAuth
 import { fetchConnect } from '../utils/fetch';
+import ErrorSpan  from '../components/error/ErrorSpan';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 
@@ -24,7 +25,8 @@ const Login = () => {
 
 
   const handleCaptchaChange = (token) => {
-    setCaptchaToken(token); // Captura o token de verificação
+    setCaptchaToken(token); 
+   setError(error?error:null)
   };
 
 
@@ -40,7 +42,7 @@ const Login = () => {
       if (!email.ValidEmail())
         throw new Error('E-mail invalido, verifique e tente novamente');
         if (!captchaToken)
-          throw new Error('Erro: falta ou problemas no envio do recaptcha');
+          throw new Error('Falta ou problemas no envio do recaptcha');
         setLoading(true)
         let result = await fetchConnect('auth/l-fdback', 'POST', { result: passUserHash, rcapt:captchaToken })
         if (!result.status){
@@ -63,8 +65,10 @@ const Login = () => {
   return (
     <div className="container mx-10 d-flex justify-content-center align-items-center vh-30" style={{ height: '100%' }}>
     
-     {loading ? (
-      <div style={{ textAlign: 'center',marginTop: '2%', width: '100%',height: '100%',zIndex: '12',position: 'absolute',alignContent: 'center', background: '#808080ad' }}>
+     {/* {true ? (
+      <div style={{top:'-10%',textAlign: 'center',width: '100%',height: '60em',zIndex: '12',position: 'absolute',alignContent: 'center', background: '#808080ad' }}>
+          <h3 style={{fontWeight:'900'}}>Welcome</h3>
+          <br/>
         <div className="container spinner-border p-10"role="status" >
           <span className="sr-only"></span>
         </div>
@@ -73,7 +77,7 @@ const Login = () => {
         <div>
 
         </div>
-      )}
+      )} */}
 
         
       <form className="col-md-6 p-10" onSubmit={handleSubmit}>
@@ -104,11 +108,23 @@ const Login = () => {
           maxLength={70}
         />
       </div>
+      {error && <ErrorSpan message={error}/> }
+      <br />
 
-      <button type="submit" className="btn btn-primary w-100">Login</button>
+        {loading ? (
+      <div style={{textAlign: 'center',width: '100%',zIndex: '12',alignContent: 'center'}}>
+          <h5 style={{fontWeight:'900'}}>Connecting</h5>
+        <div className="container spinner-border p-2"role="status" >
+          <span className="sr-only"></span>
+        </div>
+      </div>
+      ):(
+        <button type="submit" className="btn btn-primary w-100">Login</button>
+      )}
+
+      
 
       <br />
-      {error && <p className="text-danger mt-3">{error}</p>}
       <br />
     <ReCAPTCHA
       sitekey={process.env.REACT_APP_RECAPTCHA_KEY}
@@ -116,11 +132,7 @@ const Login = () => {
     />
     <br />
       <Link to="/register" className="btn border w-20">Registrar</Link>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+    
       <br />
       <br />
         <br />

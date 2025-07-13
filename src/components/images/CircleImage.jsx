@@ -1,4 +1,3 @@
-import React from 'react';
 
 const CircleImage = ({ src, alt = "Image" }) => {
   const containerStyle = {

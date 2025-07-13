@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { fetchConnect } from '../utils/fetch';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
+import ErrorSpan from '../components/error/ErrorSpan' 
 
 
 const Register = () => {
@@ -22,7 +23,8 @@ const Register = () => {
 
 
   const handleCaptchaChange = (token) => {
-    setCaptchaToken(token); // Captura o token de verificação
+    setCaptchaToken(token);
+    setError(error?error:null) // Captura o token de verificação
   };
 
 
@@ -167,10 +169,10 @@ const validPassword = (pass) => {
             maxLength={70}
           />
         </div>
-
+       {error && <ErrorSpan message={error}/> }
+        <br />
         <button type="submit" className="btn btn-primary w-100">Register</button>
         <br />
-        {error && <p className="text-danger mt-3">{error}</p>}
         <br />
         <div className=''>
           <ReCAPTCHA
