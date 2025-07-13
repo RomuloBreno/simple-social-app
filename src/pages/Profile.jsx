@@ -119,7 +119,7 @@ const Profile = () => {
             formData,
             data?.token
         );
-
+        if(!selectedFile) window.location.href = `/profile/${user.nick}`;
         const keyPath = `profile/${data?.user._id}/${data?.user._id}-${selectedFile[0]?.name}`;
         const signedUrl = await fetchApi('auth/s3-post-img-url', null, 'POST', { key: keyPath, fileName: selectedFile[0]?.name }, data?.token);
 
