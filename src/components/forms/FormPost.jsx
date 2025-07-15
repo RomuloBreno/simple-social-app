@@ -67,7 +67,7 @@ const FormPost = ({ onPost }) => {
     description: postContent,
     path: pathsName,
     owner: id,
-    ...(selectedPostsStoryValue && { postStoryPattern: selectedPostsStoryValue }),
+    ...(selectedPostsStoryValue !=null && { postStoryPattern: selectedPostsStoryValue }),
   });
 
   const handleSelectChange = (e) => setSelectedPostsStoryValue(e.target.value);
@@ -85,16 +85,16 @@ const FormPost = ({ onPost }) => {
       const pathsName = getNameFiles();
       let dataPost = {}
       if (postStoryChecked && !(selectedPostsStoryValue.valueOf() === 'default')) {
-        dataPost = factoryDataPost(title, postContent, pathsName, data?.user._id, selectedPostsStoryValue)
+        dataPost = factoryDataPost(title, postContent, pathsName, data?.user._id,selectedPostsStoryValue)
         onPost(dataPost)
       } else {
-        dataPost = factoryDataPost(title, postContent, pathsName, data?.user._id, null)
+        dataPost = factoryDataPost(title, postContent, pathsName, data?.user._id,null)
         onPost(dataPost)
       }
       setTitle('')
       setPostContent('')
       const postPublished = await fetchApi('v1/publish', null, 'POST', dataPost, data?.token);
-
+      
       if (!postPublished.status) {
         setError(postPublished.result);
         setLoading(false);
