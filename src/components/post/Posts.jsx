@@ -7,10 +7,10 @@ import Feedbacks from "../feedback/Feedbacks";
 import PostActions from '../post/PostsActions';
 import userImgNotFind from '../../images/user.png'
 
-const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
+const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible,disable }) => (
   <div style={styles.header}>
     <div style={styles.headerLeft}>
-      <Link to={`/profile/${user?.nick}`} style={styles.profileLink}>
+     {disable != null ? <Link to={`/profile/${user?.nick}`} style={styles.profileLink}>
         <img
           style={styles.avatar}
           src={user?.pathImage ? `${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}` : userImgNotFind}
@@ -20,7 +20,19 @@ const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
           <span style={styles.userNick}>{user?.nick}</span><br />
           <span style={styles.userJob}>{user?.job}</span>
         </div>
-      </Link>
+      </Link> :
+      <>
+       <img
+          style={styles.avatar}
+          src={user?.pathImage ? `${process.env.REACT_APP_URL_S3}/temp/profile/${user?._id}/${user?._id}-${user?.pathImage}` : userImgNotFind}
+          alt="User"
+        />
+        <div style={styles.userInfo}>
+          <span style={styles.userNick}>{user?.nick}</span><br />
+          <span style={styles.userJob}>{user?.job}</span>
+        </div>
+      </>
+    }
     </div>
     <div style={styles.headerRight}>
       {postStoryPattern && <span style={styles.storyBadge}>Story</span>}
@@ -42,14 +54,15 @@ const PostHeader = ({ user, postStoryPattern, toggleDivShare, isVisible }) => (
   </div>
 );
 
-const PostBody = ({ title, description, images, creationDate, postStoryPattern, postId }) => (
-  <Link
+const PostBody = ({ title, description, images, creationDate, postStoryPattern, postId, disable }) => (
+  <>
+ {disable != null ? <Link
     style={styles.body}
     to={postStoryPattern ? `/post-story/${postStoryPattern}` : `/post/${postId}`}
   >
     <div style={styles.meta}>
         <br />
-      <i className="fa fa-clock-o"></i> Publicado em: {formatDate(creationDate)}
+      <i className="fa fa-clock-o"></i> Publicado em: {formatDate(creationDate ? creationDate : new Date())}
         <br />
         <br />
     </div>
@@ -62,7 +75,28 @@ const PostBody = ({ title, description, images, creationDate, postStoryPattern, 
         ))}
       </div>
     )}
-  </Link>
+  </Link>:
+<>
+
+    <div style={styles.meta}>
+        <br />
+      <i className="fa fa-clock-o"></i> Publicado em: {formatDate(creationDate ? creationDate : new Date())}
+        <br />
+        <br />
+    </div>
+    <h4 style={styles.title}>{title}</h4>
+    <p style={styles.description}>{description}</p>
+    {images.length > 0 && (
+      <div style={styles.imagesContainer}>
+        {images.map((image, index) => (
+          <img key={index} src={image} alt={`Imagem ${index + 1}`} style={styles.image} />
+        ))}
+      </div>
+    )}
+</>
+
+}
+  </>
 );
 
 // const PostActions = ({ youLikedPost, postToggleLike, toggleComments, commentsLength }) => (
@@ -84,7 +118,7 @@ const PostBody = ({ title, description, images, creationDate, postStoryPattern, 
 //   </div>
 // );
 
-const Post = ({ postContent }) => {
+const Post = ({ postContent, disableURLs }) => {
   const { data } = useAuth();
   const [user, setUser] = useState(null);
   const [images, setImages] = useState([]);
@@ -95,8 +129,7 @@ const Post = ({ postContent }) => {
 
   const { title, description, owner, path, creationDate, comments, postStoryPattern } =
     postContent;
-
-  useEffect(() => {
+    useEffect(() => {
     const fetchUser = async () => {
       const response = await fetchApi(`v1/user/${owner}`, null, "GET", null, data?.token);
       if (response.status) setUser(response.result);
@@ -118,6 +151,7 @@ const Post = ({ postContent }) => {
   }, [postContent._id, data?.token]);
 
   useEffect(() => {
+    if(disableURLs == null) return
     getYouLiked()
   }, [data?.token]);
 
@@ -151,6 +185,7 @@ const Post = ({ postContent }) => {
           postStoryPattern={postStoryPattern}
           toggleDivShare={toggleDivShare}
           isVisible={isVisible}
+          disable={disableURLs}
         />
         <PostBody
           title={title}
@@ -159,15 +194,24 @@ const Post = ({ postContent }) => {
           creationDate={creationDate}
           postStoryPattern={postStoryPattern}
           postId={postContent._id}
+          disable={disableURLs}
         />
         <hr/>
-        <PostActions
+      {disableURLs == null &&  <h4>Publicando...</h4>}
+        {disableURLs !== null ? <PostActions
           youLikedPost={youLikedPost}
           postToggleLike={postToggleLike}
           toggleComments={toggleComments}
           commentsLength={comments?.length}
           styles={styles}
-          />
+          /> : null}
+        {/* <PostActions
+          youLikedPost={youLikedPost}
+          postToggleLike={postToggleLike}
+          toggleComments={toggleComments}
+          commentsLength={comments?.length}
+          styles={styles}
+          /> */}
       </div>
       <div>
         {showComments && <Feedbacks postId={postContent._id} qtdFeedbacks={comments?.length} />}
@@ -193,11 +237,6 @@ const styles = {
   header: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
-    maxWidth:'1280px',
-    maxHeight: '720px',
-    backgroundColor: '#4340403b',
-    alignContent: 'center'
   },
   haderLeft: {
   display: "flex",

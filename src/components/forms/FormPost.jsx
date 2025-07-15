@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { fetchApi } from '../../utils/fetch';
 import { useAuth } from '../../context/authContext';
-import ErrorSpan  from '../error/ErrorSpan';
+import ErrorSpan from '../error/ErrorSpan';
 
 const FilePreview = ({ file, onDelete }) => {
   return (
@@ -25,7 +25,7 @@ const FilePreview = ({ file, onDelete }) => {
   );
 };
 
-const FormPost = () => {
+const FormPost = ({ onPost }) => {
   const { data } = useAuth();
   const [error, setError] = useState('');
   const [postContent, setPostContent] = useState('');
@@ -62,6 +62,14 @@ const FormPost = () => {
     }
   };
 
+  const factoryDataPost = (title, postContent, pathsName, id, selectedPostsStoryValue) => ({
+    title,
+    description: postContent,
+    path: pathsName,
+    owner: id,
+    ...(selectedPostsStoryValue && { postStoryPattern: selectedPostsStoryValue }),
+  });
+
   const handleSelectChange = (e) => setSelectedPostsStoryValue(e.target.value);
 
   const handleTabChange = (tab) => setActiveTab(tab);
@@ -69,30 +77,22 @@ const FormPost = () => {
   const getNameFiles = useCallback(() => selectedFiles.map((file) => file.name), [selectedFiles]);
 
   const handleSubmit = async (e) => {
-    
+
     e.preventDefault();
     setLoading(true);
 
     try {
       const pathsName = getNameFiles();
-      let dataPost={}
-      if(postStoryChecked && !(selectedPostsStoryValue.valueOf() === 'default')){
-        dataPost = {
-          title,
-          description: postContent,
-          path: pathsName,
-          owner: data?.user._id,
-          postStoryPattern: selectedPostsStoryValue,
-        };
-      }else{
-        dataPost = {
-          title,
-          description: postContent,
-          path: pathsName,
-          owner: data?.user._id
-        };
+      let dataPost = {}
+      if (postStoryChecked && !(selectedPostsStoryValue.valueOf() === 'default')) {
+        dataPost = factoryDataPost(title, postContent, pathsName, data?.user._id, selectedPostsStoryValue)
+        onPost(dataPost)
+      } else {
+        dataPost = factoryDataPost(title, postContent, pathsName, data?.user._id, null)
+        onPost(dataPost)
       }
-
+      setTitle('')
+      setPostContent('')
       const postPublished = await fetchApi('v1/publish', null, 'POST', dataPost, data?.token);
 
       if (!postPublished.status) {
@@ -122,8 +122,6 @@ const FormPost = () => {
           }
         })
       );
-
-      window.location.href = '/';
     } catch (err) {
       setError(err.message);
     } finally {
@@ -134,22 +132,22 @@ const FormPost = () => {
   useEffect(() => {
     if (postStoryChecked && (selectedPostsStoryValue.valueOf() === 'default' || selectedPostsStoryValue.valueOf() === '')) {
       setError('Não selecionar uma opção de Post Story torna esse Post atual um Post Story');
-    }else{
+    } else {
       setError('');
     }
   }, [postStoryChecked, selectedPostsStoryValue]);
 
-  
+
   return (
     <>
       {loading && (
-        <div className='' style={{ textAlign: 'center', width: '97%', height: '100%', zIndex: '12', position: 'absolute', background: 'rgb(128 128 128 / 11%)', alignContent:'center' }}>
+        <div className='' style={{ textAlign: 'center', width: '97%', height: '100%', zIndex: '12', position: 'absolute', background: 'rgb(128 128 128 / 11%)', alignContent: 'center' }}>
           <div className="spinner-border" role="status">
           </div>
         </div>
       )}
 
-      <div className="card-header bg-white" style={{color:'black'}}>
+      <div className="card-header bg-white" style={{ color: 'black' }}>
         <ul className="nav nav-tabs card-header-tabs" role="tablist">
           <li className="nav-item">
             <button
@@ -189,7 +187,7 @@ const FormPost = () => {
                     value={postContent}
                     onChange={handlePostChange}
                     required
-                    maxLength={500}
+                    maxLength={300}
                   />
                 </div>
               </div>
@@ -215,23 +213,23 @@ const FormPost = () => {
               </div>
             )}
           </div>
-            <br />
+          <br />
           <div>
             <input type="checkbox" className="btn btn-primary" onClick={handleCheckPostStory} />
             <span className='p-2'>Marque a opção caso queira criar um Novo Post Story, ou adicionar a um existente</span>
             {/* {postStoryChecked && selectedPostsStoryValue && (
               <span> Marking the option creates a post story if it doesn't selected.</span>
             )} */}
-             <br/>
-              <br/>
+            <br />
+            <br />
 
-          {postStoryChecked > 0 && (
+            {postStoryChecked > 0 && (
               <select
                 value={selectedPostsStoryValue}
                 onChange={handleSelectChange}
                 style={{ marginLeft: '10px' }}
               >
-                 Post Story: <option value="default">Select...</option>
+                Post Story: <option value="default">Select...</option>
                 {postsStory.map((option) => (
                   <option key={option._id} value={option._id}>
                     {option.title}
@@ -243,7 +241,7 @@ const FormPost = () => {
 
           <br />
           <button type="submit" className="btn btn-primary">Publicar</button>
-        {error && <ErrorSpan message={error}/> }
+          {error && <ErrorSpan message={error} />}
         </form>
       </div>
     </>

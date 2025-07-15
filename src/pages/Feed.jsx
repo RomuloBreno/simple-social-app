@@ -17,6 +17,7 @@ const Feed = () => {
   const [visiblePosts, setVisiblePosts] = useState([]); // Estado para armazenar os posts visíveis
   const [getLimitLocal, setGetLimitLocal] = useState(10)
   const [limitShowLocal, setLimitShowLocal] = useState(5)
+  const [newPost, setNewPost] = useState()
 
   const data = useAuth().data;
   const fetchPostsFollowing = async () => {
@@ -37,6 +38,15 @@ const Feed = () => {
   useEffect(() => {
     fetchPostsFollowing();
   }, [data?.user])
+ 
+  useEffect(() => {
+    // fetchPostsFollowing();
+    {setTimeout(() => {
+           fetchPostsFollowing() // Remove a mensagem após 5 segundos
+           setNewPost('')
+          }, 3000)}
+  }, [newPost])
+ 
 
   useEffect(() => {
     postsToShow();
@@ -47,6 +57,9 @@ const Feed = () => {
     setVisiblePosts(postsFollowing?.slice(0, limitShowLocal))
   }
 
+  const handleNewPost = (newPost) => {
+    setNewPost(newPost);
+  };
 
   const handleLoadMore = () => {
     setLimitShowLocal((prev) => prev + 5)
@@ -59,19 +72,20 @@ const Feed = () => {
       <div style={{}}>
         <h2 style={{ marginRight: '70%' }} > 📃 Feed</h2><br />
         <div className="card container" style={{ width: '100%', marginRight: '0%', marginLeft: '0%', }}>
-          <FormPost />
+          <FormPost onPost={handleNewPost}/>
         </div>
         {loading && visiblePosts?.length < 1 ? (
           // TODO refazer logica de poosts
           <p>Carregando...</p>
         ) : (
           <div className='container'>
+             {newPost && <Post postContent={newPost} disableURLs={null}/>}
             {visiblePosts?.map((post, index) => {
               const isLastVisible = index === lastVisibleIndex;
               const key = post?._id?.toString?.() ?? `fallback-${index}`;
               return (
                 <div key={key} id={isLastVisible ? 'LastPost' : ''}>
-                  <Post postContent={post} />
+                  <Post postContent={post} disableURLs={'notDisable'} />
                 </div>
               );
             })}
@@ -79,7 +93,7 @@ const Feed = () => {
               <div className='container text-center'>
                 <br />
                 <button style={style.btn} onClick={handleLoadMore} disabled={loading} className="">
-                  {loading ? 'Carregando...' : visiblePosts?.length > 0 ? 'Mostrar mais' : <></>}
+                  {loading ? 'Carregando...' : postsFollowing?.length > limitShowLocal  ? 'Mostrar mais' : <></>}
                 </button>
               </div>
             )}
