@@ -33,10 +33,14 @@ const Footer = () => {
           IsLoged &&
           <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'white' }}>Feedbacks</Link>
         }
-        <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Publishes</Link>
-        <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Suporte</Link>
-        <Link to="/login" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Login</Link>
+         {
+          !IsLoged &&
+          
+          <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Publishes</Link>&&
+         <Link to="/" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Suporte</Link>&&
+         <Link to="/login" style={{ padding: '8%', textDecoration: 'none', color: 'gray' }}>Login</Link>
 
+        }
       </nav>
       </div>
       <br />
