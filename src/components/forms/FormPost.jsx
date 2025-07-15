@@ -93,6 +93,7 @@ const FormPost = ({ onPost }) => {
       }
       setTitle('')
       setPostContent('')
+      setPostStoryChecked(false)
       const postPublished = await fetchApi('v1/publish', null, 'POST', dataPost, data?.token);
       
       if (!postPublished.status) {
@@ -136,6 +137,10 @@ const FormPost = ({ onPost }) => {
       setError('');
     }
   }, [postStoryChecked, selectedPostsStoryValue]);
+
+  useEffect(() => {
+    if (!postStoryChecked) return
+  }, [postStoryChecked]);
 
 
   return (
@@ -215,14 +220,24 @@ const FormPost = ({ onPost }) => {
           </div>
           <br />
           <div>
-            <input type="checkbox" className="btn btn-primary" onClick={handleCheckPostStory} />
-            <span className='p-2'>Marque a opção caso queira criar um Novo Post Story, ou adicionar a um existente</span>
+    <div className="form-check form-switch align-items-center gap-2">
+      <label className="form-check-label" htmlFor="postStorySwitch">
+        {postStoryChecked ? '' : ''}
+      </label><span className='p-2'>Marque a opção caso queira criar um Novo Post Story, ou adicionar a um existente</span>
+      <input
+        className="form-check-input"
+        type="checkbox"
+        id="postStorySwitch"
+        checked={postStoryChecked}
+        onChange={handleCheckPostStory}
+      />
+    </div>
+            {/* <input type="checkbox" className="btn btn-primary" onClick={handleCheckPostStory} defaultChecked={postStoryChecked} /> */}
+            
             {/* {postStoryChecked && selectedPostsStoryValue && (
               <span> Marking the option creates a post story if it doesn't selected.</span>
             )} */}
             <br />
-            <br />
-
             {postStoryChecked > 0 && (
               <select
                 value={selectedPostsStoryValue}
